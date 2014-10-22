@@ -8,7 +8,7 @@ fi
 
 
 if [ -z "${APP_NAME}" ]; then
-	export APP_NAME="ECommerce Demo";
+	export APP_NAME="\"ECommerce Demo\"";
 fi
 
 	if [ -n "${web}" ]; then
@@ -17,7 +17,7 @@ fi
 		fi
 		
 		if [ -z "${TIER_NAME}" ]; then
-			export TIER_NAME="ECommerce Server";
+			export TIER_NAME="\"ECommerce Server\"";
 		fi
 		
         cp  /ECommerce-Java/ECommerce-Web/build/libs/appdynamicspilot.war /tomcat/webapps;
@@ -30,7 +30,7 @@ if [ -n "${jms}" ]; then
 		fi
 		
 		if [ -z "${TIER_NAME}" ]; then
-			export TIER_NAME="Order Processing Server";
+			export TIER_NAME="\"Order Processing Server\"";
 		fi
  	cp /ECommerce-Java/ECommerce-JMS/build/libs/appdynamicspilotjms.war /tomcat/webapps;
 fi
@@ -41,15 +41,17 @@ if [ -n "${ws}" ]; then
 		fi
 		
 		if [ -z "${TIER_NAME}" ]; then
-			export TIER_NAME="Inventory Server";
+			export TIER_NAME="\"Inventory Server\"";
 		fi
         cp /ECommerce-Java/ECommerce-WS/build/libs/cart.war /tomcat/webapps;
 fi
 
 JAVA_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=80 -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}"
 
-JAVA_OPTS="${JAVA_OPTS} -Xmx512m -XX:MaxPermSize=128m -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Dappdynamics.agent.uniqueHostId=cart-machine"
-export "$JAVA_OPTS";
+JAVA_OPTS="${JAVA_OPTS} -Xmx512m -XX:MaxPermSize=128m -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Dappdynamics.agent.uniqueHostId=cart-machine";
+export JAVA_OPTS=$JAVA_OPTS;
+
+echo $JAVA_OPTS;
 
 cd ${CATALINA_HOME}/bin;
 
