@@ -1,6 +1,8 @@
 # install Java7 from http://download.oracle.com/otn-pub/java/jdk/7u51-b13/jdk-7u51-linux-x64.rpm
 FROM appdynamics/ecommerce-java:oracle-java7
 
+RUN yum -y install httpd
+
 #GRADLE
 RUN wget -N http://services.gradle.org/distributions/gradle-2.1-all.zip
 RUN unzip gradle-2.1-all.zip -d /opt/
@@ -20,10 +22,6 @@ ENV TOMCAT_MINOR_VERSION 8.0.14
 ENV CATALINA_HOME /tomcat
 
 
-
-
-
-
 # INSTALL TOMCAT
 RUN wget -q https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
     wget -qO- https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 | md5sum -c - && \
@@ -39,6 +37,7 @@ RUN unzip /AppServerAgent.zip -d ${CATALINA_HOME}/appagent
 RUN rm AppServerAgent.zip
 
 ADD startup.sh /
+ADD ajp_proxy.conf /etc/httpd/conf.d/
 RUN chmod +x /startup.sh
 WORKDIR /
 CMD ["/bin/bash","/startup.sh"]
