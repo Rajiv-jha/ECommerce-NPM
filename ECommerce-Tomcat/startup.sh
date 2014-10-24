@@ -6,6 +6,10 @@ if [ -z "${CONTROLLER}" ]; then
 	export CONTROLLER="controller";
 fi
 
+if [-z "JVM_ROUTE" ]; then
+	export JVM_ROUTE="route1";
+fi
+
 
 if [ -z "${APP_NAME}" ]; then
 	export APP_NAME="ECommerce-Demo";
@@ -48,13 +52,12 @@ fi
 
 JAVA_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=80 -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}"
 
-JAVA_OPTS="${JAVA_OPTS} -Xmx512m -XX:MaxPermSize=128m -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Dappdynamics.agent.uniqueHostId=cart-machine";
+JAVA_OPTS="${JAVA_OPTS} -DjvmRoute=${JVM_ROUTE} -Xmx512m -XX:MaxPermSize=128m -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Dappdynamics.agent.uniqueHostId=cart-machine";
 
 echo $JAVA_OPTS;
 
 cd ${CATALINA_HOME}/bin;
 
-apachectl start;
 java -javaagent:${CATALINA_HOME}/appagent/javaagent.jar ${JAVA_OPTS} -cp ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar org.apache.catalina.startup.Bootstrap
 
 cd ${CWD}
