@@ -54,8 +54,8 @@ if [ -n "${ws}" ]; then
         cp /ECommerce-Java/ECommerce-WS/build/libs/cart.war /tomcat/webapps;
 fi
 
-JAVA_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${CONTOLLER_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}"
-
+JAVA_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${CONTROLLER_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}"
+//
 JAVA_OPTS="${JAVA_OPTS} -DjvmRoute=${JVM_ROUTE} -Xmx512m -XX:MaxPermSize=128m -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Dappdynamics.agent.uniqueHostId=cart-machine";
 
 echo $JAVA_OPTS;
