@@ -34,6 +34,13 @@ ADD AppServerAgent.zip /
 RUN unzip /AppServerAgent.zip -d ${CATALINA_HOME}/appagent
 RUN rm AppServerAgent.zip
 
+
+#Machine Agent Install
+ENV MACHINE_AGENT_HOME /machine_agent
+ADD MachineAgent.zip /
+RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
+RUN rm MachineAgent.zip
+
 ADD startup.sh /
 RUN chmod +x /startup.sh
 WORKDIR /
