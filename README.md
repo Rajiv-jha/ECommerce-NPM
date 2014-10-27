@@ -1,7 +1,7 @@
 ECommerce-Docker
 ================
 Dockerfiles and configuration scripts for the ECommerce demo. 
-These are used to build teh following Docker images used in the ECommerce demo application:
+These are used to build the following Docker images:
 
 1. [ecommerce-tomcat](https://registry.hub.docker.com/u/appdynamics/ecommerce-tomcat/)
 2. [ecommerce-java](https://registry.hub.docker.com/u/appdynamics/ecommerce-java/)
