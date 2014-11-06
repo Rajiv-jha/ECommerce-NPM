@@ -1,0 +1,1 @@
+Base image for all Java-based ECommerce demo images.  See [ECommerce-Java](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Java) on GitHub for details of the image, which is based on the official [centos:centos6](https://registry.hub.docker.com/_/centos/) image and uses the Oracle Java7 JDK.
