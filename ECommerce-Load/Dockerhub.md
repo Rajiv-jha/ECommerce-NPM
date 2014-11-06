@@ -1,0 +1,3 @@
+Provides load generation services for the Ecommerce-Java demo.  See [ECommerce-Load](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Load) for details of the image, which is based on [ecommerce-java](https://registry.hub.docker.com/u/appdynamics/ecommerce-java/).
+
+To run: `docker run --rm -it --name=load-gen --link web:web appdynamics/ecommerce-load`, where `--link web:web` refers to the ECommerce-Server demo tier, started with `--name web`.  For more details of how to run the ECommerce demo, see [ecommerce-tomcat](https://registry.hub.docker.com/u/appdynamics/ecommerce-tomcat/).
