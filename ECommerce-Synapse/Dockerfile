@@ -2,6 +2,7 @@ FROM appdynamics/ecommerce-java:oracle-java7
 
 
 ENV SYNAPSE_HOME /synapse-2.1.0
+ENV MACHINE_AGENT_HOME $SYNAPSE_HOME/machine_agent
 
 
 RUN curl http://mirror.olnevhost.net/pub/apache//synapse/2.1.0/synapse-2.1.0-bin.tar.gz | tar -xz
@@ -10,8 +11,34 @@ EXPOSE 8280
 EXPOSE 1099
 EXPOSE 8243
 
+ADD AppServerAgent.zip /
+RUN unzip /AppServerAgent.zip -d ${SYNAPSE_HOME}/appagent
+RUN rm AppServerAgent.zip
+ADD controller-info.xml /
+RUN mv controller-info.xml ${SYNAPSE_HOME}/appagent/ver4.0.0.0/conf
+
+ADD MachineAgent.zip /
+RUN unzip /MachineAgent.zip -d $MACHINE_AGENT_HOME
+RUN rm MachineAgent.zip 
+
+ADD activemq-client-5.9.0.jar /
+RUN mv activemq-client-5.9.0.jar ${SYNAPSE_HOME}/lib
+ADD geronimo-j2ee-management_1.1_spec-1.0.1.jar /
+RUN mv geronimo-j2ee-management_1.1_spec-1.0.1.jar  $SYNAPSE_HOME/lib
+ADD hawtbuf-1.9.jar /
+RUN mv hawtbuf-1.9.jar $SYNAPSE_HOME/lib
+ADD geronimo-jms_1.1_spec-1.1.1.jar /
+RUN mv geronimo-jms_1.1_spec-1.1.1.jar $SYNAPSE_HOME/lib
+ADD slf4j-api-1.7.5.jar /
+RUN mv slf4j-api-1.7.5.jar $SYNAPSE_HOME/lib
+
+COPY synapse.xml $SYNAPSE_HOME/repository/conf/synapse-config/synapse.xml
+COPY axis2.xml $SYNAPSE_HOME/repository/conf/axis2.xml
+COPY synapse.sh $SYNAPSE_HOME/bin/synapse.sh
+
 ADD startup.sh /
 
 RUN chmod +x /startup.sh
+RUN chmod +x $SYNAPSE_HOME/bin/synapse.sh
 
 CMD /startup.sh

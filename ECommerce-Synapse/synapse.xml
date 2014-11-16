@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+  ~  Licensed to the Apache Software Foundation (ASF) under one
+  ~  or more contributor license agreements.  See the NOTICE file
+  ~  distributed with this work for additional information
+  ~  regarding copyright ownership.  The ASF licenses this file
+  ~  to you under the Apache License, Version 2.0 (the
+  ~  "License"); you may not use this file except in compliance
+  ~  with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing,
+  ~  software distributed under the License is distributed on an
+  ~   * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~  KIND, either express or implied.  See the License for the
+  ~  specific language governing permissions and limitations
+  ~  under the License.
+  -->
+        
+<!-- An empty flat synapse configuration shipped with the Apache Synapse -->
+<definitions xmlns="http://ws.apache.org/ns/synapse">
+<!-- 
+    <proxy name="fulfillmentQueue" transports="jms">
+        <target>
+            <inSequence>
+                <property action="set" name="OUT_ONLY" value="true"/>
+            </inSequence>
+            <endpoint>
+		<http method="post" uri-template="http://ws:8080/appdynamicspilot/rest/fulfillment"></http>
+            </endpoint>
+            <outSequence>
+                <send/>
+            </outSequence>
+        </target>
+        <parameter name="transport.jms.ContentType">
+            <rules>
+                <jmsProperty>contentType</jmsProperty>
+                <default>application/xml</default>
+            </rules>
+        </parameter>
+    </proxy>
+ -->
+    
+    
+<proxy xmlns="http://ws.apache.org/ns/synapse" name="fulfillmentQueue" transports="jms" statistics="disable" trace="disable" startOnLoad="true">
+  <target>
+     <inSequence>
+        <property name="OUT_ONLY" value="true"/>
+        <send>
+           <endpoint>
+              <address uri="http://localhost:8000/appdynamicspilot/rest/fulfillment"/>
+           </endpoint>
+        </send>
+     </inSequence>
+  </target>
+  <parameter name="transport.jms.ContentType">
+     <rules>         
+        <jmsProperty>contentType</jmsProperty>         
+        <default>application/xml</default>      
+     </rules>
+  </parameter>
+  <description></description>
+</proxy>
+</definitions>
