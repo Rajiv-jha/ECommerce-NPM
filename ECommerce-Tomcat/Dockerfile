@@ -2,9 +2,9 @@
 FROM appdynamics/ecommerce-java:oracle-java7
 
 #GRADLE
-RUN wget -N http://services.gradle.org/distributions/gradle-2.1-all.zip
-RUN unzip gradle-2.1-all.zip -d /opt/
-RUN rm gradle-2.1-all.zip
+RUN wget -N http://services.gradle.org/distributions/gradle-2.1-bin.zip
+RUN unzip gradle-2.1-bin.zip -d /opt/
+RUN rm gradle-2.1-bin.zip
 ENV GRADLE_HOME /opt/gradle-2.1
 ENV PATH $PATH:$GRADLE_HOME/bin
 
