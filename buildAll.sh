@@ -1,4 +1,7 @@
-#! /bin/sh
+#! /bin/bash
+
+# Build ECommerce demo containers from source, using latest agent bits from download.appdynamics.com
+# Requires an AppDynamics portal login to download AppServer, Machine and DB Agents
 
 echo "Please Sign In to download agent..."
 echo "Email ID/UserName: "
@@ -18,6 +21,8 @@ then
   echo "Downloading MachineAgent..."
   wget --load-cookies cookies.txt https://download.appdynamics.com/onpremise/public/latest/MachineAgent.zip
   sleep 5 
+  #echo "Downloading DBAgent..."
+  #wget --load-cookies cookies.txt https://download.appdynamics.com/onpremise/public/latest/DBAgent.zip
 else
   echo "Username or Password missing"
 fi
@@ -28,18 +33,19 @@ echo "Creating local docker images..."
 docker pull appdynamics/ecommerce-java:oracle-java7
 
 # Build Tomcat containers using downloaded AppServer and Machine Agents
-cp AppServerAgent.zip ECommerce-Tomcat
-cp MachineAgent.zip ECommerce-Tomcat
-cd ECommerce-Tomcat; docker build -t appdynamics/ecommerce-tomcat .
+# Use docker build with --no-cache option to force latest git repo clone
+cp AppServerAgent.zip ECommerce-Tomcat/AppServerAgent.zip
+cp MachineAgent.zip ECommerce-Tomcat/MachineAgent.zip
+(cd ECommerce-Tomcat && docker build --no-cache -t appdynamics/ecommerce-tomcat .)
 
 # Build Synapse container using downloaded AppServer adn Machine Agents
-cp AppServerAgent.zip ECommerce-Synapse
-cp MachineAgent.zip ECommerce-Synapse
-cd ECommerce-Synapse; docker build -t appdynamics/ecommerce-synapse .
+cp AppServerAgent.zip ECommerce-Synapse/AppServerAgent.zip
+cp MachineAgent.zip ECommerce-Synapse/MachineAgent.zip
+(cd ECommerce-Synapse && docker build -t appdynamics/ecommerce-synapse .)
 
 # Build DBAgent container using downloaded DBAgent
-# cp dbagent.zip ECommerce-DBAgent
-# cd ECommerce-DBAgent; docker build -t appdynamics/ecommerce-dbAgent .
+# cp DBAgent.zip ECommerce-DBAgent
+# (cd ECommerce-DBAgent && docker build -t appdynamics/ecommerce-dbagent .)
 
 # Pull ActiveMQ, LBR and LoadGen containers from appdyanmics public docker repo
 docker pull appdynamics/ecommerce-activemq
@@ -59,4 +65,6 @@ echo "    appdynamics/ecommerce-load"
 rm -f cookies.txt
 rm -f index.html*
 rm -f AppServerAgent.zip MachineAgent.zip
+(cd ECommerce-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip)
+(cd ECommerce-Synapse && rm -f AppServerAgent.zip MachineAgent.zip)
 
