@@ -15,7 +15,7 @@ ADD AppServerAgent.zip /
 RUN unzip /AppServerAgent.zip -d ${SYNAPSE_HOME}/appagent
 RUN rm AppServerAgent.zip
 ADD controller-info.xml /
-RUN mv controller-info.xml ${SYNAPSE_HOME}/appagent/ver4.0.0.0/conf
+RUN mv /controller-info.xml ${SYNAPSE_HOME}/appagent/ver4.0.0.0/conf
 
 ADD MachineAgent.zip /
 RUN unzip /MachineAgent.zip -d $MACHINE_AGENT_HOME
