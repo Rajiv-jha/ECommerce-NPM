@@ -1,11 +1,12 @@
 ECommerce-Docker
 ================
 Dockerfiles and configuration scripts for the ECommerce demo. 
-These are used to build the following Docker images:
+These are used to build Docker images for all components of the ECommerce demo:
 
-1. [ecommerce-java](https://registry.hub.docker.com/u/appdynamics/ecommerce-java/)
-1. [ecommerce-tomcat](https://registry.hub.docker.com/u/appdynamics/ecommerce-tomcat/)
-3. [ecommerce-activemq](https://registry.hub.docker.com/u/appdynamics/ecommerce-activemq/)
-4. [ecommerce-dbagent](https://registry.hub.docker.com/u/appdynamics/ecommerce-dbagent/)
-5. [ecommerce-lbr](https://registry.hub.docker.com/u/appdynamics/ecommerce-dbagent/)
-6. [ecommerce-load](https://registry.hub.docker.com/u/appdynamics/ecommerce-load/)
+1. [ecommerce-java](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Java)
+2. [ecommerce-tomcat](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Tomcat)
+3. [ecommerce-activemq](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-ActiveMQ)
+4. [ecommerce-dbagent](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-DBAgent)
+5. [ecommerce-lbr](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-LBR)
+6. [ecommerce-load](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Load)
+7. [ecommerce-synapse](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Synapse)
