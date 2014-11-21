@@ -5,4 +5,4 @@ The configuration assumes that two ECommerce-Server instances are running with `
 * `docker run --rm -it --name web -e web=true -p 8080:8080 --link controller:controller --link db:db --link ws:ws --link jms:jms appdynamics/ecommerce-tomcat`
 * `docker run --rm -it --name web1 -e web=true -p 8081:8080 --link controller:controller --link db:db --link ws:ws --link jms:jms appdynamics/ecommerce-tomcat`
 
-See the [httpd configuration file on GitHub](https://github.com/Appdynamics/ECommerce-Docker/blob/master/ECommerce-LBR/ajp_proxy.conf) for details.
+See the [httpd configuration file](https://github.com/Appdynamics/ECommerce-Docker/blob/master/ECommerce-LBR/ajp_proxy.conf) for details.
