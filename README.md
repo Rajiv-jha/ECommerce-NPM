@@ -18,5 +18,5 @@ or download the latest versions directly from the [AppDynamics download site](ht
 
 1. Run `build.sh` without commandline args to be prompted (with autocomplete) for the agent installer paths __or__
 2. Run `build.sh -a <Path to App Server Agent> -m <Path to Machine Agent> -d <Path to Database Agent>` to supply agent installer paths __or__
-3. Run `build.sh --download` to download from the [AppDynamics download site](https://download.appdynamics.com) (portal login required)
+3. Run `build.sh --download` to download latest agent installers from the [AppDynamics download site](https://download.appdynamics.com) (portal login required)
 
