@@ -42,7 +42,7 @@ ADD monitor.xml /
 ADD analytics-agent.properties /
 RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
 RUN mv /monitor.xml ${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf
-RUN mv /analytics-agent.properties ${MACHINE_AGENT_HOME}/monitors/analytics-agent
+RUN mv /analytics-agent.properties ${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf
 RUN rm MachineAgent.zip
 
 ADD startup.sh /
