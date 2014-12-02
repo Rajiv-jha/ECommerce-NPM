@@ -38,11 +38,19 @@ RUN rm AppServerAgent.zip
 #Machine Agent Install
 ENV MACHINE_AGENT_HOME /machine_agent
 ADD MachineAgent.zip /
+ADD monitor.xml /
+ADD analytics-agent.properties /
 RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
+RUN mv /monitor.xml ${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf
+RUN mv /analytics-agent.properties ${MACHINE_AGENT_HOME}/monitors/analytics-agent
 RUN rm MachineAgent.zip
 
 ADD startup.sh /
+ADD env.sh /
+ADD start-machine-agent.sh /
 RUN chmod +x /startup.sh
+RUN chmod +x /start-machine-agent.sh
+RUN chmod +x /env.sh
 WORKDIR /
 CMD ["/bin/bash","/startup.sh"]
 

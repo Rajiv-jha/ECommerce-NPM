@@ -1,67 +1,21 @@
 #!/bin/bash
 CWD=${PWD}
 cd /ECommerce-Java;gradle createDB
+source /env.sh
 
-if [ -z "${CONTROLLER}" ]; then
-	export CONTROLLER="controller";
-fi
-
-if [ -z "${APPD_PORT}" ]; then
-	export APPD_PORT=8090;
-fi
-
-if [ -z "JVM_ROUTE" ]; then
-	export JVM_ROUTE="route1";
-fi
-
-
-if [ -z "${APP_NAME}" ]; then
-	export APP_NAME="ECommerce-Demo";
-fi
-
-	if [ -n "${web}" ]; then
-		if [ -z "${NODE_NAME}" ]; then
-			export NODE_NAME="Node_8000";
-		fi
-		
-		if [ -z "${TIER_NAME}" ]; then
-			export TIER_NAME="ECommerce-Server";
-		fi
-		
+if [ -n "${web}" ]; then
         cp  /ECommerce-Java/ECommerce-Web/build/libs/appdynamicspilot.war /tomcat/webapps;
-        
 fi
 
 if [ -n "${jms}" ]; then
-		if [ -z "${NODE_NAME}" ]; then
-			export NODE_NAME="Node_8003";
-		fi
-		
-		if [ -z "${TIER_NAME}" ]; then
-			export TIER_NAME="Order-Processing-Server";
-		fi
  	cp /ECommerce-Java/ECommerce-JMS/build/libs/appdynamicspilotjms.war /tomcat/webapps;
 fi
 
 if [ -n "${ws}" ]; then
-		if [ -z "${NODE_NAME}" ]; then
-			export NODE_NAME="Node_8002";
-		fi
-		
-		if [ -z "${TIER_NAME}" ]; then
-			export TIER_NAME="Inventory-Server";
-		fi
         cp /ECommerce-Java/ECommerce-WS/build/libs/cart.war /tomcat/webapps;
 fi
 
-JAVA_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}";
-
-echo "Starting Machine Agent..."
-echo java ${JAVA_OPTS} -jar ${MACHINE_AGENT_HOME}/machineagent.jar
-
-nohup java ${JAVA_OPTS} -jar ${MACHINE_AGENT_HOME}/machineagent.jar  > ${MACHINE_AGENT_HOME}/machine_agent.log 2>&1 &
-
-JAVA_OPTS="${JAVA_OPTS} -DjvmRoute=${JVM_ROUTE} -Xmx512m -XX:MaxPermSize=128m -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager";
+/start-machine-agent.sh
 
 echo $JAVA_OPTS;
 
