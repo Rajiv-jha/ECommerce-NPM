@@ -1,7 +1,12 @@
 #!/bin/bash
 CWD=${PWD}
-cd /ECommerce-Java;gradle createDB
+
+
 source /env.sh
+
+if [ "${create_schema}" == "true" ]; then
+	cd /ECommerce-Java;gradle createDB
+fi
 
 if [ -n "${web}" ]; then
         cp  /ECommerce-Java/ECommerce-Web/build/libs/appdynamicspilot.war /tomcat/webapps;

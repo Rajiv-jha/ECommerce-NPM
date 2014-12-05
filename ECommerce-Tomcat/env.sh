@@ -1,4 +1,9 @@
 #!/bin/bash
+
+if [ -n "${create_schema}" ]; then
+	export CREATE_SCHEMA=false;
+fi
+
 if [ -z "${APP_NAME}" ]; then
 	export APP_NAME="ECommerce-Demo";
 fi
