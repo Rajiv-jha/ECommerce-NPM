@@ -1,6 +1,6 @@
 # MySQL database and DB Agent
 docker run --name db -e MYSQL_ROOT_PASSWORD=singcontroller -p 3306:3306 -d mysql
-docker run --rm -it --name dbagent --link db:db appdynamics/ecommerce-dbagent
+docker run --rm -it --name dbagent --link controller:controller --link db:db appdynamics/ecommerce-dbagent
 docker run --rm -it --name oracle-db  appdynamics/ecommerce-oracle
 
 # ActiveMQ service
