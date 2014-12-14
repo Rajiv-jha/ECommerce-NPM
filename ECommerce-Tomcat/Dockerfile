@@ -56,3 +56,4 @@ CMD ["/bin/bash","/startup.sh"]
 
 EXPOSE 80	
 EXPOSE 8080
+EXPOSE 8009

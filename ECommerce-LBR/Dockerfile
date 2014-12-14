@@ -3,7 +3,6 @@ FROM centos:centos6
 
 RUN yum -y install httpd
 
-
 ADD ajp_proxy.conf /etc/httpd/conf.d/
 
 
