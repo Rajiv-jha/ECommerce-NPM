@@ -45,6 +45,10 @@ RUN mv /monitor.xml ${MACHINE_AGENT_HOME}/monitors/analytics-agent
 RUN mv /analytics-agent.properties ${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf
 RUN rm MachineAgent.zip
 
+#Analaytics Agent config
+ADD configAnalytics.sh /
+RUN chmod +x /configAnalytics.sh
+
 ADD startup.sh /
 ADD env.sh /
 ADD start-machine-agent.sh /

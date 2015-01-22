@@ -25,6 +25,10 @@ if [ -z "${APP_NAME}" ]; then
 	export APP_NAME="ECommerce-Demo";
 fi
 
+if [ -z "${ACCOUNT_NAME}" ]; then
+	export ACCOUNT_NAME="customer1";
+fi
+
 if [ -n "${web}" ]; then
 		if [ -z "${NODE_NAME}" ]; then
 			export NODE_NAME="Node_8000";
