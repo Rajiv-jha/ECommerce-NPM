@@ -10,7 +10,7 @@ aaprop=/machine_agent/monitors/analytics-agent/conf/analytics-agent.properties
 
 if [ "$(grep '^http.event.endpoint=http://controller:9080/v1' $aaprop)" ]; then
         echo "${aaprop}: setting correct endpoint"
-	sed -i '/^http.event.endpoint=/c\http.event.endpoint=http:\/\/eumcloud.demo.appdynamics.com:9080\/v1' ${aaprop}
+	sed -i "/^http.event.endpoint=/c\http.event.endpoint=http:\/\/${EUM_CLOUD}:9080\/v1" ${aaprop}
 else
         echo "${aaprop}: endpoint already set or doesn't exist"
 fi
@@ -44,7 +44,7 @@ else
         echo "${sjal}: already enabled or doesn't exist"
 fi
 
-if [ "$(grep 'path: ${user.home}' $sjal)" ]; then
+if [ "$(grep 'path: \$' $sjal)" ]; then
         echo "${sjal}: setting to correct path"
         sed -i "/path:/c\    path: /tomcat/appagent/ver4.0.0.0/logs/${NODE_NAME}" ${sjal}
 else

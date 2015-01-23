@@ -25,6 +25,10 @@ if [ -z "${APP_NAME}" ]; then
 	export APP_NAME="ECommerce-Demo";
 fi
 
+if [ -z "${EUM_CLOUD}" ]; then
+	export EUM_CLOUD="eumcloud.demo.appdynamics.com";
+fi
+
 if [ -z "${ACCOUNT_NAME}" ]; then
 	export ACCOUNT_NAME="customer1";
 fi
