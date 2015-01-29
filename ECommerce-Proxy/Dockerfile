@@ -6,6 +6,6 @@ ADD rev_proxy.conf /etc/httpd/conf.d/
 
 
 WORKDIR /
-CMD apachectl start && tail -f /etc/httpd/logs/access_log
+CMD apachectl start && tail -f /etc/httpd/logs/error_log
 
 EXPOSE 80	
