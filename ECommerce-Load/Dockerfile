@@ -17,6 +17,7 @@ RUN git clone https://github.com/Appdynamics/ECommerce-Load.git
 RUN cd /ECommerce-Load;gradle distZip;
 RUN unzip ECommerce-Load/build/distributions/load-generator.zip -d /
 RUN chmod +x $LOAD_GEN_HOME/bin/*
+ADD env.sh /
 ADD startup.sh /	
 CMD ["/bin/bash","/startup.sh"]
 
