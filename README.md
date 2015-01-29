@@ -10,6 +10,7 @@ These are used to build Docker images for all components of the ECommerce demo:
 5. [ecommerce-lbr](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-LBR)
 6. [ecommerce-load](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Load)
 7. [ecommerce-synapse](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Synapse)
+8. [ecommerce-proxy](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Proxy)
 
 Building the Container Images
 -----------------------------
