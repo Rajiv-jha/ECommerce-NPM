@@ -146,3 +146,12 @@ rm -rf .agents
 (cd ECommerce-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip)
 (cd ECommerce-Synapse && rm -f AppServerAgent.zip MachineAgent.zip)
 (cd ECommerce-DBAgent && rm -f dbagent.zip)
+
+# Remove dangling images left-over from build
+if [[ `docker images -q --filter "dangling=true"` ]] 
+then
+	echo
+	echo "Deleting intermediate containers..."
+	docker images -q --filter "dangling=true" | xargs docker rmi;
+fi
+
