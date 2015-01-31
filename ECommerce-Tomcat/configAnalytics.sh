@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Set correct variables
-
 source /env.sh
 
 # Configure analytics-agent.properties
@@ -46,7 +45,7 @@ fi
 
 if [ "$(grep 'path: \$' $sjal)" ]; then
         echo "${sjal}: setting to correct path"
-        sed -i "/path:/c\    path: /tomcat/appagent/ver4.0.0.0/logs/${NODE_NAME}" ${sjal}
+        sed -i "/path:/c\    path: /tomcat/appagent/${VERSION_STRING}/logs/${NODE_NAME}" ${sjal}
 else
         echo "${sjal}: path already set or doesn't exist"
 fi
