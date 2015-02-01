@@ -4,7 +4,7 @@ This container is intended to be run with two load-balanced ECommerce-Server nod
 
 To run: `docker run --rm -it --name=load-gen --link lbr:lbr appdynamics/ecommerce-load`, where `--link lbr:lbr` refers to the ECommerce-LBR load-balancer container, started with `--name lbr`.  
 
-To run against a remote ECommerce application: `docker run --rm -it --name=load-gen -e TARGET_HOST=<host> -e TARGET_PORT=<port> appdynamics/ecommerce-load` where TARGET_HOST (default='lbr') and TARGET_PORT (default=80) identify the remote ECommerce host:port.
+To run against a remote ECommerce application: `docker run --rm -it --name=load-gen --net=host -e TARGET_HOST=<host> -e TARGET_PORT=<port> appdynamics/ecommerce-load` where TARGET_HOST (default='lbr') and TARGET_PORT (default=80) identify the remote ECommerce host:port.  The `--net=host` flag ensures that the container uses the host's networking, so that geo-resolution will work.
 
 The following values can be set via docker environment variables:
 
