@@ -150,9 +150,8 @@ docker pull appdynamics/ecommerce-java:oracle-java7
 
 # Copy Agent zips to build dirs
 cp ${APP_SERVER_AGENT} ECommerce-Tomcat/AppServerAgent.zip
-cp ${MACHINE_AGENT} ECommerce-Tomcat/MachineAgent.zip
 cp ${APP_SERVER_AGENT} ECommerce-Synapse/AppServerAgent.zip
-cp ${MACHINE_AGENT} ECommerce-Synapse/MachineAgent.zip
+cp ${MACHINE_AGENT} ECommerce-Tomcat/MachineAgent.zip
 
 if [ "$ANALYTICS_ACCOUNT_NAME" != "" ] && [ "$ANALYTICS_ACCOUNT_KEY" != "" ];
 then
