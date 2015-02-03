@@ -80,17 +80,16 @@ then
   exit
 fi
 
-if  [ $# -eq 0 ]
 # Prompt for location of App Server, Machine and Database Agents
+if  [ $# -eq 0 ]
 then   
   promptForAgents
   promptForAnalytics
 
 else
+  # Download from download.appdynamics.com
   if [[ $1 == *--download* ]]
-  # Download App Server, Machine and Database Agent from download.appdynamics.com
   then
-    # Requires an AppDynamics portal login
     promptForPortal
 
     if [ "$USER_NAME" != "" ] && [ "$PASSWORD" != "" ];
@@ -101,7 +100,6 @@ else
       exit
     fi
 
-    # Prompt for Analytics Account Name/Key
     promptForAnalytics 
 
   else
@@ -145,7 +143,6 @@ else
     done
   
   fi
-
 fi
 
 # Pull Java base image from appdynamics docker repo
