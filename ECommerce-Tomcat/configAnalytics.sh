@@ -1,13 +1,14 @@
 #!/bin/bash
 
 # Set correct variables
+
 source /env.sh
 
 # Configure analytics-agent.properties
 
 aaprop=/machine_agent/monitors/analytics-agent/conf/analytics-agent.properties
 
-if [ "$(grep '^http.event.endpoint=http://controller:9080/v1' $aaprop)" ]; then
+if [ "$(grep '^http.event.endpoint=http://localhost:9080/v1' $aaprop)" ]; then
         echo "${aaprop}: setting correct endpoint"
 	sed -i "/^http.event.endpoint=/c\http.event.endpoint=http:\/\/${EUM_CLOUD}:9080\/v1" ${aaprop}
 else
@@ -45,7 +46,7 @@ fi
 
 if [ "$(grep 'path: \$' $sjal)" ]; then
         echo "${sjal}: setting to correct path"
-        sed -i "/path:/c\    path: /tomcat/appagent/${VERSION_STRING}/logs/${NODE_NAME}" ${sjal}
+        sed -i "/path:/c\    path: /tomcat/appagent/ver4.0.0.0/logs/${NODE_NAME}" ${sjal}
 else
         echo "${sjal}: path already set or doesn't exist"
 fi
