@@ -172,17 +172,21 @@ fi
 (cd ECommerce-Tomcat && docker build --no-cache -t appdynamics/ecommerce-tomcat .)
 
 # Build Synapse container using downloaded AppServer and Machine Agents
+# Use docker build with --no-cache option to force latest git repo clone
 cp ECommerce-Tomcat/MachineAgent.zip ECommerce-Synapse/MachineAgent.zip
-(cd ECommerce-Synapse && docker build -t appdynamics/ecommerce-synapse .)
+(cd ECommerce-Synapse && docker build --no-cache -t appdynamics/ecommerce-synapse .)
 
 # Build DBAgent container using downloaded DBAgent
 cp ${DB_AGENT} ECommerce-DBAgent/dbagent.zip
 (cd ECommerce-DBAgent && docker build -t appdynamics/ecommerce-dbagent .)
 
+# Build LoadGen container
+# Use docker build with --no-cache option to force latest git repo clone
+(cd ECommerce-Load && docker build --no-cache -t appdynamics/load .)
+
 # Pull ActiveMQ, LBR and LoadGen containers from appdynamics public docker repo
 docker pull appdynamics/ecommerce-activemq
 docker pull appdynamics/ecommerce-lbr
-docker pull appdynamics/ecommerce-load
 docker pull appdynamics/ecommerce-oracle
 
 echo "Local docker container images installed: "
