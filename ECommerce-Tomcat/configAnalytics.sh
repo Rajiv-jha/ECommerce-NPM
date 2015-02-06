@@ -27,6 +27,7 @@ if [ "$(grep '^http.event.accessKey=your-account-access-key$' $aaprop)" ]; then
         sed -i "/^http.event.accessKey=/c\http.event.accessKey=${ACCESS_KEY}" ${aaprop}
 else
         echo "${aaprop}: accessKey already set or doesn't exist"
+fi
 
 # Configure monitor.xml
 
