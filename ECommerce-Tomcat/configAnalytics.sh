@@ -15,12 +15,18 @@ else
         echo "${aaprop}: endpoint already set or doesn't exist"
 fi
 
-if [ "$(grep '^http.event.accountName=customer1$' $aaprop)" ]; then
+if [ "$(grep '^http.event.accountName=analytics-customer1$' $aaprop)" ]; then
         echo "${aaprop}: setting correct account name"
 	sed -i "/^http.event.accountName=/c\http.event.accountName=${ACCOUNT_NAME}" ${aaprop}
 else
         echo "${aaprop}: account name already set or doesn't exist"
 fi
+
+if [ "$(grep '^http.event.accessKey=your-account-access-key$' $aaprop)" ]; then
+        echo "${aaprop}: setting correct accessKey"
+        sed -i "/^http.event.accessKey=/c\http.event.accessKey=${ACCESS_KEY}" ${aaprop}
+else
+        echo "${aaprop}: accessKey already set or doesn't exist"
 
 # Configure monitor.xml
 
@@ -46,7 +52,7 @@ fi
 
 if [ "$(grep 'path: \$' $sjal)" ]; then
         echo "${sjal}: setting to correct path"
-        sed -i "/path:/c\    path: /tomcat/appagent/ver4.0.0.0/logs/${NODE_NAME}" ${sjal}
+        sed -i "/path:/c\    path: /tomcat/appagent/${VERSION_STRING}/logs/${NODE_NAME}" ${sjal}
 else
         echo "${sjal}: path already set or doesn't exist"
 fi

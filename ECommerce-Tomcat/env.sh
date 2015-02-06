@@ -20,7 +20,6 @@ if [ -z "JVM_ROUTE" ]; then
 	export JVM_ROUTE="route1";
 fi
 
-
 if [ -z "${APP_NAME}" ]; then
 	export APP_NAME="ECommerce-Demo";
 fi
@@ -30,7 +29,11 @@ if [ -z "${EUM_CLOUD}" ]; then
 fi
 
 if [ -z "${ACCOUNT_NAME}" ]; then
-	export ACCOUNT_NAME="customer1";
+	export ACCOUNT_NAME="analytics-customer1";
+fi
+
+if [ -z "${ACCESS_KEY}" ]; then
+	export ACCESS_KEY="your-account-access-key";
 fi
 
 if [ -n "${web}" ]; then
