@@ -32,12 +32,11 @@ ADD AppServerAgent.zip /
 RUN unzip /AppServerAgent.zip -d ${CATALINA_HOME}/appagent
 RUN rm AppServerAgent.zip
 
-
 # Machine Agent Install
 ENV MACHINE_AGENT_HOME /machine_agent
 ADD MachineAgent.zip /
 RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
-ADD increase-pool.sh ${MACHINE_AGENT_HOME}/local-scripts
+ADD increase-pool.sh ${MACHINE_AGENT_HOME}/local-scripts/
 RUN rm MachineAgent.zip
 
 # Analytics Agent config
