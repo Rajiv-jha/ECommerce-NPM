@@ -24,11 +24,6 @@ promptForAgents() {
   read -e -p "Enter path to DB Agent: " DB_AGENT
 }
 
-promptForAnalytics() {
-  read -e -p "Enter Analytics Account Name: " ANALYTICS_ACCOUNT_NAME
-  read -e -p "Enter Analytics Account Key: " ANALYTICS_ACCOUNT_KEY
-}
-
 promptForPortal() {
   echo "Please Sign In to download agent..."
   echo "Email ID/UserName: "
@@ -84,7 +79,6 @@ fi
 if  [ $# -eq 0 ]
 then   
   promptForAgents
-  promptForAnalytics
 
 else
   # Download from download.appdynamics.com
@@ -99,8 +93,6 @@ else
       echo "Username or Password missing"
       exit
     fi
-
-    promptForAnalytics 
 
   else
     # Allow user to specify locations of App Server, Machine and Database Agents
@@ -153,13 +145,10 @@ cp ${APP_SERVER_AGENT} ECommerce-Tomcat/AppServerAgent.zip
 cp ${APP_SERVER_AGENT} ECommerce-Synapse/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-Tomcat/MachineAgent.zip
 
-if [ "$ANALYTICS_ACCOUNT_NAME" != "" ] && [ "$ANALYTICS_ACCOUNT_KEY" != "" ];
-then
-  # Enable Analytics 
-  (cd ECommerce-Tomcat && unzip MachineAgent.zip monitors/analytics-agent/monitor.xml)
-  (cd ECommerce-Tomcat && sed -i .bak "s/false/true/g" monitors/analytics-agent/monitor.xml)
-  (cd ECommerce-Tomcat && zip MachineAgent.zip monitors/analytics-agent/monitor.xml)
-fi
+# Enable Analytics 
+(cd ECommerce-Tomcat && unzip MachineAgent.zip monitors/analytics-agent/monitor.xml)
+(cd ECommerce-Tomcat && sed -i .bak "s/false/true/g" monitors/analytics-agent/monitor.xml)
+(cd ECommerce-Tomcat && zip MachineAgent.zip monitors/analytics-agent/monitor.xml)
 
 # Build Tomcat containers using downloaded AppServer and Machine Agents
 # Use docker build with --no-cache option to force latest git repo clone
