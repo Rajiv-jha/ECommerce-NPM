@@ -15,7 +15,7 @@ else
         echo "${aaprop}: endpoint already set or doesn't exist"
 fi
 
-if [ "$(grep '^http.event.accountName=customer1$' $aaprop)" ]; then
+if [ "$(grep '^http.event.accountName=analytics-customer1$' $aaprop)" ]; then
         echo "${aaprop}: setting correct account name"
 	sed -i "/^http.event.accountName=/c\http.event.accountName=${ACCOUNT_NAME}" ${aaprop}
 else
