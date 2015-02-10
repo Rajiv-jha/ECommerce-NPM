@@ -155,12 +155,6 @@ cp ${MACHINE_AGENT} ECommerce-Tomcat/MachineAgent.zip
 
 if [ "$ANALYTICS_ACCOUNT_NAME" != "" ] && [ "$ANALYTICS_ACCOUNT_KEY" != "" ];
 then
-  # Update Machine Agent install with Analytics account/key info
-  (cd ECommerce-Tomcat && unzip MachineAgent.zip monitors/analytics-agent/conf/analytics-agent.properties)
-  (cd ECommerce-Tomcat && sed -i .bak "s/analytics-customer1/$ANALYTICS_ACCOUNT_NAME/g" monitors/analytics-agent/conf/analytics-agent.properties)
-  (cd ECommerce-Tomcat && sed -i .bak "s/your-account-access-key/$ANALYTICS_ACCOUNT_KEY/g" monitors/analytics-agent/conf/analytics-agent.properties)
-  (cd ECommerce-Tomcat && zip MachineAgent.zip monitors/analytics-agent/conf/analytics-agent.properties)
-
   # Enable Analytics 
   (cd ECommerce-Tomcat && unzip MachineAgent.zip monitors/analytics-agent/monitor.xml)
   (cd ECommerce-Tomcat && sed -i .bak "s/false/true/g" monitors/analytics-agent/monitor.xml)
