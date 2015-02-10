@@ -11,7 +11,7 @@ ENV PATH $PATH:$GRADLE_HOME/bin
 RUN git clone https://github.com/Appdynamics/ECommerce-Java.git
 
 # Gradle build
-RUN cd /ECommerce-Java;gradle war
+RUN cd /ECommerce-Java;gradle war uberJar;
 
 # Environment vars: Tomcat
 ENV TOMCAT_MAJOR_VERSION 8
@@ -37,11 +37,12 @@ RUN rm AppServerAgent.zip
 ENV MACHINE_AGENT_HOME /machine_agent
 ADD MachineAgent.zip /
 RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
+ADD increase-pool.sh ${MACHINE_AGENT_HOME}/local-scripts
 RUN rm MachineAgent.zip
 
 # Analytics Agent config
 ADD configAnalytics.sh /
-RUN chmod +x /configAnalytics.sh
+RUN chmod +x /configAnalytics.sh;chmod +x ${MACHINE_AGENT_HOME}/local-scripts/*.sh
 
 # Startup scripts
 ADD startup.sh /
@@ -49,6 +50,7 @@ ADD env.sh /
 RUN version=`find ${CATALINA_HOME}/appagent -type d -name "ver*" | sed "s:^${CATALINA_HOME}/appagent/::"`; \
     sed -e "s:_VERSION_STRING:$version:g" env.sh > env.sh.tmp && mv env.sh.tmp env.sh
 ADD start-machine-agent.sh /
+
 RUN chmod +x /startup.sh
 RUN chmod +x /start-machine-agent.sh
 RUN chmod +x /env.sh
