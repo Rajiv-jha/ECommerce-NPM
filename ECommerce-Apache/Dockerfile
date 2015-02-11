@@ -36,6 +36,6 @@ RUN chmod u+x /opt/appdynamics/env.sh
 RUN chmod u+x /opt/appdynamics/start.sh
 
 WORKDIR /
-CMD /opt/appdynamics/start.sh && tail -f ${HTTPD_24}/logs/access_log
+CMD /opt/appdynamics/start.sh 
 
 EXPOSE 80

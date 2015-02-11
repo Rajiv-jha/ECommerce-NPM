@@ -16,4 +16,4 @@ echo "ServerName `hostname`:80" >> $HTTPD24/conf/httpd.conf
 
 # Start Apache and AppDynamics Proxy Agent
 service httpd24-httpd start
-nohup /opt/appdynamics/appdynamics-sdk-native/runSDKProxy.sh &
+/opt/appdynamics/appdynamics-sdk-native/runSDKProxy.sh
