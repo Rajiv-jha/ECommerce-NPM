@@ -17,6 +17,6 @@ if [ -z "${TIER_NAME}" ]; then
 fi 
 
 if [ -z "${NODE_NAME}" ]; then
-	export NODE_NAME="Apache";
+	export NODE_NAME="ECommerce-Apache";
 fi
 		

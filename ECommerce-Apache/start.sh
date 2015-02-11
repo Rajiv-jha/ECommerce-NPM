@@ -8,8 +8,8 @@ HTTPD24=/opt/rh/httpd24/root/etc/httpd
 sed -i "s/<your_controller>/${CONTROLLER}/g" $HTTPD24/conf.d/appd.conf
 sed -i "s/<your_controller_port>/${APPD_PORT}/g" $HTTPD24/conf.d/appd.conf
 sed -i "s/<your_app_name>/${APP_NAME}/g" $HTTPD24/conf.d/appd.conf
-sed -i "s/<your_tier_name>/${NODE_NAME}/g" $HTTPD24/conf.d/appd.conf
-sed -i "s/<your_node_name>/${TIER_NAME}/g" $HTTPD24/conf.d/appd.conf
+sed -i "s/<your_tier_name>/${TIER_NAME}/g" $HTTPD24/conf.d/appd.conf
+sed -i "s/<your_node_name>/${NODE_NAME}/g" $HTTPD24/conf.d/appd.conf
 
 # Set Apache ServerName usign container's hostname
 echo "ServerName `hostname`:80" >> $HTTPD24/conf/httpd.conf
