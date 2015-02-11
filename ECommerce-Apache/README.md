@@ -1,6 +1,6 @@
 Provides an Apache httpd-based AJP load balancer for the ECommerce demo, with mod_appdynamics installed.  This will load balance across two instance of the ECommerce-Server tier.  
 
-To run: `docker run --name=lbr -h lbr -e APP_NAME=$APP_NAME -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link web:web --link web1:web1 -p 80:80 -d appdynamics/ecommerce-apache`
+`docker run --name=lbr -h lbr -e APP_NAME=ECommerce -e CONTROLLER=controller -e APPD_PORT=8090 -e TIER_NAME=ECommerce_WebTier -e NODE_NAME=ECommerce_Apache --link web:web --link web1:web1 -p 80:80 -d appdynamics/ecommerce-apache`
 
 The following environment variables are set with the docker -e flag:
 
