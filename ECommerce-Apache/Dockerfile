@@ -1,6 +1,4 @@
-FROM centos:centos6
-
-RUN yum -y install wget unzip
+FROM appdynamics/ecommerce-java:oracle-java7
 
 # Centos 6 installs Apache 2.2 by default: we want 2.4
 RUN cd /etc/yum.repos.d/; wget http://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo
