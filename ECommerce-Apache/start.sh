@@ -18,3 +18,6 @@ echo "ServerName `hostname`:80" >> $HTTPD24/conf/httpd.conf
 export APPD_SDK_ENV_LOG_CONFIG_PATH=/opt/appdynamics/appdynamics-sdk-native/conf/appdynamics_sdk_log4cxx.xml
 /etc/init.d/httpd24-httpd start
 nohup /opt/appdynamics/appdynamics-sdk-native/runSDKProxy.sh &
+
+# Start Machine Agent
+/opt/appdynamics/start-machine-agent.sh

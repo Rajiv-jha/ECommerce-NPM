@@ -29,7 +29,7 @@ RUN ln -s /opt/appdynamics/appdynamics-sdk-native/sdk_lib/lib/libappdynamics_nat
 ADD ajp_proxy.conf ${HTTPD_24}/conf.d/
 
 # Install Machine Agent
-ENV MACHINE_AGENT_HOME opt/appdynamics/machine_agent
+ENV MACHINE_AGENT_HOME /opt/appdynamics/machine_agent
 ADD MachineAgent.zip /
 RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
 RUN rm MachineAgent.zip

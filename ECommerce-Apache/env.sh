@@ -20,6 +20,7 @@ if [ -z "${NODE_NAME}" ]; then
 	export NODE_NAME="ECommerce-Apache";
 fi
 
+export MACHINE_AGENT_HOME=/opt/appdynamics/machine_agent
 export AGENT_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}";
 export JAVA_OPTS="${AGENT_OPTS} -DjvmRoute=${JVM_ROUTE} -Xmx512m -XX:MaxPermSize=128m -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager";
 
