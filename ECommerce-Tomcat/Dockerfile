@@ -36,12 +36,16 @@ RUN rm AppServerAgent.zip
 ENV MACHINE_AGENT_HOME /machine_agent
 ADD MachineAgent.zip /
 RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
-ADD increase-pool.sh ${MACHINE_AGENT_HOME}/local-scripts/
 RUN rm MachineAgent.zip
+
+# Machine Agent scripts for Run Book Automation
+ADD increase-pool.sh ${MACHINE_AGENT_HOME}/local-scripts/
+ADD shrink-pool.sh ${MACHINE_AGENT_HOME}/local-scripts/
+RUN chmod +x ${MACHINE_AGENT_HOME}/local-scripts/*.sh
 
 # Analytics Agent config
 ADD configAnalytics.sh /
-RUN chmod +x /configAnalytics.sh;chmod +x ${MACHINE_AGENT_HOME}/local-scripts/*.sh
+RUN chmod +x /configAnalytics.sh
 
 # Startup scripts
 ADD startup.sh /
