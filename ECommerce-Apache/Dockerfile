@@ -25,7 +25,7 @@ RUN /opt/appdynamics/appdynamics-sdk-native/install.sh
 # Add libappdynamics_native_sdk
 RUN ln -s /opt/appdynamics/appdynamics-sdk-native/sdk_lib/lib/libappdynamics_native_sdk.so /usr/lib64/libappdynamics_native_sdk.so
 
-# Revproxy configuration
+# ECommerce reverse proxy configuration
 ADD ajp_proxy.conf ${HTTPD_24}/conf.d/
 
 # Set Controller, Port, App, Tier and Node via env vars
@@ -34,6 +34,7 @@ ADD start.sh /opt/appdynamics/
 RUN chmod 744 /opt/appdynamics/env.sh
 RUN chmod 744 /opt/appdynamics/start.sh
 
-CMD /opt/appdynamics/start.sh && tail -f ${HTTPD_24}/logs/error_log 
+# Run startup script and tail the AppDynamics Native SDK proxy log
+CMD /opt/appdynamics/start.sh && (cd /opt/appdynamics/appdynamics-sdk-native/logs; tail -f `ls | grep proxy.*`)
 
 EXPOSE 80
