@@ -165,7 +165,7 @@ cp ${DB_AGENT} ECommerce-DBAgent/dbagent.zip
 
 # Build LoadGen container
 # Use docker build with --no-cache option to force latest git repo clone
-(cd ECommerce-Load && docker build --no-cache -t appdynamics/load .)
+(cd ECommerce-Load && docker build --no-cache -t appdynamics/ecommerce-load .)
 
 # Pull ActiveMQ, LBR and LoadGen containers from appdynamics public docker repo
 docker pull appdynamics/ecommerce-activemq
