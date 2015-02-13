@@ -15,5 +15,6 @@ sed -i "s/<your_node_name>/${NODE_NAME}/g" $HTTPD24/conf.d/appd.conf
 echo "ServerName `hostname`:80" >> $HTTPD24/conf/httpd.conf
 
 # Start Apache and AppDynamics Proxy Agent
-service httpd24-httpd start
-/opt/appdynamics/appdynamics-sdk-native/runSDKProxy.sh
+export APPD_SDK_ENV_LOG_CONFIG_PATH=/opt/appdynamics/appdynamics-sdk-native/conf/appdynamics_sdk_log4cxx.xml
+/etc/init.d/httpd24-httpd start
+nohup /opt/appdynamics/appdynamics-sdk-native/runSDKProxy.sh &
