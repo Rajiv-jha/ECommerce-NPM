@@ -1,6 +1,6 @@
 FROM centos:centos6
 
-RUN yum -y install wget
+RUN yum -y install wget unzip
 
 # Centos 6 installs Apache 2.2 by default: we want 2.4
 RUN cd /etc/yum.repos.d/; wget http://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo
@@ -28,9 +28,17 @@ RUN ln -s /opt/appdynamics/appdynamics-sdk-native/sdk_lib/lib/libappdynamics_nat
 # ECommerce reverse proxy configuration
 ADD ajp_proxy.conf ${HTTPD_24}/conf.d/
 
+# Install Machine Agent
+ENV MACHINE_AGENT_HOME opt/appdynamics/machine_agent
+ADD MachineAgent.zip /
+RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
+RUN rm MachineAgent.zip
+
 # Set Controller, Port, App, Tier and Node via env vars
+ADD start-machine-agent.sh /opt/appdynamics/
 ADD env.sh /opt/appdynamics/
 ADD start.sh /opt/appdynamics/
+RUN chmod 744 /opt/appdynamics/start-machine-agent.sh
 RUN chmod 744 /opt/appdynamics/env.sh
 RUN chmod 744 /opt/appdynamics/start.sh
 
