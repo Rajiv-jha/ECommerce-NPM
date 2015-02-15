@@ -41,6 +41,6 @@ RUN chmod 744 /opt/appdynamics/env.sh
 RUN chmod 744 /opt/appdynamics/start.sh
 
 # Run startup script and tail the AppDynamics Native SDK proxy log
-CMD /opt/appdynamics/start.sh
+CMD /opt/appdynamics/start.sh && tail -f ${HTTPD_24}/logs/error_log
 
 EXPOSE 80
