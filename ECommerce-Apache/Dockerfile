@@ -35,6 +35,7 @@ RUN rm MachineAgent.zip
 # Add utility scripts to /usr/local/bin
 ADD tail-proxy-log /usr/local/bin/
 ADD tail-access-log /usr/local/bin/
+ADD tail-error-log /usr/local/bin/
 RUN chmod 744 /usr/local/bin/tail-*
 
 # Set Controller, Port, App, Tier and Node via env vars

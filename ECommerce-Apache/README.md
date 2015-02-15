@@ -20,3 +20,5 @@ See the [httpd configuration file](https://github.com/Appdynamics/ECommerce-Dock
 To view the AppDynamics Native SDK Proxy log: `docker exec -it lbr tail-proxy-log`
 
 To view the Apache access log: `docker exec -it lbr tail-access-log`
+
+To view the Apache error log: `docker exec -it lbr tail-error-log`
