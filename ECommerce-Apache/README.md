@@ -16,3 +16,7 @@ The configuration assumes that two ECommerce-Server instances are running with `
 * `docker run --rm -it --name web1 -e web=true -p 8081:8080 --link controller:controller --link db:db --link ws:ws --link jms:jms appdynamics/ecommerce-tomcat`
 
 See the [httpd configuration file](https://github.com/Appdynamics/ECommerce-Docker/blob/master/ECommerce-Apache/ajp_proxy.conf) for details.
+
+To view the AppDynamics Native SDK Proxy log: `docker exec -it lbr tail-proxy-log`
+
+To view the Apache access log: `docker exec -it lbr tail-access-log`

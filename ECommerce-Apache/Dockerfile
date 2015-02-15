@@ -32,15 +32,18 @@ ADD MachineAgent.zip /
 RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
 RUN rm MachineAgent.zip
 
+# Add utility scripts to /usr/local/bin
+ADD tail-proxy-log /usr/local/bin/
+ADD tail-access-log /usr/local/bin/
+RUN chmod 744 /usr/local/bin/tail-*
+
 # Set Controller, Port, App, Tier and Node via env vars
-ADD start-machine-agent.sh /opt/appdynamics/
 ADD env.sh /opt/appdynamics/
 ADD start.sh /opt/appdynamics/
-RUN chmod 744 /opt/appdynamics/start-machine-agent.sh
 RUN chmod 744 /opt/appdynamics/env.sh
 RUN chmod 744 /opt/appdynamics/start.sh
 
-# Run startup script and tail the AppDynamics Native SDK proxy log
+# Run startup script and tail Apache error log
 CMD /opt/appdynamics/start.sh && tail -f ${HTTPD_24}/logs/error_log
 
 EXPOSE 80

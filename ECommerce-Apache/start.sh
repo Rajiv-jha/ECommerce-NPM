@@ -19,9 +19,12 @@ export APPD_SDK_ENV_LOG_CONFIG_PATH=/opt/appdynamics/appdynamics-sdk-native/conf
 /etc/init.d/httpd24-httpd start
 
 # Start AppDynamics Proxy Agent
+echo "Starting Proxy Agent"
 nohup /opt/appdynamics/appdynamics-sdk-native/runSDKProxy.sh &
 
+# Wait for Proxy Agent to register with the Controller
 sleep 60
 
 # Start Machine Agent
-/opt/appdynamics/start-machine-agent.sh
+echo "Starting Machine Agent..."
+nohup java ${AGENT_OPTS} -jar ${MACHINE_AGENT_HOME}/machineagent.jar  > ${MACHINE_AGENT_HOME}/machine_agent.log &
