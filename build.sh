@@ -147,7 +147,11 @@ cp ${MACHINE_AGENT} ECommerce-Tomcat/MachineAgent.zip
 
 # Enable Analytics 
 (cd ECommerce-Tomcat && unzip MachineAgent.zip monitors/analytics-agent/monitor.xml)
-(cd ECommerce-Tomcat && sed -i .bak "s/false/true/g" monitors/analytics-agent/monitor.xml)
+if [ `uname` == "Darwin" ]; then
+  (cd ECommerce-Tomcat && sed -i .bak "s/false/true/g" monitors/analytics-agent/monitor.xml)
+else
+  (cd ECommerce-Tomcat && sed -i "s/false/true/g" monitors/analytics-agent/monitor.xml)
+fi
 (cd ECommerce-Tomcat && zip MachineAgent.zip monitors/analytics-agent/monitor.xml)
 
 # Build Tomcat containers using downloaded AppServer and Machine Agents
