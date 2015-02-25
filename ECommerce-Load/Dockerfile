@@ -14,7 +14,6 @@ ENV PATH $PATH:$GRADLE_HOME/bin
 ENV LOAD_GEN_HOME /ECommerce-Load
 RUN git clone https://github.com/Appdynamics/ECommerce-Load.git
 RUN cd /ECommerce-Load;gradle distZip;
-ADD /load-generator.zip /ECommerce-Load/build/distributions/
 RUN unzip ECommerce-Load/build/distributions/load-generator.zip -d /
 RUN chmod +x $LOAD_GEN_HOME/bin/*
 ADD env.sh /
