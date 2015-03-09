@@ -53,10 +53,13 @@ ADD env.sh /
 RUN version=`find ${CATALINA_HOME}/appagent -type d -name "ver*" | sed "s:^${CATALINA_HOME}/appagent/::"`; \
     sed -e "s:_VERSION_STRING:$version:g" env.sh > env.sh.tmp && mv env.sh.tmp env.sh
 ADD start-machine-agent.sh /
+ADD start-appserver-agent.sh /
 
 RUN chmod +x /startup.sh
-RUN chmod +x /start-machine-agent.sh
 RUN chmod +x /env.sh
+RUN chmod +x /start-machine-agent.sh
+RUN chmod +x /start-appserver-agent.sh
+
 WORKDIR /
 CMD ["/bin/bash","/startup.sh"]
 
