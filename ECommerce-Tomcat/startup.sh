@@ -21,5 +21,6 @@ fi
 
 source /start-machine-agent.sh
 source /start-appserver-agent.sh
+source /configAnalytics.sh
 
 cd ${CWD}
