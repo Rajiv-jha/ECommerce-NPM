@@ -1,7 +1,7 @@
 FROM appdynamics/ecommerce-java:oracle-java7
 
 # Install Gradle
-RUN wget -N http://services.gradle.org/distributions/gradle-2.1-bin.zip
+RUN curl -O http://downloads.gradle.org/distributions/gradle-2.1-bin.zip
 RUN unzip gradle-2.1-bin.zip -d /opt/
 RUN rm gradle-2.1-bin.zip
 ENV GRADLE_HOME /opt/gradle-2.1
@@ -19,12 +19,12 @@ ENV TOMCAT_MINOR_VERSION 8.0.14
 ENV CATALINA_HOME /tomcat
 
 # Install Tomcat
-RUN wget -q https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
-    wget -qO- https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 | md5sum -c - && \
-    tar zxf apache-tomcat-*.tar.gz && \
-    rm apache-tomcat-*.tar.gz && \
-    mv apache-tomcat* tomcat
-
+RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz \
+    && curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
+    && md5sum apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
+    && tar zxf apache-tomcat-*.tar.gz \
+    && rm apache-tomcat-*.tar.gz \
+    && mv apache-tomcat-${TOMCAT_MINOR_VERSION} tomcat
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 
 # App Server Agent Install
