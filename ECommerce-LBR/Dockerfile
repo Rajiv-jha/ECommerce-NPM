@@ -10,33 +10,35 @@ ENV HTTPD_24 /opt/rh/httpd24/root/etc/httpd
 RUN echo 'SetEnv APPD_SDK_ENV_LOG_CONFIG_PATH /opt/appdynamics/appdynamics-sdk-native/conf/appdynamics_sdk_log4cxx.xml' >>  ${HTTPD_24}/conf.modules.d/00-base.conf
 RUN echo 'PassEnv APPD_SDK_ENV_LOG_CONFIG_PATH' >>  ${HTTPD_24}/conf.modules.d/00-base.conf
 RUN echo 'LoadModule appdynamics_module modules/mod_appdynamics.so' >>  ${HTTPD_24}/conf.modules.d/00-base.conf
-ADD libmod_appdynamics.so ${HTTPD_24}/modules/mod_appdynamics.so
+#ADD libmod_appdynamics.so ${HTTPD_24}/modules/mod_appdynamics.so
 ADD appd.conf ${HTTPD_24}/conf.d/
 
 # TODO: Fix mod_appdynamics dependency on lib_curl3
 #RUN ln -s /usr/lib64/libcurl.so.4 /usr/lib64/libcurl.so.3
 
 # Add native SDK
-
-ENV SDK_HOME /opt/appdynamics
+	
+ENV SDK_HOME /opt
 ENV NATIVE_HOME ${SDK_HOME}/appdynamics-sdk-native
-RUN mkdir ${SDK_HOME}
+#RUN mkdir ${SDK_HOME}
 
-ADD appdynamics-sdk-native.tar.bz2 ${SDK_HOME}
-RUN chmod 777 ${NATIVE_HOME}/logs;chmod 744 ${NATIVE_HOME}/install.sh;
+ADD webserver_agent.tar.gz ${SDK_HOME}
+ADD appdynamics_sdk.conf /etc/ld.so.conf.d/
+RUN ldconfig;cd ${SDK_HOME} gunzip ${SDK_HOME}/webserver_agent.tar.gz;cd ${SDK_HOME} tar xf ${SDK_HOME}/webserver_agent.tar;chmod 777 ${NATIVE_HOME}/logs;chmod 744 ${NATIVE_HOME}/install.sh;
 RUN ${NATIVE_HOME}/install.sh
 
 # Add libappdynamics_native_sdk
-RUN ln -s /opt/appdynamics/appdynamics-sdk-native/sdk_lib/lib/libappdynamics_native_sdk.so /usr/lib64/libappdynamics_native_sdk.so
+RUN ln -s ${NATIVE_HOME}/sdk_lib/lib/libappdynamics_native_sdk.so /usr/lib64/libappdynamics_native_sdk.so;ln -s $NATIVE_HOME/WebServerAgent/Apache/libmod_appdynamics.so $HTTPD_24/modules/mod_appdynamics.so 
 
 # ECommerce reverse proxy configuration
 ADD ajp_proxy.conf ${HTTPD_24}/conf.d/
 
 # Install Machine Agent
-# ENV MACHINE_AGENT_HOME /opt/appdynamics/machine_agent
-# ADD MachineAgent.zip /
-# RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
-# RUN rm MachineAgent.zip
+ENV MACHINE_AGENT_HOME /opt/appdynamics/machine_agent
+ADD machineagent.rpm /
+RUN rpm -i /machineagent.rpm;rm /machineagent.rpm
+ADD controller-info.xml /
+
 
 # Add utility scripts to /usr/local/bin
 ADD tail-proxy-log /usr/local/bin/
@@ -44,12 +46,11 @@ ADD tail-access-log /usr/local/bin/
 ADD tail-error-log /usr/local/bin/
 RUN chmod 744 /usr/local/bin/tail-*
 
-# Set Controller, Port, App, Tier and Node via env vars
-ADD env.sh /opt/appdynamics/
-ADD startup.sh /opt/appdynamics/
-RUN chmod 744 /opt/appdynamics/env.sh;chmod 744 /opt/appdynamics/startup.sh;chown -R apache:apache /opt/appdynamics;chmod 7777 -R /opt/appdynamics;
+ADD env.sh $NATIVE_HOME/
+ADD startup.sh $NATIVE_HOME/
+RUN chmod 744 ${NATIVE_HOME}/env.sh;chmod 744 ${NATIVE_HOME}/startup.sh;chown -R apache:apache ${NATIVE_HOME};chmod 7777 -R ${NATIVE_HOME};
 
 # Run startup script and tail Apache error log
-CMD /opt/appdynamics/startup.sh && tail -f ${HTTPD_24}/logs/error_log
+CMD ${NATIVE_HOME}/startup.sh && tail -f ${HTTPD_24}/logs/error_log
 
 EXPOSE 80

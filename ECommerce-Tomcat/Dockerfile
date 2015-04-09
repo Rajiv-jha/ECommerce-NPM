@@ -33,10 +33,11 @@ RUN unzip /AppServerAgent.zip -d ${CATALINA_HOME}/appagent
 RUN rm AppServerAgent.zip
 
 # Machine Agent Install
-ENV MACHINE_AGENT_HOME /machine_agent
-ADD MachineAgent.zip /
-RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
-RUN rm MachineAgent.zip
+# Install Machine Agent
+ENV MACHINE_AGENT_HOME /opt/appdynamics/machine_agent
+ADD machineagent.rpm /
+RUN rpm -i /machineagent.rpm;rm /machineagent.rpm
+ADD controller-info.xml /
 
 # Machine Agent scripts for Run Book Automation
 ADD increase-pool.sh ${MACHINE_AGENT_HOME}/local-scripts/
