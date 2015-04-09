@@ -1,9 +1,6 @@
 #! /bin/bash
 
 cleanUp() {
-  rm -f cookies.txt
-  rm -f index.html*
-  rm -rf .agents
   (cd ECommerce-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip)
   (cd ECommerce-Tomcat && rm -rf monitors)
   (cd ECommerce-Synapse && rm -f AppServerAgent.zip MachineAgent.zip)
@@ -24,53 +21,10 @@ promptForAgents() {
   read -e -p "Enter path to DB Agent: " DB_AGENT
 }
 
-promptForPortal() {
-  echo "Please Sign In to download agent..."
-  echo "Email ID/UserName: "
-  read USER_NAME
-
-  stty -echo
-  echo "Password: "
-  read PASSWORD
-  stty echo
-}
-
-downloadAgents() {
-  mkdir -p .agents
-
-  wget --quiet --save-cookies cookies.txt  --post-data "username=$USER_NAME&password=$PASSWORD" --no-check-certificate https://login.appdynamics.com/sso/login/
-
-  echo "Downloading AppServerAgent..."
-  wget --quiet --load-cookies cookies.txt https://download.appdynamics.com/onpremise/public/latest/AppServerAgent.zip -O .agents/AppServerAgent.zip
-  if [ $? -ne 0 ]; then
-     cleanUp
-     exit
-  fi
-  APP_SERVER_AGENT=".agents/AppServerAgent.zip"
-
-  echo "Downloading MachineAgent..."
-  wget --quiet --load-cookies cookies.txt https://download.appdynamics.com/onpremise/public/latest/MachineAgent.zip -O .agents/MachineAgent.zip
-  if [ $? -ne 0 ]; then
-     cleanUp
-     exit
-  fi
-  MACHINE_AGENT=".agents/MachineAgent.zip"
-
-  echo "Downloading DBAgent..."
-  wget --quiet --load-cookies cookies.txt https://download.appdynamics.com/onpremise/public/latest/dbagent.zip -O .agents/dbagent.zip
-  if [ $? -ne 0 ]; then
-     cleanUp
-     exit
-  fi
-  DB_AGENT=".agents/dbagent.zip"
-}
-
-
 # Usage information
 if [[ $1 == *--help* ]]
 then
   echo "Specify agent locations: build.sh -a <Path to App Server Agent> -m <Path to Machine Agent> -d <Path to Database Agent>"
-  echo "Download from downloads.appdynamics.com: build.sh --download"
   echo "Prompt for agent locations: build.sh"
   exit
 fi
@@ -81,60 +35,44 @@ then
   promptForAgents
 
 else
-  # Download from download.appdynamics.com
-  if [[ $1 == *--download* ]]
-  then
-    promptForPortal
-
-    if [ "$USER_NAME" != "" ] && [ "$PASSWORD" != "" ];
-    then
-      downloadAgents
-    else
-      echo "Username or Password missing"
-      exit
-    fi
-
-  else
-    # Allow user to specify locations of App Server, Machine and Database Agents
-    while getopts "a:m:d:n:k:" opt; do
-      case $opt in
-        a)
-          APP_SERVER_AGENT=$OPTARG
-          if [ ! -e ${APP_SERVER_AGENT} ]
-          then
-            echo "Not found: ${APP_SERVER_AGENT}"
-            exit
-          fi
-          ;;
-        m)
-          MACHINE_AGENT=$OPTARG
-          if [ ! -e ${MACHINE_AGENT} ]
-          then
-            echo "Not found: ${MACHINE_AGENT}"
-            exit
-          fi
-          ;;
-        d)
-          DB_AGENT=$OPTARG
-          if [ ! -e ${DB_AGENT} ]
-          then
-            echo "Not found: ${DB_AGENT}"
-            exit
-          fi
-          ;;
-        n)
-          ANALYTICS_ACCOUNT_NAME=$OPTARG
-          ;;
-        k)
-          ANALYTICS_ACCOUNT_KEY=$OPTARG
-          ;;
-        \?)
-          echo "Invalid option: -$OPTARG"
-          ;;
-      esac
-    done
-  
-  fi
+  # Allow user to specify locations of App Server, Machine and Database Agents
+  while getopts "a:m:d:n:k:" opt; do
+    case $opt in
+      a)
+        APP_SERVER_AGENT=$OPTARG
+        if [ ! -e ${APP_SERVER_AGENT} ]
+        then
+          echo "Not found: ${APP_SERVER_AGENT}"
+          exit
+        fi
+        ;;
+      m)
+        MACHINE_AGENT=$OPTARG
+        if [ ! -e ${MACHINE_AGENT} ]
+        then
+          echo "Not found: ${MACHINE_AGENT}"
+          exit
+        fi
+        ;;
+      d)
+        DB_AGENT=$OPTARG
+        if [ ! -e ${DB_AGENT} ]
+        then
+          echo "Not found: ${DB_AGENT}"
+          exit
+        fi
+        ;;
+      n)
+        ANALYTICS_ACCOUNT_NAME=$OPTARG
+        ;;
+      k)
+        ANALYTICS_ACCOUNT_KEY=$OPTARG
+        ;;
+      \?)
+        echo "Invalid option: -$OPTARG"
+        ;;
+    esac
+  done
 fi
 
 # Pull Java base image from appdynamics docker repo
@@ -187,4 +125,3 @@ echo "    appdynamics/ecommerce-load"
 echo "    appdynamics/ecommerce-oracle"
 
 cleanUp
-
