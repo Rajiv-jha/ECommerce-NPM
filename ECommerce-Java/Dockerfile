@@ -1,6 +1,5 @@
 FROM centos:centos6
 
-RUN yum -y install git
 RUN yum -y install unzip
 RUN yum -y install tar
 
