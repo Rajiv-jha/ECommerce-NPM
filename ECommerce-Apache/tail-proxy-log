@@ -1,8 +1,0 @@
-#! /bin/bash
-source /opt/appdynamics/env.sh
-export PROXY_LOG=`ls ${NATIVE_SDK_HOME}/logs | grep proxy.[0-9]`
-if [ -z "${PROXY_LOG}" ]; then
-    echo "Error: AppDynamics Native SDK Proxy log not found"
-else
-    tail -f ${NATIVE_SDK_HOME}/logs/${PROXY_LOG}
-fi
