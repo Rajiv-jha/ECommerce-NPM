@@ -1,12 +1,10 @@
-# install Java7 from http://download.oracle.com/otn-pub/java/jdk/7u51-b13/jdk-7u51-linux-x64.rpm
 FROM centos:centos6
+
 RUN yum -y install git
 RUN yum -y install unzip
 RUN yum -y install tar
-#hack for centos docker bug
-RUN mkdir -p /run/lock
 
-#JDK
+# Install Oracle JDK
 RUN curl -j -k -L -H "Cookie:oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u71-b13/jdk-7u71-linux-x64.rpm -o jdk-linux-x64.rpm
 RUN rpm -Uvh jdk-linux-x64.rpm
 

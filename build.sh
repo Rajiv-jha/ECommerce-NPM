@@ -2,9 +2,10 @@
 
 cleanUp() {
   (cd ECommerce-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip)
-  (cd ECommerce-Tomcat && rm -rf monitors)
+  (cd ECommerce-Tomcat && rm -rf monitors ECommerce-Java)
   (cd ECommerce-Synapse && rm -f AppServerAgent.zip MachineAgent.zip)
   (cd ECommerce-DBAgent && rm -f dbagent.zip)
+  (cd ECommerce-Load && rm -rf ECommerce-Load)
 
   # Remove dangling images left-over from build
   if [[ `docker images -q --filter "dangling=true"` ]]
@@ -93,21 +94,20 @@ fi
 (cd ECommerce-Tomcat && zip MachineAgent.zip monitors/analytics-agent/monitor.xml)
 
 # Build Tomcat containers using downloaded AppServer and Machine Agents
-# Use docker build with --no-cache option to force latest git repo clone
-(cd ECommerce-Tomcat && docker build --no-cache -t appdynamics/ecommerce-tomcat .)
+(cd ECommerce-Tomcat && git clone https://github.com/Appdynamics/ECommerce-Java.git)
+(cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat .)
 
 # Build Synapse container using downloaded AppServer and Machine Agents
-# Use docker build with --no-cache option to force latest git repo clone
 cp ECommerce-Tomcat/MachineAgent.zip ECommerce-Synapse/MachineAgent.zip
-(cd ECommerce-Synapse && docker build --no-cache -t appdynamics/ecommerce-synapse .)
+(cd ECommerce-Synapse && docker build -t appdynamics/ecommerce-synapse .)
 
 # Build DBAgent container using downloaded DBAgent
 cp ${DB_AGENT} ECommerce-DBAgent/dbagent.zip
 (cd ECommerce-DBAgent && docker build -t appdynamics/ecommerce-dbagent .)
 
 # Build LoadGen container
-# Use docker build with --no-cache option to force latest git repo clone
-(cd ECommerce-Load && docker build --no-cache -t appdynamics/ecommerce-load .)
+(cd ECommerce-Load && git clone https://github.com/Appdynamics/ECommerce-Load.git)
+(cd ECommerce-Load && docker build -t appdynamics/ecommerce-load .)
 
 # Pull ActiveMQ, LBR and LoadGen containers from appdynamics public docker repo
 docker pull appdynamics/ecommerce-activemq

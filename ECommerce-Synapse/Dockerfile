@@ -1,15 +1,9 @@
 FROM appdynamics/ecommerce-java:oracle-java7
 
-
 ENV SYNAPSE_HOME /synapse-2.1.0
 ENV MACHINE_AGENT_HOME $SYNAPSE_HOME/machine_agent
 
-
 RUN curl http://mirror.olnevhost.net/pub/apache//synapse/2.1.0/synapse-2.1.0-bin.tar.gz | tar -xz
-
-EXPOSE 8280
-EXPOSE 1099
-EXPOSE 8243
 
 ADD AppServerAgent.zip /
 RUN unzip /AppServerAgent.zip -d ${SYNAPSE_HOME}/appagent
@@ -43,3 +37,7 @@ RUN chmod +x /startup.sh
 RUN chmod +x $SYNAPSE_HOME/bin/synapse.sh
 
 CMD /startup.sh
+
+EXPOSE 8280
+EXPOSE 1099
+EXPOSE 8243

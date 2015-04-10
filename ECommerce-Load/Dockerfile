@@ -4,16 +4,16 @@ RUN yum -y install firefox
 RUN yum -y install Xvfb
 
 # Gradle
-RUN wget -N http://services.gradle.org/distributions/gradle-2.1-all.zip
-RUN unzip gradle-2.1-all.zip -d /opt/
-RUN rm gradle-2.1-all.zip
+RUN curl -O http://downloads.gradle.org/distributions/gradle-2.1-bin.zip
+RUN unzip gradle-2.1-bin.zip -d /opt/
+RUN rm gradle-2.1-bin.zip
 ENV GRADLE_HOME /opt/gradle-2.1
 ENV PATH $PATH:$GRADLE_HOME/bin
 
-# Git Checkout
+# Add ECommerce-Load project from build dir 
+ADD ECommerce-Load /ECommerce-Load
 ENV LOAD_GEN_HOME /ECommerce-Load
-RUN git clone https://github.com/Appdynamics/ECommerce-Load.git
-RUN cd /ECommerce-Load;gradle distZip;
+RUN cd /ECommerce-Load; gradle distZip
 RUN unzip ECommerce-Load/build/distributions/load-generator.zip -d /
 RUN chmod +x $LOAD_GEN_HOME/bin/*
 ADD env.sh /

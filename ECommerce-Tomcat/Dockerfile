@@ -7,8 +7,8 @@ RUN rm gradle-2.1-bin.zip
 ENV GRADLE_HOME /opt/gradle-2.1
 ENV PATH $PATH:$GRADLE_HOME/bin
 
-# Git Checkout
-RUN git clone https://github.com/Appdynamics/ECommerce-Java.git
+# Copy ECommerce-Java project from build dir
+ADD ECommerce-Java /ECommerce-Java
 
 # Gradle build
 RUN cd /ECommerce-Java;gradle war uberJar;
