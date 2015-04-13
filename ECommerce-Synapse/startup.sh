@@ -22,9 +22,8 @@ fi
 
 JAVA_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}";
 
-echo java ${JAVA_OPTS} -jar ${MACHINE_AGENT_HOME}/machineagent.jar
-
-nohup java ${JAVA_OPTS} -jar ${MACHINE_AGENT_HOME}/machineagent.jar  > ${MACHINE_AGENT_HOME}/machine_agent.log 2>&1 &
+source /start-machine-agent.sh
+source /start-appserver-agent.sh
 
 
 cd ${SYNAPSE_HOME};
