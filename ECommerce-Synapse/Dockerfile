@@ -14,7 +14,7 @@ RUN mv /controller-info.xml ${SYNAPSE_HOME}/appagent/ver4.0.0.0/conf
 
 # Machine Agent Install
 # Install Machine Agent
-ENV MACHINE_AGENT_HOME /opt/appdynamics/machine_agent
+ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
 ADD machineagent.rpm /
 RUN rpm -i /machineagent.rpm;rm /machineagent.rpm
 ADD controller-info.xml /

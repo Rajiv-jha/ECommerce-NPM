@@ -34,7 +34,7 @@ RUN ln -s ${NATIVE_HOME}/sdk_lib/lib/libappdynamics_native_sdk.so /usr/lib64/lib
 ADD ajp_proxy.conf ${HTTPD_24}/conf.d/
 
 # Install Machine Agent
-ENV MACHINE_AGENT_HOME /opt/appdynamics/machine_agent
+ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
 ADD machineagent.rpm /
 RUN rpm -i /machineagent.rpm;rm /machineagent.rpm
 ADD controller-info.xml /

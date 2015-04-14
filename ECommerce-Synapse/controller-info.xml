@@ -48,6 +48,6 @@
     Each hierarchy level should be separated with a vertical bar ["|"].
     For example, if this Machine belongs to DataRack1 and it is located in Virginia Data Center, then
     it could be set to "Virginia Data Center|DataRack1|Machine1" and the UI will display in that hierarchy. -->
-    <machine-path>Foo|Bar</machine-path>
+    <machine-path>FOO|BAR|BAZ</machine-path>
 
 </controller-info>
