@@ -16,14 +16,26 @@
 
 #!/bin/sh
 
+# Default application name
 APP_NAME=$1
-CONTR_HOST=controller
-CONTR_PORT=8090
 if [ -z "$1" ]; then
         export APP_NAME="ECommerce";
 else
         export APP_NAME=$1;
 fi
+
+# Controller host/port
+CONTR_HOST=controller
+CONTR_PORT=8090
+
+# Analytics config parameters
+ACCOUNT_NAME=
+ACCESS_KEY=
+EVENT_ENDPOINT=
+
+# Load gen parameters
+NUM_OF_USERS=1
+TIME_BETWEEN_RUNS=60000
 
 docker run --name oracle-db -d -p 1521:1521 appdynamics/ecommerce-oracle
 docker run --name db -e MYSQL_ROOT_PASSWORD=singcontroller -p 3306:3306 -d mysql
