@@ -29,8 +29,7 @@ RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 
 # App Server Agent Install
 ADD AppServerAgent.zip /
-RUN unzip /AppServerAgent.zip -d ${CATALINA_HOME}/appagent
-RUN rm AppServerAgent.zip
+RUN unzip /AppServerAgent.zip -d ${CATALINA_HOME}/appagent;rm AppServerAgent.zip
 
 # Machine Agent Install
 # Install Machine Agent
@@ -46,7 +45,6 @@ RUN chmod +x ${MACHINE_AGENT_HOME}/local-scripts/*.sh
 
 # Analytics Agent config
 ADD configAnalytics.sh /
-RUN chmod +x /configAnalytics.sh
 
 # Startup scripts
 ADD startup.sh /
@@ -56,10 +54,7 @@ RUN version=`find ${CATALINA_HOME}/appagent -type d -name "ver*" | sed "s:^${CAT
 ADD start-machine-agent.sh /
 ADD start-appserver-agent.sh /
 
-RUN chmod +x /startup.sh
-RUN chmod +x /env.sh
-RUN chmod +x /start-machine-agent.sh
-RUN chmod +x /start-appserver-agent.sh
+RUN chmod +x /startup.sh;chmod +x /env.sh;chmod +x /start-machine-agent.sh;chmod +x /start-appserver-agent.sh;chmod +x /configAnalytics.sh
 
 WORKDIR /
 CMD ["/bin/bash","/startup.sh"]

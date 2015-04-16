@@ -6,7 +6,7 @@ source /env.sh
 
 # Configure analytics-agent.properties
 
-aaprop=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/analytics-agent.properties
+aaprop=/machine_agent/monitors/analytics-agent/conf/analytics-agent.properties
 
 if [ "$(grep '^http.event.endpoint=http://localhost:9080/v1' $aaprop)" ]; then
         echo "${aaprop}: setting correct endpoint"
@@ -31,7 +31,7 @@ fi
 
 # Configure monitor.xml
 
-monxml=${MACHINE_AGENT_HOME}/monitors/analytics-agent/monitor.xml
+monxml=/machine_agent/monitors/analytics-agent/monitor.xml
 
 if [ "$(grep '<enabled>false</enabled>' $monxml)" ]; then
         echo "${monxml}: setting to "true""
@@ -42,7 +42,7 @@ fi
 
 # Configure sample-java-agent-log.job
 
-sjal=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/sample-java-agent-log.job
+sjal=/machine_agent/monitors/analytics-agent/conf/job/sample-java-agent-log.job
 
 if [ "$(grep '^enabled: false' $sjal)" ]; then
         echo "${sjal}: setting to "true""
