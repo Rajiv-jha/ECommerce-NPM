@@ -20,6 +20,8 @@ cleanUp() {
   (cd ECommerce-Java && rm -f jdk-linux-x64.rpm)
   (cd ECommerce-Tomcat && rm -f AppServerAgent.zip machineagent.rpm)
   (cd ECommerce-Tomcat && rm -rf monitors ECommerce-Java)
+  (cd ECommerce-FulfillmentClient && rm -f AppServerAgent.zip machineagent.rpm)
+  (cd ECommerce-FulfillmentClient && rm -rf monitors ECommerce-Java)
   (cd ECommerce-Synapse && rm -f AppServerAgent.zip machineagent.rpm)
   (cd ECommerce-DBAgent && rm -f dbagent.zip)
   (cd ECommerce-Load && rm -rf ECommerce-Load)
@@ -124,6 +126,8 @@ echo "Building ECommerce-Java base image..."
 echo "Adding AppDynamics Agents ${APP_SERVER_AGENT} ${MACHINE_AGENT} ${WEB_AGENT} ${DB_AGENT}"
 cp ${APP_SERVER_AGENT} ECommerce-Tomcat/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-Tomcat/machineagent.rpm
+cp ${APP_SERVER_AGENT} ECommerce-FulfillmentClient/AppServerAgent.zip
+cp ${MACHINE_AGENT} ECommerce-FulfillmentClient/machineagent.rpm
 echo "Copied Agents Tomcat..."
 cp ${APP_SERVER_AGENT} ECommerce-Synapse/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-Synapse/machineagent.rpm
@@ -139,6 +143,10 @@ echo "Copied Agents LBR..."
 echo "Building ECommerce-Tomcat..."
 (cd ECommerce-Tomcat && git clone https://github.com/Appdynamics/ECommerce-Java.git)
 (cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat:${VERSION} .)
+
+echo "Building ECommerce-FulfillmentClient..."
+(cd ECommerce-FulfillmentClient && git clone https://github.com/Appdynamics/ECommerce-Java.git)
+(cd ECommerce-FulfillmentClient && docker build -t appdynamics/ecommerce-fulfillment-client:${VERSION} .)
 
 # Build Synapse container using downloaded AppServer and Machine Agents
 echo "Building ECommerce-Synapse..."
@@ -166,6 +174,7 @@ docker pull appdynamics/ecommerce-oracle:${VERSION}
 echo "Local docker container images installed: "
 echo "    appdynamics/ecommerce-java:oracle-java7"
 echo "    appdynamics/ecommerce-tomcat"
+echo "    appdynamics/ecommerce-fulfillment-client"
 echo "    appdynamics/ecommerce-synapse"
 echo "    appdynamics/ecommerce-dbagent"
 echo "    appdynamics/ecommerce-activemq"

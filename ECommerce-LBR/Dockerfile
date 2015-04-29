@@ -5,13 +5,13 @@ RUN useradd -U apache
 RUN cd /etc/yum.repos.d/; wget http://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo
 RUN yum -y install httpd24.x86_64
 ENV HTTPD_24 /opt/rh/httpd24/root/etc/httpd
+ENV APPDYNAMICS_SIM_ENABLED true
 
 # Add mod_appdynamics 
-RUN echo 'SetEnv APPD_SDK_ENV_LOG_CONFIG_PATH /opt/appdynamics/appdynamics-sdk-native/conf/appdynamics_sdk_log4cxx.xml' >>  ${HTTPD_24}/conf.modules.d/00-base.conf
-RUN echo 'PassEnv APPD_SDK_ENV_LOG_CONFIG_PATH' >>  ${HTTPD_24}/conf.modules.d/00-base.conf
-RUN echo 'LoadModule appdynamics_module modules/mod_appdynamics.so' >>  ${HTTPD_24}/conf.modules.d/00-base.conf
-#ADD libmod_appdynamics.so ${HTTPD_24}/modules/mod_appdynamics.so
-ADD appd.conf ${HTTPD_24}/conf.d/
+#RUN echo 'SetEnv APPD_SDK_ENV_LOG_CONFIG_PATH /opt/appdynamics/appdynamics-sdk-native/conf/appdynamics_sdk_log4cxx.xml' >>  ${HTTPD_24}/conf.modules.d/00-base.conf
+#RUN echo 'PassEnv APPD_SDK_ENV_LOG_CONFIG_PATH' >>  ${HTTPD_24}/conf.modules.d/00-base.conf
+#RUN echo 'LoadModule appdynamics_module modules/mod_appdynamics.so' >>  ${HTTPD_24}/00-appd.conf
+ADD appd.conf ${HTTPD_24}/
 
 # TODO: Fix mod_appdynamics dependency on lib_curl3
 #RUN ln -s /usr/lib64/libcurl.so.4 /usr/lib64/libcurl.so.3
