@@ -31,7 +31,7 @@ sed -i "s/<your_app_name>/${APP_NAME}/g" $HTTPD24/appd.conf
 sed -i "s/<your_tier_name>/${TIER_NAME}/g" $HTTPD24/appd.conf
 sed -i "s/<your_node_name>/${NODE_NAME}/g" $HTTPD24/appd.conf
 cat $HTTPD24/appd.conf >> $HTTPD24/conf/httpd.conf
-
+ 
 echo "Starting Proxy Agent"
 su  apache -c "nohup $NATIVE_HOME/runSDKProxy.sh &"
 
