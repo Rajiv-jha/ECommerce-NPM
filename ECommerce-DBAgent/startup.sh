@@ -14,7 +14,7 @@ fi
 
 JAVA_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT}";
 
-JAVA_OPTS="${JAVA_OPTS} -Xmx512m -XX:MaxPermSize=128m";
+JAVA_OPTS="${JAVA_OPTS} -Xmx512m -XX:MaxPermSize=128m -Duser.timezone=UTC";
 
 echo $JAVA_OPTS;
 
