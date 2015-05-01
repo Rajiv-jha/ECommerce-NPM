@@ -1,0 +1,22 @@
+enabled: true
+startAtEnd: false
+
+file:
+    path: /tomcat/logs
+    nameGlob: cart.log
+
+multiline:
+   startsWith: "INFO"
+
+fields:
+   sourceType: ECommerce41-log4j
+   nodeName: _NODE_NAME
+   tierName: _TIER_NAME
+   appName: _APP_NAME
+
+grok:
+  patterns:
+    - "(?s)%{LOG4J_TIMESTAMP:eventTimestamp} %{JAVACLASS:class} %{JAVAFILE:method}%{SPACE}%{LOGLEVEL:logLevel}: %{GREEDYDATA:logMessage}"
+
+eventTimestamp:
+   pattern: "MMM d, yyyy h:mm:ss aa"

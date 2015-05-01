@@ -58,3 +58,28 @@ else
         echo "${sjal}: path already set or doesn't exist"
 fi
 
+# Configure custom ECommerce log analytics
+
+ecjl=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/ecommerce-log4j.job
+
+if [ "$(grep '_NODE_NAME' ${ecjl})" ]; then
+        echo "${sjal}: setting NODE_NAME to "${NODE_NAME}""
+        sed -i "s/_NODE_NAME/${NODE_NAME}/g" ${ecjl}
+else
+        echo "Error configuring ${ecjl}: _NODE_NAME not found"
+fi
+
+if [ "$(grep '_TIER_NAME' ${ecjl})" ]; then
+        echo "${sjal}: setting TIER_NAME to "${TIER_NAME}""
+        sed -i "s/_TIER_NAME/${TIER_NAME}/g" ${ecjl}
+else
+        echo "Error configuring ${ecjl}: _TIER_NAME not found"
+fi
+
+if [ "$(grep '_APP_NAME' ${ecjl})" ]; then
+        echo "${sjal}: setting APP_NAME to "${APP_NAME}""
+        sed -i "s/_APP_NAME/${APP_NAME}/g" ${ecjl}
+else
+        echo "Error configuring ${ecjl}: _APP_NAME not found"
+fi
+

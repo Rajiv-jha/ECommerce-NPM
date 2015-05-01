@@ -32,7 +32,6 @@ ADD AppServerAgent.zip /
 RUN unzip /AppServerAgent.zip -d ${CATALINA_HOME}/appagent;rm AppServerAgent.zip
 
 # Machine Agent Install
-# Install Machine Agent
 ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
 ADD machineagent.rpm /
 RUN rpm -i /machineagent.rpm;rm /machineagent.rpm
@@ -44,6 +43,7 @@ ADD shrink-pool.sh ${MACHINE_AGENT_HOME}/local-scripts/
 RUN chmod +x ${MACHINE_AGENT_HOME}/local-scripts/*.sh
 
 # Analytics Agent config
+ADD ecommerce-log4j.job ${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/
 ADD configAnalytics.sh /
 
 # Startup scripts
