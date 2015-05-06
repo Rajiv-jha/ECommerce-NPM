@@ -19,7 +19,7 @@ if [ -n "${ws}" ]; then
         cp /ECommerce-Java/ECommerce-WS/build/libs/cart.war /tomcat/webapps;
 fi
 
-source /start-machine-agent.sh
 source /start-appserver-agent.sh
+source /start-machine-agent.sh
 
 cd ${CWD}
