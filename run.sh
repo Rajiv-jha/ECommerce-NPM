@@ -50,7 +50,7 @@ docker run --name jms -d appdynamics/ecommerce-activemq:$VERSION
 sleep 30
 
 docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_WS_NODE -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e APP_NAME=$APP_NAME --link db:db --link jms:jms --link oracle-db:oracle-db --link controller:controller -d appdynamics/ecommerce-tomcat:$VERSION
-docker run --name web -h ${APP_NAME}-web i-e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_WEB1_NODE -e JVM_ROUTE=route1 -e web=true -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e APP_NAME=$APP_NAME --link db:db --link ws:ws --link jms:jms --link controller:controller -d appdynamics/ecommerce-tomcat:$VERSION
+docker run --name web -h ${APP_NAME}-web -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_WEB1_NODE -e JVM_ROUTE=route1 -e web=true -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e APP_NAME=$APP_NAME --link db:db --link ws:ws --link jms:jms --link controller:controller -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
 docker run --name fulfillment -h ${APP_NAME}-fulfillment -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e web=true -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e NODE_NAME=Fulfillment -e APP_NAME=Fulfillment -e TIER_NAME=Fulfillment-Processor --link db:db --link ws:ws --link jms:jms --link oracle-db:oracle-db --link controller:controller -d appdynamics/ecommerce-tomcat:$VERSION
