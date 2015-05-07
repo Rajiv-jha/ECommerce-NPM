@@ -101,12 +101,6 @@ else
           echo "Version Not found using: ${VERSION}"          
         fi
         ;;               
-      n)
-        ANALYTICS_ACCOUNT_NAME=$OPTARG
-        ;;
-      k)
-        ANALYTICS_ACCOUNT_KEY=$OPTARG
-        ;;
       \?)
         echo "Invalid option: -$OPTARG"
         ;;
