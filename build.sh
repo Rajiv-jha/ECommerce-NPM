@@ -18,14 +18,14 @@
 
 cleanUp() {
   (cd ECommerce-Java && rm -f jdk-linux-x64.rpm)
-  (cd ECommerce-Tomcat && rm -f AppServerAgent.zip machineagent.rpm)
+  (cd ECommerce-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip)
   (cd ECommerce-Tomcat && rm -rf monitors ECommerce-Java)
-  (cd ECommerce-FulfillmentClient && rm -f AppServerAgent.zip machineagent.rpm)
+  (cd ECommerce-FulfillmentClient && rm -f AppServerAgent.zip MachineAgent.zip)
   (cd ECommerce-FulfillmentClient && rm -rf monitors ECommerce-Java)
-  (cd ECommerce-Synapse && rm -f AppServerAgent.zip machineagent.rpm)
+  (cd ECommerce-Synapse && rm -f AppServerAgent.zip MachineAgent.zip)
   (cd ECommerce-DBAgent && rm -f dbagent.zip)
   (cd ECommerce-Load && rm -rf ECommerce-Load)
-  (cd ECommerce-LBR && rm -f machineagent.rpm webserver_agent.tar.gz)
+  (cd ECommerce-LBR && rm -f MachineAgent.zip webserver_agent.tar.gz)
   
   # Remove dangling images left-over from build
   if [[ `docker images -q --filter "dangling=true"` ]]
@@ -125,19 +125,24 @@ echo "Building ECommerce-Java base image..."
 # Copy Agent zips to build dirs
 echo "Adding AppDynamics Agents ${APP_SERVER_AGENT} ${MACHINE_AGENT} ${WEB_AGENT} ${DB_AGENT}"
 cp ${APP_SERVER_AGENT} ECommerce-Tomcat/AppServerAgent.zip
-cp ${MACHINE_AGENT} ECommerce-Tomcat/machineagent.rpm
+cp ${MACHINE_AGENT} ECommerce-Tomcat/MachineAgent.zip
+echo "Copied Agents for ECommerce-Tomcat..."
+
 cp ${APP_SERVER_AGENT} ECommerce-FulfillmentClient/AppServerAgent.zip
-cp ${MACHINE_AGENT} ECommerce-FulfillmentClient/machineagent.rpm
-echo "Copied Agents Tomcat..."
+cp ${MACHINE_AGENT} ECommerce-FulfillmentClient/MachineAgent.zip
+echo "Copied Agents for ECommerce-Tomcat..."
+
 cp ${APP_SERVER_AGENT} ECommerce-Synapse/AppServerAgent.zip
-cp ${MACHINE_AGENT} ECommerce-Synapse/machineagent.rpm
-echo "Copied Agents Synapse..."
-cp ${MACHINE_AGENT} ECommerce-DBAgent/machineagent.rpm
-echo "Copied Agents DBAgent..."
+cp ${MACHINE_AGENT} ECommerce-Synapse/MachineAgent.zip
+echo "Copied Agents for ECommerce-Synapse..."
+
+cp ${MACHINE_AGENT} ECommerce-DBAgent/MachineAgent.zip
+echo "Copied Agents for ECommerce-DBAgent..."
+
 cp ${WEB_AGENT} ECommerce-LBR/webserver_agent.tar.gz
-cp ${MACHINE_AGENT} ECommerce-LBR/machineagent.rpm
+cp ${MACHINE_AGENT} ECommerce-LBR/MachineAgent.zip
 cp ${DB_AGENT} ECommerce-DBAgent/dbagent.zip
-echo "Copied Agents LBR..."
+echo "Copied Agents for ECommerce-LBR..."
 
 # Build Tomcat containers using downloaded AppServer and Machine Agents
 echo "Building ECommerce-Tomcat..."

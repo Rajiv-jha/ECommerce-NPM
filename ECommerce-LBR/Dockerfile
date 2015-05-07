@@ -33,12 +33,19 @@ RUN ln -s ${NATIVE_HOME}/sdk_lib/lib/libappdynamics_native_sdk.so /usr/lib64/lib
 # ECommerce reverse proxy configuration
 ADD ajp_proxy.conf ${HTTPD_24}/conf.d/
 
-# Install Machine Agent
-ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
-ADD machineagent.rpm /
-RUN rpm -i /machineagent.rpm;rm /machineagent.rpm
-ADD controller-info.xml /
+# Machine Agent Install
+# RPM Machine Agent Install
+#ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
+#ADD machineagent.rpm /
+#RUN rpm -i /machineagent.rpm; rm /machineagent.rpm
+#ADD controller-info.xml /
 
+# Zip Machine Agent Install
+ENV MACHINE_AGENT_HOME /machine-agent
+ADD MachineAgent.zip /
+RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
+RUN rm MachineAgent.zip
+ADD controller-info.xml /
 
 # Add utility scripts to /usr/local/bin
 ADD tail-proxy-log /usr/local/bin/

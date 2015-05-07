@@ -12,11 +12,17 @@ ADD controller-info.xml /
 RUN mkdir -p ${SYNAPSE_HOME}/appagent/ver4.0.0.0/conf
 RUN mv /controller-info.xml ${SYNAPSE_HOME}/appagent/ver4.0.0.0/conf
 
-# Machine Agent Install
-# Install Machine Agent
-ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
-ADD machineagent.rpm /
-RUN rpm -i /machineagent.rpm;rm /machineagent.rpm
+# RPM Machine Agent Install
+#ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
+#ADD machineagent.rpm /
+#RUN rpm -i /machineagent.rpm; rm /machineagent.rpm
+#ADD controller-info.xml /
+
+# Zip Machine Agent Install
+ENV MACHINE_AGENT_HOME /machine-agent
+ADD MachineAgent.zip /
+RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
+RUN rm MachineAgent.zip
 ADD controller-info.xml /
 
 ADD activemq-client-5.9.0.jar /
