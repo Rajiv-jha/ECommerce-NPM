@@ -13,11 +13,7 @@ ENV APPDYNAMICS_SIM_ENABLED true
 #RUN echo 'LoadModule appdynamics_module modules/mod_appdynamics.so' >>  ${HTTPD_24}/00-appd.conf
 ADD appd.conf ${HTTPD_24}/
 
-# TODO: Fix mod_appdynamics dependency on lib_curl3
-#RUN ln -s /usr/lib64/libcurl.so.4 /usr/lib64/libcurl.so.3
-
 # Add native SDK
-	
 ENV SDK_HOME /opt
 ENV NATIVE_HOME ${SDK_HOME}/appdynamics-sdk-native
 #RUN mkdir ${SDK_HOME}
@@ -33,19 +29,8 @@ RUN ln -s ${NATIVE_HOME}/sdk_lib/lib/libappdynamics_native_sdk.so /usr/lib64/lib
 # ECommerce reverse proxy configuration
 ADD ajp_proxy.conf ${HTTPD_24}/conf.d/
 
+# (Placeholder - build script will update with zip/rpm directives)
 # Machine Agent Install
-# RPM Machine Agent Install
-#ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
-#ADD machineagent.rpm /
-#RUN rpm -i /machineagent.rpm; rm /machineagent.rpm
-#ADD controller-info.xml /
-
-# Zip Machine Agent Install
-ENV MACHINE_AGENT_HOME /machine-agent
-ADD MachineAgent.zip /
-RUN unzip /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
-RUN rm MachineAgent.zip
-ADD controller-info.xml /
 
 # Add utility scripts to /usr/local/bin
 ADD tail-proxy-log /usr/local/bin/

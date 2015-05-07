@@ -18,15 +18,16 @@
 
 cleanUp() {
   (cd ECommerce-Java && rm -f jdk-linux-x64.rpm)
-  (cd ECommerce-Tomcat && rm -f AppServerAgent.zip MachineAgent.zip)
+  (cd ECommerce-Tomcat && rm -f AppServerAgent.zip ${MACHINE_AGENT})
   (cd ECommerce-Tomcat && rm -rf monitors ECommerce-Java)
-  (cd ECommerce-FulfillmentClient && rm -f AppServerAgent.zip MachineAgent.zip)
+  (cd ECommerce-FulfillmentClient && rm -f AppServerAgent.zip ${MACHINE_AGENT})
   (cd ECommerce-FulfillmentClient && rm -rf monitors ECommerce-Java)
-  (cd ECommerce-Synapse && rm -f AppServerAgent.zip MachineAgent.zip)
+  (cd ECommerce-Synapse && rm -f AppServerAgent.zip ${MACHINE_AGENT})
   (cd ECommerce-DBAgent && rm -f dbagent.zip)
   (cd ECommerce-Load && rm -rf ECommerce-Load)
-  (cd ECommerce-LBR && rm -f MachineAgent.zip webserver_agent.tar.gz)
-  
+  (cd ECommerce-LBR && rm -f ${MACHINE_AGENT} webserver_agent.tar.gz)
+  rm ${MACHINE_AGENT}
+ 
   # Remove dangling images left-over from build
   if [[ `docker images -q --filter "dangling=true"` ]]
   then
@@ -116,25 +117,53 @@ echo "Building ECommerce-Java base image..."
 (cd ECommerce-Java; curl -j -k -L -H "Cookie:oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u71-b13/jdk-7u71-linux-x64.rpm -o jdk-linux-x64.rpm)
 (cd ECommerce-Java; docker build -t appdynamics/ecommerce-java .)
 
+# Configure for RPM/zipfile Machine Agents
+if [[ `uname -a | grep "Darwin"` ]]
+then
+  SED_OPTS=".bak"
+fi
+if [ ${MACHINE_AGENT: -4} == ".zip" ]
+then
+  echo "Using .zip version of the Machine Agent"
+  cp ${MACHINE_AGENT} MachineAgent.zip
+  MACHINE_AGENT="MachineAgent.zip"
+  (cd ECommerce-Tomcat; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
+  (cd ECommerce-FulfillmentClient; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
+  (cd ECommerce-Synapse; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
+  (cd ECommerce-LBR; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
+elif [ ${MACHINE_AGENT: -4} == ".rpm" ]
+then
+  echo "Using .rpm  version pf the Machine Agent"
+  cp ${MACHINE_AGENT} machineagent.rpm
+  MACHINE_AGENT="machineagent.rpm"
+  (cd ECommerce-Tomcat; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
+  (cd ECommerce-FulfillmentClient; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
+  (cd ECommerce-Synapse; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
+  (cd ECommerce-LBR; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
+else
+  echo "Machine agent file extension not recognized"
+  exit
+fi
+
 # Copy Agent zips to build dirs
 echo "Adding AppDynamics Agents ${APP_SERVER_AGENT} ${MACHINE_AGENT} ${WEB_AGENT} ${DB_AGENT}"
 cp ${APP_SERVER_AGENT} ECommerce-Tomcat/AppServerAgent.zip
-cp ${MACHINE_AGENT} ECommerce-Tomcat/MachineAgent.zip
+cp ${MACHINE_AGENT} ECommerce-Tomcat/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-Tomcat..."
 
 cp ${APP_SERVER_AGENT} ECommerce-FulfillmentClient/AppServerAgent.zip
-cp ${MACHINE_AGENT} ECommerce-FulfillmentClient/MachineAgent.zip
-echo "Copied Agents for ECommerce-Tomcat..."
+cp ${MACHINE_AGENT} ECommerce-FulfillmentClient/${MACHINE_AGENT}
+echo "Copied Agents for ECommerce-FulfillmentClient..."
 
 cp ${APP_SERVER_AGENT} ECommerce-Synapse/AppServerAgent.zip
-cp ${MACHINE_AGENT} ECommerce-Synapse/MachineAgent.zip
+cp ${MACHINE_AGENT} ECommerce-Synapse/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-Synapse..."
 
-cp ${MACHINE_AGENT} ECommerce-DBAgent/MachineAgent.zip
+cp ${MACHINE_AGENT} ECommerce-DBAgent/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-DBAgent..."
 
 cp ${WEB_AGENT} ECommerce-LBR/webserver_agent.tar.gz
-cp ${MACHINE_AGENT} ECommerce-LBR/MachineAgent.zip
+cp ${MACHINE_AGENT} ECommerce-LBR/${MACHINE_AGENT}
 cp ${DB_AGENT} ECommerce-DBAgent/dbagent.zip
 echo "Copied Agents for ECommerce-LBR..."
 
