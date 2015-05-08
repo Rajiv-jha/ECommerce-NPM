@@ -6,11 +6,11 @@ source /env.sh
 
 # Configure analytics-agent.properties
 
-aaprop=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/analytics-agent.properties
+aaprop=/machine_agent/monitors/analytics-agent/conf/analytics-agent.properties
 
 if [ "$(grep '^http.event.endpoint=http://localhost:9080/v1' $aaprop)" ]; then
         echo "${aaprop}: setting correct endpoint"
-	sed -i "/^http.event.endpoint=/c\http.event.endpoint=http:\/\/${EVENT_ENDPOINT}\/v1" ${aaprop}
+	sed -i "/^http.event.endpoint=/c\http.event.endpoint=http:\/\/${EUM_CLOUD}:9080\/v1" ${aaprop}
 else
         echo "${aaprop}: endpoint already set or doesn't exist"
 fi
@@ -31,7 +31,7 @@ fi
 
 # Configure monitor.xml
 
-monxml=${MACHINE_AGENT_HOME}/monitors/analytics-agent/monitor.xml
+monxml=/machine_agent/monitors/analytics-agent/monitor.xml
 
 if [ "$(grep '<enabled>false</enabled>' $monxml)" ]; then
         echo "${monxml}: setting to "true""
@@ -42,7 +42,7 @@ fi
 
 # Configure sample-java-agent-log.job
 
-sjal=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/sample-java-agent-log.job
+sjal=/machine_agent/monitors/analytics-agent/conf/job/sample-java-agent-log.job
 
 if [ "$(grep '^enabled: false' $sjal)" ]; then
         echo "${sjal}: setting to "true""
@@ -58,28 +58,10 @@ else
         echo "${sjal}: path already set or doesn't exist"
 fi
 
-# Configure custom ECommerce log analytics
+# Restart the Machine Agent
 
-ecjl=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/ecommerce-log4j.job
+echo "killing MachineAgent"
+echo `ps -ef | grep machineagent.jar | grep -v grep | awk '{print $2}'`
+kill -9 `ps -ef | grep machineagent.jar | grep -v grep | awk '{print $2}'`
 
-if [ "$(grep '_NODE_NAME' ${ecjl})" ]; then
-        echo "${sjal}: setting NODE_NAME to "${NODE_NAME}""
-        sed -i "s/_NODE_NAME/${NODE_NAME}/g" ${ecjl}
-else
-        echo "Error configuring ${ecjl}: _NODE_NAME not found"
-fi
-
-if [ "$(grep '_TIER_NAME' ${ecjl})" ]; then
-        echo "${sjal}: setting TIER_NAME to "${TIER_NAME}""
-        sed -i "s/_TIER_NAME/${TIER_NAME}/g" ${ecjl}
-else
-        echo "Error configuring ${ecjl}: _TIER_NAME not found"
-fi
-
-if [ "$(grep '_APP_NAME' ${ecjl})" ]; then
-        echo "${sjal}: setting APP_NAME to "${APP_NAME}""
-        sed -i "s/_APP_NAME/${APP_NAME}/g" ${ecjl}
-else
-        echo "Error configuring ${ecjl}: _APP_NAME not found"
-fi
-
+exit 0

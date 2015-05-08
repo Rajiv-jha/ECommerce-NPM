@@ -12,9 +12,8 @@ ADD controller-info.xml /
 RUN mkdir -p ${SYNAPSE_HOME}/appagent/ver4.0.0.0/conf
 RUN mv /controller-info.xml ${SYNAPSE_HOME}/appagent/ver4.0.0.0/conf
 
-ADD MachineAgent.zip /
-RUN unzip /MachineAgent.zip -d $MACHINE_AGENT_HOME
-RUN rm MachineAgent.zip 
+# (Placeholder - build script will update with zip/rpm directives)
+# Machine Agent Install
 
 ADD activemq-client-5.9.0.jar /
 RUN mv activemq-client-5.9.0.jar ${SYNAPSE_HOME}/lib
