@@ -26,7 +26,8 @@ cleanUp() {
   (cd ECommerce-DBAgent && rm -f dbagent.zip)
   (cd ECommerce-Load && rm -rf ECommerce-Load)
   (cd ECommerce-LBR && rm -f ${MACHINE_AGENT} webserver_agent.tar.gz)
-  rm ${MACHINE_AGENT}
+  rm -f ${MACHINE_AGENT}
+  restoreDockerfiles
  
   # Remove dangling images left-over from build
   if [[ `docker images -q --filter "dangling=true"` ]]
@@ -43,6 +44,20 @@ promptForAgents() {
   read -e -p "Enter path to DB Agent: " DB_AGENT
   read -e -p "Enter path to Web Server Agent: " WEB_AGENT
   read -e -p "Enter Docker Version: " VERSION
+}
+
+saveDockerfiles() {
+  cp ECommerce-Tomcat/Dockerfile ECommerce-Tomcat/Dockerfile.saved
+  cp ECommerce-Synapse/Dockerfile ECommerce-Synapse/Dockerfile.saved
+  cp ECommerce-FulfillmentClient/Dockerfile ECommerce-FulfillmentClient/Dockerfile.saved
+  cp ECommerce-LBR/Dockerfile ECommerce-LBR/Dockerfile.saved
+}
+
+restoreDockerfiles() {
+  mv ECommerce-Tomcat/Dockerfile.saved ECommerce-Tomcat/Dockerfile
+  mv ECommerce-Synapse/Dockerfile.saved ECommerce-Synapse/Dockerfile
+  mv ECommerce-FulfillmentClient/Dockerfile.saved ECommerce-FulfillmentClient/Dockerfile
+  mv ECommerce-LBR/Dockerfile.saved ECommerce-LBR/Dockerfile
 }
 
 # Usage information
@@ -118,10 +133,13 @@ echo "Building ECommerce-Java base image..."
 (cd ECommerce-Java; docker build -t appdynamics/ecommerce-java .)
 
 # Configure for RPM/zipfile Machine Agents
+saveDockerfiles
+
 if [[ `uname -a | grep "Darwin"` ]]
 then
   SED_OPTS=".bak"
 fi
+
 if [ ${MACHINE_AGENT: -4} == ".zip" ]
 then
   echo "Using .zip version of the Machine Agent"
