@@ -16,6 +16,7 @@
 
 #!/bin/sh
 
+# Docker container version
 VERSION=$1
 if [ -z "$1" ]; then
         export VERSION="latest";
@@ -53,7 +54,7 @@ docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true -e EVENT
 docker run --name web -h ${APP_NAME}-web -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_WEB1_NODE -e JVM_ROUTE=route1 -e web=true -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e APP_NAME=$APP_NAME --link db:db --link ws:ws --link jms:jms --link controller:controller -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
-docker run --name fulfillment-client -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e NODE_NAME=FulfillmentClient1 -e APP_NAME=Fulfillment -e TIER_NAME=Fulfillment-Client --link controller:controller -d appdynamics/ecommerce-fullfilment-client:$VERSION
+docker run --name fulfillment-client -h ${APP_NAME}-fulfillment-client -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e NODE_NAME=FulfillmentClient1 -e APP_NAME=Fulfillment -e TIER_NAME=Fulfillment-Client --link controller:controller -d appdynamics/ecommerce-fullfilment-client:$VERSION
 sleep 30
 
 docker run --name web1 -h ${APP_NAME}-web1 -e web=true -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_WEB2_NODE -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e JVM_ROUTE=route2 -e APP_NAME=$APP_NAME --link db:db --link ws:ws --link jms:jms --link controller:controller -d appdynamics/ecommerce-tomcat:$VERSION
