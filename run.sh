@@ -19,10 +19,11 @@
 # Docker container version
 VERSION=$1
 if [ -z "$1" ]; then
-        export VERSION="4.1-6983";
+        export VERSION="4.1-7010";
 else
         export VERSION=$1;
 fi
+echo "Using version: $VERSION"
 
 # Default application name
 APP_NAME=$2
@@ -31,13 +32,14 @@ if [ -z "$2" ]; then
 else
         export APP_NAME=$2;
 fi
+echo "Application Name: $APP_NAME"
 
 # Controller host/port
-CONTR_HOST=e2e.demo.appdynamics.com
+CONTR_HOST=e2e-staging.demo.appdynamics.com
 CONTR_PORT=8090
 
 # Analytics config parameters
-ACCOUNT_NAME=customer1_83813e72-69a1-4b34-98de-310dd3014934
+ACCOUNT_NAME=customer1_004340ba-bb46-4f93-b08a-e3f758277823
 ACCESS_KEY=SJ5b2m7d1\$354
 EVENT_ENDPOINT=54.244.114.249:9080
 
