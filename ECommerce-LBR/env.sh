@@ -21,9 +21,9 @@ if [ -z "${NODE_NAME}" ]; then
 fi
 
 export HTTPD_24=/opt/rh/httpd24/root/etc/httpd
-export MACHINE_AGENT_HOME=/opt/appdynamics/machine-agent
 export NATIVE_SDK_HOME=/opt/appdynamics-sdk-native
 
-export AGENT_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}";
-export JAVA_OPTS="${AGENT_OPTS} -DjvmRoute=${JVM_ROUTE} -Xmx512m -XX:MaxPermSize=128m -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager";
-
+export AGENT_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}"
+export JAVA_OPTS="-Xmx512m -XX:MaxPermSize=128m"
+export MACHINE_AGENT_JAVA_OPTS="-Dappdynamics.sim.enabled=true ${JAVA_OPTS} ${AGENT_OPTS}"
+export MACHINE_AGENT_HOME="/machine-agent"

@@ -177,9 +177,6 @@ cp ${APP_SERVER_AGENT} ECommerce-Synapse/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-Synapse/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-Synapse..."
 
-cp ${MACHINE_AGENT} ECommerce-DBAgent/${MACHINE_AGENT}
-echo "Copied Agents for ECommerce-DBAgent..."
-
 cp ${WEB_AGENT} ECommerce-LBR/webserver_agent.tar.gz
 cp ${MACHINE_AGENT} ECommerce-LBR/${MACHINE_AGENT}
 cp ${DB_AGENT} ECommerce-DBAgent/dbagent.zip
