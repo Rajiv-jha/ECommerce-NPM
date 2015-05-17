@@ -17,35 +17,35 @@
 #!/bin/sh
 
 # Docker container version
-VERSION=$1
 if [ -z "$1" ]; then
-        export VERSION="4.1-7010";
+        export VERSION="latest";
 else
         export VERSION=$1;
 fi
 echo "Using version: $VERSION"
 
 # Default application name
-APP_NAME=$2
 if [ -z "$2" ]; then
-        export APP_NAME="Mark-ECommerce";
+        export APP_NAME="ECommerce";
 else
         export APP_NAME=$2;
 fi
 echo "Application Name: $APP_NAME"
 
 # Controller host/port
-CONTR_HOST=e2e-staging.demo.appdynamics.com
-CONTR_PORT=8090
+CONTR_HOST=
+CONTR_PORT=
 
 # Analytics config parameters
-ACCOUNT_NAME=customer1_004340ba-bb46-4f93-b08a-e3f758277823
-ACCESS_KEY=SJ5b2m7d1\$354
-EVENT_ENDPOINT=54.244.114.249:9080
+ACCOUNT_NAME=
+ACCESS_KEY=
+EVENT_ENDPOINT=
 
 # Load gen parameters
-NUM_OF_USERS=1
-TIME_BETWEEN_RUNS=60000
+NUM_OF_USERS=
+TIME_BETWEEN_RUNS=
+RAMP_TIME=
+WAIT_TIME=
 
 docker run --name oracle-db -d -p 1521:1521 appdynamics/ecommerce-oracle
 docker run --name db -e MYSQL_ROOT_PASSWORD=singcontroller -p 3306:3306 -d mysql
@@ -69,5 +69,5 @@ docker run --name=lbr -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e 
 docker run --name msg -h ${APP_NAME}-msg -e jms=true -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_JMS_NODE -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e APP_NAME=$APP_NAME --link db:db --link jms:jms --link oracle-db:oracle-db --link fulfillment:fulfillment -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
-docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load:$VERSION
-#docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
+docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load
+docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION

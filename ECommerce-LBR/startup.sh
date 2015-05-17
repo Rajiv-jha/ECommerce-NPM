@@ -25,5 +25,7 @@ echo 'export APPD_SDK_ENV_LOG_CONFIG_PATH=/$NATIVE_HOMEconf/appdynamics_sdk_log4
 /etc/init.d/httpd24-httpd stop
 /etc/init.d/httpd24-httpd start
 
-# Start Machine Agent
-#${MACHINE_AGENT_HOME}/start-machine-agent.sh
+# Start Machine Agent 
+# NOTE: Machine Agent/Web Server Agent race condition
+# Start manually with: docker exec lbr /start-machine-agent.sh
+# ${MACHINE_AGENT_HOME}/start-machine-agent.sh
