@@ -72,4 +72,4 @@ docker run --name msg -h ${APP_NAME}-msg -e jms=true -e EVENT_ENDPOINT=${EVENT_E
 sleep 30
 
 docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load
-#docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
+docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
