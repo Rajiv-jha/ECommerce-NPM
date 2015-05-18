@@ -31,7 +31,11 @@ ADD env.sh /
 ADD start-machine-agent.sh /
 ADD start-appserver-agent.sh /
 
-RUN chmod +x /startup.sh;chmod +x /env.sh;chmod +x /start-machine-agent.sh;chmod +x /start-appserver-agent.sh;chmod +x /configAnalytics.sh
+RUN chmod +x /startup.sh
+RUN chmod +x /env.sh
+RUN chmod +x /start-machine-agent.sh
+RUN chmod +x /start-appserver-agent.sh
+RUN chmod +x /configAnalytics.sh
 
 WORKDIR /
 CMD ["/bin/bash","/startup.sh"]

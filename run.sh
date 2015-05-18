@@ -41,11 +41,13 @@ ACCOUNT_NAME=
 ACCESS_KEY=
 EVENT_ENDPOINT=
 
+# AWS Credentials for Fulfillment-Client
+AWS_ACCESS_KEY=
+AWS_SECRET_KEY=
+
 # Load gen parameters
-NUM_OF_USERS=
-TIME_BETWEEN_RUNS=
-RAMP_TIME=
-WAIT_TIME=
+NUM_OF_USERS=1
+TIME_BETWEEN_RUNS=60000
 
 docker run --name oracle-db -d -p 1521:1521 appdynamics/ecommerce-oracle
 docker run --name db -e MYSQL_ROOT_PASSWORD=singcontroller -p 3306:3306 -d mysql
@@ -56,10 +58,10 @@ docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true -e EVENT
 docker run --name web -h ${APP_NAME}-web -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_WEB1_NODE -e JVM_ROUTE=route1 -e web=true -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e APP_NAME=$APP_NAME --link db:db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
-docker run --name fulfillment -h ${APP_NAME}-fulfillment -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e web=true -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e NODE_NAME=Fulfillment -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Processor --link db:db --link ws:ws --link jms:jms --link oracle-db:oracle-db -d appdynamics/ecommerce-tomcat:$VERSION
+docker run --name fulfillment -h ${APP_NAME}-fulfillment -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e web=true -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e NODE_NAME=Fulfillment -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Processor -e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} --link db:db --link ws:ws --link jms:jms --link oracle-db:oracle-db -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
-docker run --name fulfillment-client -h ${APP_NAME}-fulfillment-client -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e NODE_NAME=FulfillmentClient1 -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Client -d appdynamics/ecommerce-fulfillment-client:$VERSION
+docker run --name fulfillment-client -h ${APP_NAME}-fulfillment-client -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e NODE_NAME=FulfillmentClient1 -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Client -e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} -d appdynamics/ecommerce-fulfillment-client:$VERSION
 sleep 30
 
 docker run --name web1 -h ${APP_NAME}-web1 -e web=true -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_WEB2_NODE -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e JVM_ROUTE=route2 -e APP_NAME=$APP_NAME --link db:db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
@@ -70,4 +72,4 @@ docker run --name msg -h ${APP_NAME}-msg -e jms=true -e EVENT_ENDPOINT=${EVENT_E
 sleep 30
 
 docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load
-docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
+#docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
