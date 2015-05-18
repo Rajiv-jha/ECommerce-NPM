@@ -45,8 +45,8 @@ EVENT_ENDPOINT=
 SIM_HIERARCHY_1=
 SIM_HIERARCHY_2=
 # Uncomment to use AWS metadata
-SIM_HIERACRHY_1=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
-SIM_HIERARCHY_2=$(curl -s http://169.254.169.254//latest/meta-data/public-hostname)
+#SIM_HIERACRHY_1=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+#SIM_HIERARCHY_2=$(curl -s http://169.254.169.254//latest/meta-data/public-hostname)
 
 # AWS Credentials for Fulfillment-Client
 AWS_ACCESS_KEY=
