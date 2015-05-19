@@ -84,3 +84,6 @@ sleep 30
 
 docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load
 docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
+
+# Start machine agent on the Apache LBR node
+docker exec lbr /start-machine-agent.sh
