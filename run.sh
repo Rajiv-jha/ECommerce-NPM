@@ -36,7 +36,7 @@ echo "Application Name: $APP_NAME"
 if [ -z "$AWS_ACCESS_KEY" ]; then
         echo "AWS_ACCESS_KEY not set";
 fi
-if [ -z "AWS_SECRET_KEY" ]; then
+if [ -z "$AWS_SECRET_KEY" ]; then
         echo "AWS_SECRET_KEY not set";
 fi
 
@@ -54,7 +54,7 @@ SIM_HIERARCHY_1=
 SIM_HIERARCHY_2=
 # Uncomment to use AWS metadata
 #SIM_HIERACRHY_1=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
-#SIM_HIERARCHY_2=$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)
+#SIM_HIERARCHY_2=$(curl -s http://169.254.169.254//latest/meta-data/public-hostname)
 
 # Load gen parameters
 NUM_OF_USERS=1
@@ -65,25 +65,59 @@ docker run --name db -e MYSQL_ROOT_PASSWORD=singcontroller -p 3306:3306 -d mysql
 docker run --name jms -d appdynamics/ecommerce-activemq:
 sleep 30
 
-docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_WS_NODE -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e APP_NAME=$APP_NAME -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} --link db:db --link jms:jms --link oracle-db:oracle-db -d appdynamics/ecommerce-tomcat:$VERSION
-docker run --name web -h ${APP_NAME}-web -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_WEB1_NODE -e JVM_ROUTE=route1 -e web=true -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e APP_NAME=$APP_NAME -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} --link db:db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
+docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true \
+	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
+	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
+	-e NODE_NAME=${APP_NAME}_WS_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=Inventory-Server\
+	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} --link db:db \
+	--link jms:jms --link oracle-db:oracle-db -d appdynamics/ecommerce-tomcat:$VERSION
+
+docker run --name web -h ${APP_NAME}-web -e JVM_ROUTE=route1 -e web=true \
+	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
+	-e NODE_NAME=${APP_NAME}_WEB1_NODE -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Server\
+	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
+	--link db:db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
-docker run --name fulfillment -h ${APP_NAME}-fulfillment -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e web=true -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e NODE_NAME=Fulfillment -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Processor -e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} --link db:db --link ws:ws --link jms:jms --link oracle-db:oracle-db -d appdynamics/ecommerce-tomcat:$VERSION
+docker run --name fulfillment -h ${APP_NAME}-fulfillment -e web=true \
+	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
+	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
+	-e NODE_NAME=Fulfillment -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Processor \
+	-e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} \
+	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
+	--link db:db --link ws:ws --link jms:jms --link oracle-db:oracle-db -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
-docker run --name fulfillment-client -h ${APP_NAME}-fulfillment-client -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e NODE_NAME=FulfillmentClient1 -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Client -e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} -d appdynamics/ecommerce-fulfillment-client:$VERSION
+docker run --name fulfillment-client -h ${APP_NAME}-fulfillment-client \
+	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
+	-e NODE_NAME=FulfillmentClient1 -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Client \
+	-e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} \
+	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
+	-d appdynamics/ecommerce-fulfillment-client:$VERSION
 sleep 30
 
-docker run --name web1 -h ${APP_NAME}-web1 -e web=true -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_WEB2_NODE -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e JVM_ROUTE=route2 -e APP_NAME=$APP_NAME -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} --link db:db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
+docker run --name web1 -h ${APP_NAME}-web1 -e JVM_ROUTE=route2 -e web=true \
+	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
+	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT}\
+	-e NODE_NAME=${APP_NAME}_WEB2_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Server\
+	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
+	--link db:db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
-docker run --name=lbr -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e APP_NAME=${APP_NAME} -e TIER_NAME=${APP_NAME}-WebServer -e NODE_NAME=${APP_NAME}-Apache -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} --link web:web --link web1:web1 -p 80:80 -d appdynamics/ecommerce-lbr:$VERSION
-docker run --name msg -h ${APP_NAME}-msg -e jms=true -e EVENT_ENDPOINT=${EVENT_ENDPOINT} -e NODE_NAME=${APP_NAME}_JMS_NODE -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e APP_NAME=$APP_NAME -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} --link db:db --link jms:jms --link oracle-db:oracle-db --link fulfillment:fulfillment -d appdynamics/ecommerce-tomcat:$VERSION
+docker run --name=lbr -h ${APP_NAME}-lbr \
+	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
+	-e APP_NAME=${APP_NAME} -e TIER_NAME=${APP_NAME}-WebServer -e NODE_NAME=${APP_NAME}-Apache \
+	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
+	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
+	--link web:web --link web1:web1 -p 80:80 -d appdynamics/ecommerce-lbr:$VERSION
+
+docker run --name msg -h ${APP_NAME}-msg -e jms=true \ 
+	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
+	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
+	-e NODE_NAME=${APP_NAME}_JMS_NODE -e APP_NAME=$APP_NAME \
+	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
+	--link db:db --link jms:jms --link oracle-db:oracle-db --link fulfillment:fulfillment -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
 docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load
 docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
-
-# Start machine agent on the Apache LBR node
-docker exec lbr /start-machine-agent.sh

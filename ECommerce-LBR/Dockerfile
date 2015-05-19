@@ -49,6 +49,12 @@ RUN chmod 7777 -R ${NATIVE_HOME}
 ADD start-machine-agent.sh $MACHINE_AGENT_HOME/
 RUN chmod 744 ${MACHINE_AGENT_HOME}/start-machine-agent.sh
 
+# Configure Log Analytics
+ADD configAnalytics.sh /
+RUN chmod +x /configAnalytics.sh
+ADD ecommerce-lbr-httpserver-error-log.job ${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/
+ADD ecommerce-lbr-httpserver-access-log.job ${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/
+
 # Run startup script and tail Apache error log
 CMD ${NATIVE_HOME}/startup.sh && tail -f ${HTTPD_24}/logs/error_log
 
