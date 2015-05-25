@@ -11,6 +11,9 @@ ENV APPDYNAMICS_SIM_ENABLED true
 ADD env.sh /
 RUN chmod +x /env.sh
 
+# Use Apache Worker MPM 
+ADD 00-mpm.conf ${HTTPD_24}/conf.modules.d/00-mpm.conf
+
 # Add mod_appdynamics configuration file
 ADD appd.conf ${HTTPD_24}/
 
@@ -20,7 +23,11 @@ ENV NATIVE_HOME ${SDK_HOME}/appdynamics-sdk-native
 
 ADD webserver_agent.tar.gz ${SDK_HOME}
 ADD appdynamics_sdk.conf /etc/ld.so.conf.d/
-RUN ldconfig;cd ${SDK_HOME} gunzip ${SDK_HOME}/webserver_agent.tar.gz;cd ${SDK_HOME} tar xf ${SDK_HOME}/webserver_agent.tar;chmod 777 ${NATIVE_HOME}/logs;chmod 744 ${NATIVE_HOME}/install.sh;
+RUN ldconfig
+RUN (cd ${SDK_HOME} gunzip ${SDK_HOME}/webserver_agent.tar.gz)
+RUN (cd ${SDK_HOME} tar xf ${SDK_HOME}/webserver_agent.tar)
+RUN chmod 777 ${NATIVE_HOME}/logs
+RUN chmod 744 ${NATIVE_HOME}/install.sh
 RUN ${NATIVE_HOME}/install.sh
 
 # Add libappdynamics_native_sdk
