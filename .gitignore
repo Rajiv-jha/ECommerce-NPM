@@ -1,0 +1,9 @@
+# Do not check in personal env variables
+env.sh
+
+# Agent download sub-dirs
+3.*/**
+4.*/**
+
+# Ignore backups of run.sh/env.sh
+*.sh.*
