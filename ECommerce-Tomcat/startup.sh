@@ -1,5 +1,4 @@
 #!/bin/sh
-CWD=${PWD}
 
 source /env.sh
 
@@ -19,10 +18,13 @@ if [ -n "${ws}" ]; then
         cp /ECommerce-Java/ECommerce-WS/build/libs/cart.war /tomcat/webapps;
 fi
 
+# This script should not return or the container will exit
+# The last command called should execute in the foreground
+
 # Start App Server Agent
-source /start-appserver-agent.sh
+/start-appserver-agent.sh
 
 # Start Machine Agent
-source /start-machine-agent.sh;
+# Start manually with: docker exec lbr /start-machine-agent.sh
+# /start-machine-agent.sh;
 
-cd ${CWD}

@@ -18,12 +18,16 @@ ENV TOMCAT_MAJOR_VERSION 8
 ENV TOMCAT_MINOR_VERSION 8.0.14
 ENV CATALINA_HOME /tomcat
 
+# Environment settings for startup scripts
+ADD env.sh /
+RUN chmod +x /env.sh
+
 # Install Tomcat
 RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz \
     && curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
     && md5sum apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
     && tar zxf apache-tomcat-*.tar.gz \
-    && rm apache-tomcat-*.tar.gz \
+    && rm apache-tomcat-*.tar.gz* \
     && mv apache-tomcat-${TOMCAT_MINOR_VERSION} tomcat
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 
@@ -45,20 +49,20 @@ ADD configAnalytics.sh /
 
 # Startup scripts
 ADD startup.sh /
-ADD env.sh /
 RUN version=`find ${CATALINA_HOME}/appagent -type d -name "ver*" | sed "s:^${CATALINA_HOME}/appagent/::"`; \
     sed -e "s:_VERSION_STRING:$version:g" env.sh > env.sh.tmp && mv env.sh.tmp env.sh
 ADD start-machine-agent.sh /
 ADD start-appserver-agent.sh /
 
 RUN chmod +x /startup.sh
-RUN chmod +x /env.sh
 RUN chmod +x /start-machine-agent.sh
 RUN chmod +x /start-appserver-agent.sh
 RUN chmod +x /configAnalytics.sh
 
 WORKDIR /
-CMD ["/bin/bash","/startup.sh"]
+
+# Note: This command should not return or the container will exit
+CMD "/startup.sh" 
 
 EXPOSE 80	
 EXPOSE 8080

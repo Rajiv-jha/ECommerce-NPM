@@ -7,6 +7,10 @@ RUN yum -y install httpd24.x86_64
 ENV HTTPD_24 /opt/rh/httpd24/root/etc/httpd
 ENV APPDYNAMICS_SIM_ENABLED true
 
+# Environment settings for startup scripts
+ADD env.sh /
+RUN chmod +x /env.sh
+
 # Add mod_appdynamics configuration file
 ADD appd.conf ${HTTPD_24}/
 
@@ -39,9 +43,7 @@ ADD tail-access-log /usr/local/bin/
 ADD tail-error-log /usr/local/bin/
 RUN chmod 744 /usr/local/bin/tail-*
 
-ADD env.sh $NATIVE_HOME/
 ADD startup.sh $NATIVE_HOME/
-RUN chmod 744 ${NATIVE_HOME}/env.sh
 RUN chmod 744 ${NATIVE_HOME}/startup.sh
 RUN chown -R apache:apache ${NATIVE_HOME}
 RUN chmod 7777 -R ${NATIVE_HOME}
