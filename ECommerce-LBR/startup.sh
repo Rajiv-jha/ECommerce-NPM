@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Read env vars for Controller, Port, App, Tier and Node names
-source /opt/appdynamics-sdk-native/env.sh
+source ${NATIVE_HOME}/env.sh
 
 /etc/init.d/httpd24-httpd stop
 

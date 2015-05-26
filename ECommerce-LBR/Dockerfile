@@ -7,9 +7,7 @@ RUN yum -y install httpd24.x86_64
 ENV HTTPD_24 /opt/rh/httpd24/root/etc/httpd
 ENV APPDYNAMICS_SIM_ENABLED true
 
-# Environment settings for startup scripts
-ADD env.sh /
-RUN chmod +x /env.sh
+
 
 # Use Apache Worker MPM 
 ADD 00-mpm.conf ${HTTPD_24}/conf.modules.d/00-mpm.conf
@@ -20,6 +18,10 @@ ADD appd.conf ${HTTPD_24}/
 # Add native SDK
 ENV SDK_HOME /opt
 ENV NATIVE_HOME ${SDK_HOME}/appdynamics-sdk-native
+
+# Environment settings for startup scripts
+ADD env.sh ${NATIVE_HOME}/
+RUN chmod +x ${NATIVE_HOME}/env.sh
 
 ADD webserver_agent.tar.gz ${SDK_HOME}
 ADD appdynamics_sdk.conf /etc/ld.so.conf.d/
