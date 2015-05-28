@@ -7,15 +7,16 @@ source ${NATIVE_HOME}/env.sh
 
 ln -s ${NATIVE_HOME}/WebServerAgent/Apache/libmod_appdynamics.so $HTTPD24/modules/mod_appdynamics.so
 
-# Set Apache ServerName usign container's hostname
+# Set Apache ServerName using container's hostname
 echo "ServerName `hostname`:80" >> $HTTPD24/conf/httpd.conf
 
-sed -i "s/<your_controller>/${CONTROLLER}/g" $HTTPD_24/appd.conf
-sed -i "s/<your_controller_port>/${APPD_PORT}/g" $HTTPD_24/appd.conf
-sed -i "s/<your_app_name>/${APP_NAME}/g" $HTTPD_24/appd.conf
-sed -i "s/<your_tier_name>/${TIER_NAME}/g" $HTTPD_24/appd.conf
-sed -i "s/<your_node_name>/${NODE_NAME}/g" $HTTPD_24/appd.conf
-mv ${HTTPD_24}/appd.conf ${HTTPD_24}/conf.modules.d/02-appd.conf
+# Configure Controller, Port, App, Tier and Node for mod_appdynamics
+sed -i "s/<your_controller>/${CONTROLLER}/g" $HTTPD_24/02-appd.conf
+sed -i "s/<your_controller_port>/${APPD_PORT}/g" $HTTPD_24/02-appd.conf
+sed -i "s/<your_app_name>/${APP_NAME}/g" $HTTPD_24/02-appd.conf
+sed -i "s/<your_tier_name>/${TIER_NAME}/g" $HTTPD_24/02-appd.conf
+sed -i "s/<your_node_name>/${NODE_NAME}/g" $HTTPD_24/02-appd.conf
+mv ${HTTPD_24}/02-appd.conf ${HTTPD_24}/conf.modules.d/02-appd.conf
  
 echo "Starting Proxy Agent"
 su apache -c "nohup $NATIVE_HOME/runSDKProxy.sh &"
