@@ -1,6 +1,6 @@
 #!/bin/sh
 # Read env vars for Controller, Port, App, Tier and Node names
-source /env.sh
+source ${NATIVE_HOME}/env.sh
 
 sed -e "s/CONTROLLERHOST/${CONTROLLER}/g;s/CONTROLLERPORT/${APPD_PORT}/g;s/APP/${APP_NAME}/g;s/TIER/${TIER_NAME}/g;s/NODE/${NODE_NAME}/g;s/FOO/${SIM_HIERARCHY_1}/g;s/BAR/${SIM_HIERARCHY_2}/g;s/BAZ/${HOSTNAME}/g" /controller-info.xml > $MACHINE_AGENT_HOME/conf/controller-info.xml
 
