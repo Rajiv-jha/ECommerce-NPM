@@ -120,7 +120,7 @@ else
         ;;               
       y)
         ANALYTICS_AGENT=$OPTARG 
-        if [ ! -e ${ANALYTICS_AGENT} ]
+	if [ ! -e ${ANALYTICS_AGENT} ]
         then
           echo "Not found: ${ANALYTICS_AGENT}"
 	  exit         
@@ -153,6 +153,7 @@ if [ ${MACHINE_AGENT: -4} == ".zip" ]
 then
   echo "Using .zip version of the Machine Agent"
   cp ${MACHINE_AGENT} MachineAgent.zip
+  MACHINE_AGENT_INPUT=${MACHINE_AGENT}
   MACHINE_AGENT="MachineAgent.zip"
   (cd ECommerce-Tomcat; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
   (cd ECommerce-FulfillmentClient; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
@@ -173,11 +174,19 @@ else
 fi
 
 # Copy Agent zips to build dirs
-echo "Adding AppDynamics Agents ${APP_SERVER_AGENT} ${MACHINE_AGENT} ${WEB_AGENT} ${DB_AGENT}"
+echo "Adding AppDynamics Agents: 
+${APP_SERVER_AGENT} 
+${MACHINE_AGENT_INPUT} 
+${WEB_AGENT} 
+${DB_AGENT}"
+
 cp ${APP_SERVER_AGENT} ECommerce-Tomcat/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-Tomcat/${MACHINE_AGENT}
-if [ -e ${ANALYTICS_AGENT}
+
+if [ -z ${ANALYTICS_AGENT} ]
 then
+  echo "Skipping standalone Analytics Agent install"
+else
   echo "Installing standalone Analytics Agent"
   cp ${ANALYTICS_AGENT} ECommerce-Tomcat/AnalyticsAgent.zip
   (cd ECommerce-Tomcat; sed -i ${SED_OPTS} '/# Analytics Agent Install/ r Dockerfile.include.analytics-agent' Dockerfile; rm -f Dockerfile.bak)

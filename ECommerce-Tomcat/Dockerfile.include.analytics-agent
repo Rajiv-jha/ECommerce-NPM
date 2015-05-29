@@ -1,4 +1,3 @@
-# Analytics Agent install
 ENV ANALYTICS_AGENT_HOME /analytics-agent
 ADD AnalyticsAgent.zip /
 RUN unzip AnalyticsAgent.zip

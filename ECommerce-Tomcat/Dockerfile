@@ -48,7 +48,7 @@ ADD ecommerce-log4j.job ${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/
 ADD configAnalytics.sh /
 
 # (Placeholder - build script will update for analytics-agent install)
-# Analytics Agent install
+# Analytics Agent Install
 
 # Startup scripts
 ADD startup.sh /
