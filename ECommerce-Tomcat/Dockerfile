@@ -43,9 +43,12 @@ ADD increase-pool.sh ${MACHINE_AGENT_HOME}/local-scripts/
 ADD shrink-pool.sh ${MACHINE_AGENT_HOME}/local-scripts/
 RUN chmod +x ${MACHINE_AGENT_HOME}/local-scripts/*.sh
 
-# Analytics Agent config
+# Analytics config
 ADD ecommerce-log4j.job ${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/
 ADD configAnalytics.sh /
+
+# (Placeholder - build script will update for analytics-agent install)
+# Analytics Agent Install
 
 # Startup scripts
 ADD startup.sh /

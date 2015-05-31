@@ -18,7 +18,7 @@
 
 cleanUp() {
   (cd ECommerce-Java && rm -f jdk-linux-x64.rpm)
-  (cd ECommerce-Tomcat && rm -f AppServerAgent.zip ${MACHINE_AGENT})
+  (cd ECommerce-Tomcat && rm -f AppServerAgent.zip ${MACHINE_AGENT} AnalyticsAgent.zip)
   (cd ECommerce-Tomcat && rm -rf monitors ECommerce-Java)
   (cd ECommerce-FulfillmentClient && rm -f AppServerAgent.zip ${MACHINE_AGENT})
   (cd ECommerce-FulfillmentClient && rm -rf monitors ECommerce-Java)
@@ -43,6 +43,7 @@ promptForAgents() {
   read -e -p "Enter path to Machine Agent: " MACHINE_AGENT
   read -e -p "Enter path to DB Agent: " DB_AGENT
   read -e -p "Enter path to Web Server Agent: " WEB_AGENT
+  read -e -p "Enter path to Analytics Agent: " ANALYTICS_AGENT
   read -e -p "Enter Docker Version: " VERSION
 }
 
@@ -63,7 +64,7 @@ restoreDockerfiles() {
 # Usage information
 if [[ $1 == *--help* ]]
 then
-  echo "Specify agent locations: build.sh -a <Path to App Server Agent> -m <Path to Machine Agent> -d <Path to Database Agent> -v <Version>"
+  echo "Specify agent locations: build.sh -a <Path to App Server Agent> -m <Path to Machine Agent> -d <Path to Database Agent> -w <Path to Web Server Agent> -y <Path to Analytics Agent> -v <Version>"
   echo "Prompt for agent locations: build.sh"
   exit
 fi
@@ -75,7 +76,7 @@ then
 
 else
   # Allow user to specify locations of App Server, Machine and Database Agents
-  while getopts "a:m:d:w:v:n:k:" opt; do
+  while getopts "a:m:d:w:v:y:" opt; do
     case $opt in
       a)
         APP_SERVER_AGENT=$OPTARG
@@ -117,6 +118,14 @@ else
           echo "Version Not found using: ${VERSION}"          
         fi
         ;;               
+      y)
+        ANALYTICS_AGENT=$OPTARG 
+	if [ ! -e ${ANALYTICS_AGENT} ]
+        then
+          echo "Not found: ${ANALYTICS_AGENT}"
+	  exit         
+        fi
+        ;;               
       \?)
         echo "Invalid option: -$OPTARG"
         ;;
@@ -144,6 +153,7 @@ if [ ${MACHINE_AGENT: -4} == ".zip" ]
 then
   echo "Using .zip version of the Machine Agent"
   cp ${MACHINE_AGENT} MachineAgent.zip
+  MACHINE_AGENT_INPUT=${MACHINE_AGENT}
   MACHINE_AGENT="MachineAgent.zip"
   (cd ECommerce-Tomcat; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
   (cd ECommerce-FulfillmentClient; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
@@ -164,9 +174,24 @@ else
 fi
 
 # Copy Agent zips to build dirs
-echo "Adding AppDynamics Agents ${APP_SERVER_AGENT} ${MACHINE_AGENT} ${WEB_AGENT} ${DB_AGENT}"
+echo "Adding AppDynamics Agents: 
+${APP_SERVER_AGENT} 
+${MACHINE_AGENT_INPUT} 
+${WEB_AGENT} 
+${DB_AGENT}"
+
 cp ${APP_SERVER_AGENT} ECommerce-Tomcat/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-Tomcat/${MACHINE_AGENT}
+
+if [ -z ${ANALYTICS_AGENT} ]
+then
+  echo "Skipping standalone Analytics Agent install"
+else
+  echo "Installing standalone Analytics Agent"
+  echo ${ANALYTICS_AGENT}
+  cp ${ANALYTICS_AGENT} ECommerce-Tomcat/AnalyticsAgent.zip
+  (cd ECommerce-Tomcat; sed -i ${SED_OPTS} '/# Analytics Agent Install/ r Dockerfile.include.analytics-agent' Dockerfile; rm -f Dockerfile.bak)
+fi
 echo "Copied Agents for ECommerce-Tomcat..."
 
 cp ${APP_SERVER_AGENT} ECommerce-FulfillmentClient/AppServerAgent.zip
