@@ -188,6 +188,7 @@ then
   echo "Skipping standalone Analytics Agent install"
 else
   echo "Installing standalone Analytics Agent"
+  echo ${ANALYTICS_AGENT}
   cp ${ANALYTICS_AGENT} ECommerce-Tomcat/AnalyticsAgent.zip
   (cd ECommerce-Tomcat; sed -i ${SED_OPTS} '/# Analytics Agent Install/ r Dockerfile.include.analytics-agent' Dockerfile; rm -f Dockerfile.bak)
 fi
