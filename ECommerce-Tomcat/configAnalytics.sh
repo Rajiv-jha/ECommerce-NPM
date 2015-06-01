@@ -9,21 +9,21 @@ source /env.sh
 aaprop=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/analytics-agent.properties
 
 if [ "$(grep '^http.event.endpoint=http://localhost:9080/v1' $aaprop)" ]; then
-        echo "${aaprop}: setting correct endpoint"
+        echo "${aaprop}: setting event.endpoint: ${EVENT_ENDPOINT}"
 	sed -i "/^http.event.endpoint=/c\http.event.endpoint=http:\/\/${EVENT_ENDPOINT}\/v1" ${aaprop}
 else
         echo "${aaprop}: endpoint already set or doesn't exist"
 fi
 
 if [ "$(grep '^http.event.accountName=analytics-customer1$' $aaprop)" ]; then
-        echo "${aaprop}: setting correct account name"
+        echo "${aaprop}: setting event.accountName: ${ACCOUNT_NAME}"
 	sed -i "/^http.event.accountName=/c\http.event.accountName=${ACCOUNT_NAME}" ${aaprop}
 else
         echo "${aaprop}: account name already set or doesn't exist"
 fi
 
 if [ "$(grep '^http.event.accessKey=your-account-access-key$' $aaprop)" ]; then
-        echo "${aaprop}: setting correct accessKey"
+        echo "${aaprop}: setting event.accessKey: ${ACCESS_KEY}"
         sed -i "/^http.event.accessKey=/c\http.event.accessKey=${ACCESS_KEY}" ${aaprop}
 else
         echo "${aaprop}: accessKey already set or doesn't exist"
@@ -39,26 +39,6 @@ if [ "$(grep '<enabled>false</enabled>' $monxml)" ]; then
 else
         echo "${monxml}: already enabled or doesn't exist"
 fi
-
-# Configure sample-java-agent-log.job
-
-sjal=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/sample-java-agent-log.job
-
-if [ "$(grep '^enabled: false' $sjal)" ]; then
-        echo "${sjal}: setting to "true""
-	sed -i '/^enabled/c\enabled: true' ${sjal}
-else
-        echo "${sjal}: already enabled or doesn't exist"
-fi
-
-if [ "$(grep 'path: \$' $sjal)" ]; then
-        echo "${sjal}: setting to correct path"
-        sed -i "/path:/c\    path: /tomcat/appagent/${VERSION_STRING}/logs/${NODE_NAME}" ${sjal}
-else
-        echo "${sjal}: path already set or doesn't exist"
-fi
-
-# Configure custom ECommerce log analytics
 
 ecjl=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/ecommerce-log4j.job
 

@@ -10,21 +10,21 @@ ANALYTICS_AGENT_HOME=/analytics-agent
 aaprop=${ANALYTICS_AGENT_HOME}/conf/analytics-agent.properties
 
 if [ "$(grep '^http.event.endpoint=http://localhost:9080/v1' $aaprop)" ]; then
-        echo "${aaprop}: setting correct endpoint"
+        echo "${aaprop}: setting event.endpoint: ${EVENT_ENDPOINT}"
 	sed -i "/^http.event.endpoint=/c\http.event.endpoint=http:\/\/${EVENT_ENDPOINT}\/v1" ${aaprop}
 else
         echo "${aaprop}: endpoint already set or doesn't exist"
 fi
 
 if [ "$(grep '^http.event.accountName=analytics-customer1$' $aaprop)" ]; then
-        echo "${aaprop}: setting correct account name"
+        echo "${aaprop}: setting event.accountName: ${ACCOUNT_NAME}"
 	sed -i "/^http.event.accountName=/c\http.event.accountName=${ACCOUNT_NAME}" ${aaprop}
 else
         echo "${aaprop}: account name already set or doesn't exist"
 fi
 
 if [ "$(grep '^http.event.accessKey=your-account-access-key$' $aaprop)" ]; then
-        echo "${aaprop}: setting correct accessKey"
+        echo "${aaprop}: setting event.accessKey: ${ACCESS_KEY}"
         sed -i "/^http.event.accessKey=/c\http.event.accessKey=${ACCESS_KEY}" ${aaprop}
 else
         echo "${aaprop}: accessKey already set or doesn't exist"
