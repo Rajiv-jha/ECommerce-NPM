@@ -37,6 +37,7 @@ else
         echo "${monxml}: already enabled or doesn't exist"
 fi
 
+# Configure custom ECommerce log analytics
 ecjl=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/ecommerce-log4j.job
 
 if [ "$(grep '_NODE_NAME' ${ecjl})" ]; then
