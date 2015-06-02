@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Set correct variables
-
 source /env.sh
 
 # Configure analytics-agent.properties
@@ -31,7 +30,6 @@ else
 fi
 
 # Configure monitor.xml
-
 monxml=${ANALYTICS_AGENT_HOME}/monitor.xml
 
 if [ "$(grep '<enabled>false</enabled>' $monxml)" ]; then
@@ -42,27 +40,25 @@ else
 fi
 
 # Configure custom ECommerce log analytics
-
 ecjl=${ANALYTICS_AGENT_HOME}/conf/job/ecommerce-log4j.job
 
 if [ "$(grep '_NODE_NAME' ${ecjl})" ]; then
-        echo "${sjal}: setting NODE_NAME to "${NODE_NAME}""
+        echo "${ecjl}: setting NODE_NAME to "${NODE_NAME}""
         sed -i "s/_NODE_NAME/${NODE_NAME}/g" ${ecjl}
 else
         echo "Error configuring ${ecjl}: _NODE_NAME not found"
 fi
 
 if [ "$(grep '_TIER_NAME' ${ecjl})" ]; then
-        echo "${sjal}: setting TIER_NAME to "${TIER_NAME}""
+        echo "${ecjl}: setting TIER_NAME to "${TIER_NAME}""
         sed -i "s/_TIER_NAME/${TIER_NAME}/g" ${ecjl}
 else
         echo "Error configuring ${ecjl}: _TIER_NAME not found"
 fi
 
 if [ "$(grep '_APP_NAME' ${ecjl})" ]; then
-        echo "${sjal}: setting APP_NAME to "${APP_NAME}""
+        echo "${ecjl}: setting APP_NAME to "${APP_NAME}""
         sed -i "s/_APP_NAME/${APP_NAME}/g" ${ecjl}
 else
         echo "Error configuring ${ecjl}: _APP_NAME not found"
 fi
-
