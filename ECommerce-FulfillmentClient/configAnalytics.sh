@@ -36,21 +36,3 @@ if [ "$(grep '<enabled>false</enabled>' $monxml)" ]; then
 else
         echo "${monxml}: already enabled or doesn't exist"
 fi
-
-# Configure sample-java-agent-log.job
-sjal=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/sample-java-agent-log.job
-
-if [ "$(grep '^enabled: false' $sjal)" ]; then
-        echo "${sjal}: setting to "true""
-	sed -i '/^enabled/c\enabled: true' ${sjal}
-else
-        echo "${sjal}: already enabled or doesn't exist"
-fi
-
-if [ "$(grep 'path: \$' $sjal)" ]; then
-        echo "${sjal}: setting to correct path"
-        sed -i "/path:/c\    path: /tomcat/appagent/${VERSION_STRING}/logs/${NODE_NAME}" ${sjal}
-else
-        echo "${sjal}: path already set or doesn't exist"
-fi
-
