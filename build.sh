@@ -18,16 +18,15 @@
 
 cleanUp() {
   (cd ECommerce-Java && rm -f jdk-linux-x64.rpm)
-  (cd ECommerce-Tomcat && rm -f AppServerAgent.zip ${MACHINE_AGENT} AnalyticsAgent.zip)
+  (cd ECommerce-Tomcat && rm -f AppServerAgent.zip ${MACHINE_AGENT} AnalyticsAgent.zip Dockerfile)
   (cd ECommerce-Tomcat && rm -rf monitors ECommerce-Java)
-  (cd ECommerce-FulfillmentClient && rm -f AppServerAgent.zip ${MACHINE_AGENT})
+  (cd ECommerce-FulfillmentClient && rm -f AppServerAgent.zip ${MACHINE_AGENT} Dockerfile)
   (cd ECommerce-FulfillmentClient && rm -rf monitors ECommerce-Java)
-  (cd ECommerce-Synapse && rm -f AppServerAgent.zip ${MACHINE_AGENT})
+  (cd ECommerce-Synapse && rm -f AppServerAgent.zip ${MACHINE_AGENT} Dockerfile)
   (cd ECommerce-DBAgent && rm -f dbagent.zip)
   (cd ECommerce-Load && rm -rf ECommerce-Load)
-  (cd ECommerce-LBR && rm -f ${MACHINE_AGENT} webserver_agent.tar.gz)
+  (cd ECommerce-LBR && rm -f ${MACHINE_AGENT} webserver_agent.tar.gz Dockerfile)
   rm -f ${MACHINE_AGENT}
-  restoreDockerfiles
  
   # Remove dangling images left-over from build
   if [[ `docker images -q --filter "dangling=true"` ]]
@@ -37,6 +36,7 @@ cleanUp() {
     docker images -q --filter "dangling=true" | xargs docker rmi;
   fi
 }
+trap cleanUp EXIT
 
 promptForAgents() {
   read -e -p "Enter path to App Server Agent: " APP_SERVER_AGENT
@@ -47,24 +47,10 @@ promptForAgents() {
   read -e -p "Enter Docker Version: " VERSION
 }
 
-saveDockerfiles() {
-  cp ECommerce-Tomcat/Dockerfile ECommerce-Tomcat/Dockerfile.saved
-  cp ECommerce-Synapse/Dockerfile ECommerce-Synapse/Dockerfile.saved
-  cp ECommerce-FulfillmentClient/Dockerfile ECommerce-FulfillmentClient/Dockerfile.saved
-  cp ECommerce-LBR/Dockerfile ECommerce-LBR/Dockerfile.saved
-}
-
-restoreDockerfiles() {
-  mv ECommerce-Tomcat/Dockerfile.saved ECommerce-Tomcat/Dockerfile
-  mv ECommerce-Synapse/Dockerfile.saved ECommerce-Synapse/Dockerfile
-  mv ECommerce-FulfillmentClient/Dockerfile.saved ECommerce-FulfillmentClient/Dockerfile
-  mv ECommerce-LBR/Dockerfile.saved ECommerce-LBR/Dockerfile
-}
-
 # Usage information
 if [[ $1 == *--help* ]]
 then
-  echo "Specify agent locations: build.sh -a <Path to App Server Agent> -m <Path to Machine Agent> -d <Path to Database Agent> -w <Path to Web Server Agent> -y <Path to Analytics Agent> -v <Version>"
+  echo "Specify agent locations: build.sh -a <Path to App Server Agent> -m <Path to Machine Agent> -d <Path to Database Agent> -w <Path to Web Server Agent> -y <Path to Analytics Agent>"
   echo "Prompt for agent locations: build.sh"
   exit
 fi
@@ -87,7 +73,7 @@ else
         fi
         ;;
       m)
-        MACHINE_AGENT=$OPTARG
+        export MACHINE_AGENT=$OPTARG
         if [ ! -e ${MACHINE_AGENT} ]
         then
           echo "Not found: ${MACHINE_AGENT}"
@@ -110,14 +96,6 @@ else
           exit
         fi
         ;; 
-      v)
-        VERSION=$OPTARG 
-        if [ -e ${VERSION} ]
-        then
-          VERSION=latest;
-          echo "Version Not found using: ${VERSION}"          
-        fi
-        ;;               
       y)
         ANALYTICS_AGENT=$OPTARG 
 	if [ ! -e ${ANALYTICS_AGENT} ]
@@ -137,37 +115,26 @@ fi
 # docker pull appdynamics/ecommerce-java:oracle-java7
 
 # Download Oracle JDK7 and build ecommerce-java base image
-echo "Building ECommerce-Java base image..."
+echo; echo "Building ECommerce-Java base image..."
+echo "Downloading Oracle Java 7 JDK"
 (cd ECommerce-Java; curl -j -k -L -H "Cookie:oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u71-b13/jdk-7u71-linux-x64.rpm -o jdk-linux-x64.rpm)
+echo "Building ECommerce-Java..."
 (cd ECommerce-Java; docker build -t appdynamics/ecommerce-java .)
+echo
 
-# Configure for RPM/zipfile Machine Agents
-saveDockerfiles
-
-if [[ `uname -a | grep "Darwin"` ]]
-then
-  SED_OPTS=".bak"
-fi
-
+MACHINE_AGENT_INPUT=${MACHINE_AGENT}
 if [ ${MACHINE_AGENT: -4} == ".zip" ]
 then
-  echo "Using .zip version of the Machine Agent"
-  cp ${MACHINE_AGENT} MachineAgent.zip
-  MACHINE_AGENT_INPUT=${MACHINE_AGENT}
-  MACHINE_AGENT="MachineAgent.zip"
-  (cd ECommerce-Tomcat; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
-  (cd ECommerce-FulfillmentClient; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
-  (cd ECommerce-Synapse; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
-  (cd ECommerce-LBR; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
+	# Add Machine Agent zip install to Dockerfiles 
+	source ./makeDockerfiles.sh zip
+        cp ${MACHINE_AGENT} MachineAgent.zip
+        MACHINE_AGENT="MachineAgent.zip"        
 elif [ ${MACHINE_AGENT: -4} == ".rpm" ]
 then
-  echo "Using .rpm  version pf the Machine Agent"
-  cp ${MACHINE_AGENT} machineagent.rpm
-  MACHINE_AGENT="machineagent.rpm"
-  (cd ECommerce-Tomcat; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
-  (cd ECommerce-FulfillmentClient; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
-  (cd ECommerce-Synapse; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
-  (cd ECommerce-LBR; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
+	# Add Machine Agent rpm install to Dockerfiles 
+	source ./makeDockerfiles.sh rpm
+        cp ${MACHINE_AGENT} machineagent.rpm
+        MACHINE_AGENT="machineagent.rpm"
 else
   echo "Machine agent file extension not recognized"
   exit
@@ -192,62 +159,43 @@ else
   cp ${ANALYTICS_AGENT} ECommerce-Tomcat/AnalyticsAgent.zip
   (cd ECommerce-Tomcat; sed -i ${SED_OPTS} '/# Analytics Agent Install/ r Dockerfile.include.analytics-agent' Dockerfile; rm -f Dockerfile.bak)
 fi
-echo "Copied Agents for ECommerce-Tomcat..."
+echo "Copied Agents for ECommerce-Tomcat"
 
 cp ${APP_SERVER_AGENT} ECommerce-FulfillmentClient/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-FulfillmentClient/${MACHINE_AGENT}
-echo "Copied Agents for ECommerce-FulfillmentClient..."
+echo "Copied Agents for ECommerce-FulfillmentClient"
 
 cp ${APP_SERVER_AGENT} ECommerce-Synapse/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-Synapse/${MACHINE_AGENT}
-echo "Copied Agents for ECommerce-Synapse..."
+echo "Copied Agents for ECommerce-Synapse"
 
 cp ${WEB_AGENT} ECommerce-LBR/webserver_agent.tar.gz
 cp ${MACHINE_AGENT} ECommerce-LBR/${MACHINE_AGENT}
 cp ${DB_AGENT} ECommerce-DBAgent/dbagent.zip
-echo "Copied Agents for ECommerce-LBR..."
+echo "Copied Agents for ECommerce-LBR"
 
 # Build Tomcat containers using downloaded AppServer and Machine Agents
-echo "Building ECommerce-Tomcat..."
+echo; echo "Building ECommerce-Tomcat..." 
 (cd ECommerce-Tomcat && git clone https://github.com/Appdynamics/ECommerce-Java.git)
 (cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat:${VERSION} .)
 
-echo "Building ECommerce-FulfillmentClient..."
+echo; echo "Building ECommerce-FulfillmentClient..."
 (cd ECommerce-FulfillmentClient && git clone https://github.com/Appdynamics/ECommerce-Java.git)
 (cd ECommerce-FulfillmentClient && docker build -t appdynamics/ecommerce-fulfillment-client:${VERSION} .)
 
 # Build Synapse container using downloaded AppServer and Machine Agents
-echo "Building ECommerce-Synapse..."
+echo; echo "Building ECommerce-Synapse..."
 (cd ECommerce-Synapse && docker build -t appdynamics/ecommerce-synapse:${VERSION} .)
 
 # Build DBAgent container using downloaded DBAgent
-echo "Building ECommerce-DBAgent..."
+echo; echo "Building ECommerce-DBAgent..."
 (cd ECommerce-DBAgent && docker build -t appdynamics/ecommerce-dbagent:${VERSION} .)
 
 # Build Web Agent container
-echo "Building Web Agent container..."
+echo; echo "Building ECommerce-LBR..."
 (cd ECommerce-LBR && docker build -t appdynamics/ecommerce-lbr:${VERSION} .)
 
 # Build LoadGen container
-echo "Building ECommerce-Load..."
+echo; echo "Building ECommerce-Load..."
 (cd ECommerce-Load && git clone https://github.com/Appdynamics/ECommerce-Load.git)
 (cd ECommerce-Load && docker build -t appdynamics/ecommerce-load:${VERSION} .)
-
-# Pull ActiveMQ, LBR and Oracle containers from (private) appdynamics docker repo
-echo "Pulling ActiveMQ, LBR and Oracle database containers..."
-#docker pull appdynamics/ecommerce-activemq:${VERSION}
-#docker pull appdynamics/ecommerce-lbr:${VERSION}
-docker pull appdynamics/ecommerce-oracle:${VERSION}
-
-echo "Local docker container images installed: "
-echo "    appdynamics/ecommerce-java:oracle-java7"
-echo "    appdynamics/ecommerce-tomcat"
-echo "    appdynamics/ecommerce-fulfillment-client"
-echo "    appdynamics/ecommerce-synapse"
-echo "    appdynamics/ecommerce-dbagent"
-echo "    appdynamics/ecommerce-activemq"
-echo "    appdynamics/ecommerce-lbr"
-echo "    appdynamics/ecommerce-load"
-echo "    appdynamics/ecommerce-oracle"
-
-cleanUp

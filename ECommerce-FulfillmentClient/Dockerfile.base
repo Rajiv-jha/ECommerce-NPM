@@ -2,7 +2,7 @@ FROM appdynamics/ecommerce-java:oracle-java7
 
 # Install Gradle
 RUN curl -O http://downloads.gradle.org/distributions/gradle-2.1-bin.zip
-RUN unzip gradle-2.1-bin.zip -d /opt/
+RUN unzip -q gradle-2.1-bin.zip -d /opt/
 RUN rm gradle-2.1-bin.zip
 ENV GRADLE_HOME /opt/gradle-2.1
 ENV PATH $PATH:$GRADLE_HOME/bin
@@ -12,11 +12,11 @@ ENV CLIENT_HOME /opt/fulfillment-client
 ADD ECommerce-Java /ECommerce-Java
 
 # Gradle build
-RUN cd /ECommerce-Java;gradle uberJar;mkdir ${CLIENT_HOME};cp /ECommerce-Java/ECommerce-FulfillmentClient/build/libs/ECommerce-FulfillmentClient.jar ${CLIENT_HOME};rm -rf /ECommerce-Java;
+RUN cd /ECommerce-Java; gradle uberJar; mkdir ${CLIENT_HOME}; cp /ECommerce-Java/ECommerce-FulfillmentClient/build/libs/ECommerce-FulfillmentClient.jar ${CLIENT_HOME}; rm -rf /ECommerce-Java;
 
 # App Server Agent Install
 ADD AppServerAgent.zip /
-RUN unzip /AppServerAgent.zip -d ${CLIENT_HOME}/appagent;rm AppServerAgent.zip
+RUN unzip -q /AppServerAgent.zip -d ${CLIENT_HOME}/appagent;rm AppServerAgent.zip
 
 # (Placeholder - build script will update with zip/rpm directives)
 # Machine Agent Install

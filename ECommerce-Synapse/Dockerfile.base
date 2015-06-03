@@ -6,7 +6,7 @@ ENV MACHINE_AGENT_HOME $SYNAPSE_HOME/machine_agent
 RUN curl http://mirror.olnevhost.net/pub/apache//synapse/2.1.0/synapse-2.1.0-bin.tar.gz | tar -xz
 
 ADD AppServerAgent.zip /
-RUN unzip /AppServerAgent.zip -d ${SYNAPSE_HOME}/appagent
+RUN unzip -q /AppServerAgent.zip -d ${SYNAPSE_HOME}/appagent
 RUN rm AppServerAgent.zip
 ADD controller-info.xml /
 RUN mkdir -p ${SYNAPSE_HOME}/appagent/ver4.0.0.0/conf
