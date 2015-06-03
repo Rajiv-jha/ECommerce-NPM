@@ -44,13 +44,19 @@ promptForAgents() {
   read -e -p "Enter path to DB Agent: " DB_AGENT
   read -e -p "Enter path to Web Server Agent: " WEB_AGENT
   read -e -p "Enter path to Analytics Agent: " ANALYTICS_AGENT
-  read -e -p "Enter Docker Version: " VERSION
+  read -e -p "Enter path to Oracle JDK7: " ORACLE_JDK7
 }
 
 # Usage information
 if [[ $1 == *--help* ]]
 then
-  echo "Specify agent locations: build.sh -a <Path to App Server Agent> -m <Path to Machine Agent> -d <Path to Database Agent> -w <Path to Web Server Agent> -y <Path to Analytics Agent>"
+  echo "Specify agent locations: build.sh 
+          -a <Path to App Server Agent> 
+          -m <Path to Machine Agent> 
+          -d <Path to Database Agent> 
+          -w <Path to Web Server Agent> 
+          -y <Path to Analytics Agent>
+          -j <Path to Oracle JDK7>"
   echo "Prompt for agent locations: build.sh"
   exit
 fi
@@ -62,7 +68,7 @@ then
 
 else
   # Allow user to specify locations of App Server, Machine and Database Agents
-  while getopts "a:m:d:w:v:y:" opt; do
+  while getopts "a:m:d:w:v:y:j:" opt; do
     case $opt in
       a)
         APP_SERVER_AGENT=$OPTARG
@@ -103,7 +109,15 @@ else
           echo "Not found: ${ANALYTICS_AGENT}"
 	  exit         
         fi
-        ;;               
+        ;; 
+      j)
+        ORACLE_JDK7=$OPTARG
+        if [ ! -e ${ORACLE_JDK7} ]
+        then
+          echo "Not found: ${ORACLE_JDK7}"
+          exit
+        fi
+        ;;              
       \?)
         echo "Invalid option: -$OPTARG"
         ;;
@@ -116,8 +130,15 @@ fi
 
 # Download Oracle JDK7 and build ecommerce-java base image
 echo; echo "Building ECommerce-Java base image..."
-echo "Downloading Oracle Java 7 JDK"
-(cd ECommerce-Java; curl -j -k -L -H "Cookie:oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u71-b13/jdk-7u71-linux-x64.rpm -o jdk-linux-x64.rpm)
+
+if [ -z ${ORACLE_JDK7} ]
+then
+  echo "Downloading Oracle Java 7 JDK"
+  (cd ECommerce-Java; curl -j -k -L -H "Cookie:oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u71-b13/jdk-7u71-linux-x64.rpm -o jdk-linux-x64.rpm)
+else
+  cp ${ORACLE_JDK7} ECommerce-Java/jdk-linux-x64.rpm
+fi
+
 echo "Building ECommerce-Java..."
 (cd ECommerce-Java; docker build -t appdynamics/ecommerce-java .)
 echo
