@@ -202,25 +202,25 @@ echo "Copied Agents for ECommerce-DBAgent"
 # Build Tomcat containers
 echo; echo "Building ECommerce-Tomcat..." 
 (cd ECommerce-Tomcat && git clone https://github.com/Appdynamics/ECommerce-Java.git)
-(cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat:${VERSION} .)
+(cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat .)
 
 echo; echo "Building ECommerce-FulfillmentClient..."
 (cd ECommerce-FulfillmentClient && git clone https://github.com/Appdynamics/ECommerce-Java.git)
-(cd ECommerce-FulfillmentClient && docker build -t appdynamics/ecommerce-fulfillment-client:${VERSION} .)
+(cd ECommerce-FulfillmentClient && docker build -t appdynamics/ecommerce-fulfillment-client .)
 
 # Build Synapse container
 echo; echo "Building ECommerce-Synapse..."
-(cd ECommerce-Synapse && docker build -t appdynamics/ecommerce-synapse:${VERSION} .)
+(cd ECommerce-Synapse && docker build -t appdynamics/ecommerce-synapse .)
 
 # Build DBAgent container
 echo; echo "Building ECommerce-DBAgent..."
-(cd ECommerce-DBAgent && docker build -t appdynamics/ecommerce-dbagent:${VERSION} .)
+(cd ECommerce-DBAgent && docker build -t appdynamics/ecommerce-dbagent .)
 
 # Build Web Agent container
 echo; echo "Building ECommerce-LBR..."
-(cd ECommerce-LBR && docker build -t appdynamics/ecommerce-lbr:${VERSION} .)
+(cd ECommerce-LBR && docker build -t appdynamics/ecommerce-lbr .)
 
 # Build LoadGen container
 echo; echo "Building ECommerce-Load..."
 (cd ECommerce-Load && git clone https://github.com/Appdynamics/ECommerce-Load.git)
-(cd ECommerce-Load && docker build -t appdynamics/ecommerce-load:${VERSION} .)
+(cd ECommerce-Load && docker build -t appdynamics/ecommerce-load .)
