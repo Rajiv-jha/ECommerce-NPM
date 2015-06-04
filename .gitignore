@@ -7,3 +7,9 @@ env.sh
 
 # Ignore backups of run.sh/env.sh
 *.sh.*
+
+# Ignore Dockerfiles - built on-demand
+ECommerce-LBR/Dockerfile
+ECommerce-Tomcat/Dockerfile
+ECommerce-Synapse/Dockerfile
+ECommerce-FulfillmentClient

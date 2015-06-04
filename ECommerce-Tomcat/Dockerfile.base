@@ -38,6 +38,9 @@ RUN unzip -q /AppServerAgent.zip -d ${CATALINA_HOME}/appagent;rm AppServerAgent.
 # (Placeholder - build script will update with zip/rpm directives)
 # Machine Agent Install
 
+# (Placeholder - build script will update for analytics-agent install)
+# Analytics Agent Install
+
 # Machine Agent scripts for Run Book Automation
 ADD increase-pool.sh ${MACHINE_AGENT_HOME}/local-scripts/
 ADD shrink-pool.sh ${MACHINE_AGENT_HOME}/local-scripts/
@@ -46,9 +49,6 @@ RUN chmod +x ${MACHINE_AGENT_HOME}/local-scripts/*.sh
 # Analytics config
 ADD ecommerce-log4j.job ${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/job/
 ADD configAnalytics.sh /
-
-# (Placeholder - build script will update for analytics-agent install)
-# Analytics Agent Install
 
 # Startup scripts
 ADD startup.sh /
