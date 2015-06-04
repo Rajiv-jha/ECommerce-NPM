@@ -10,7 +10,7 @@ echo "Configuring Machine Agent:
   Port: ${APPD_PORT}
   App: ${APP_NAME}
   Tier: ${TIER_NAME}
-  Node: ${NODE}
+  Node: ${NODE_NAME}
   SIM Hierarchy: ${SIM_HIERARCHY_1}/${SIM_HIERARCHY_2}"
 
 if [ -e /etc/init.d/appdynamics-machine-agent ]
