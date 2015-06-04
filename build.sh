@@ -163,7 +163,7 @@ then
     source ./makeDockerfiles.sh zip ${DOCKERFILE_OPTIONS}
     cp ${MACHINE_AGENT_INPUT} MachineAgent.zip
     MACHINE_AGENT="MachineAgent.zip"        
-elif [ ${MACHINE_AGENT: -4} == ".rpm" ]
+elif [ ${MACHINE_AGENT_INPUT: -4} == ".rpm" ]
 then
     source ./makeDockerfiles.sh rpm ${DOCKERFILE_OPTIONS}
     cp ${MACHINE_AGENT_INPUT} machineagent.rpm
@@ -194,8 +194,10 @@ echo "Copied Agents for ECommerce-Synapse"
 
 cp ${WEB_AGENT} ECommerce-LBR/webserver_agent.tar.gz
 cp ${MACHINE_AGENT} ECommerce-LBR/${MACHINE_AGENT}
-cp ${DB_AGENT} ECommerce-DBAgent/dbagent.zip
 echo "Copied Agents for ECommerce-LBR"
+
+cp ${DB_AGENT} ECommerce-DBAgent/dbagent.zip
+echo "Copied Agents for ECommerce-DBAgent"
 
 # Build Tomcat containers
 echo; echo "Building ECommerce-Tomcat..." 
