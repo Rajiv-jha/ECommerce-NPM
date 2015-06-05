@@ -23,8 +23,8 @@ Starting the Machine Agent and Analytics Agent
 By default, on startup the containers will run the App Server / Database / Web Server Agents only.
 The Machine Agent or standalone Analytics Agent can be started using `docker exec` once the container is running:
 
-1. To start the Machine Agent (with integrated analytics-agent): `docker exec -t <container> /start-machine-agent.sh`
-2. To start the Standalone Analytics Agent: `docker exec -t <container> /start-analytics-agent.sh` (ecommerce-tomcat only)
+1. To start the Machine Agents (with integrated analytics-agent): `./startMachineAgents.sh [zip | rpm]`
+2. To start the Standalone Analytics Agents (ecommerce-tomcat only): `./startAnalyticsAgent.sh`
 
 Tagging and Pushing to DockerHub
 --------------------------------
