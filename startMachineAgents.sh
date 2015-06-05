@@ -1,5 +1,10 @@
 #! /bin/bash
 
+if [ ! $# -eq 1 ]; then
+  echo "Usage: startMachineAgents.sh zip | rpm"
+  exit
+fi 
+
 if [ $1 == "rpm" ]; then
   EXEC_ARGS="-t"
 elif [ $1 == "zip" ]; then
