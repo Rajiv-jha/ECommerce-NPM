@@ -1,17 +1,13 @@
 #! /bin/bash
 
-if [ ! $# -eq 1 ]; then
-  echo "Usage: startMachineAgents.sh zip | rpm"
-  exit
-fi 
+USE_RPM=$(docker exec web ls /etc/init.d/appdynamics-machine-agent 2> /dev/null)
 
-if [ $1 == "rpm" ]; then
-  EXEC_ARGS="-t"
-elif [ $1 == "zip" ]; then
+if [ -z ${USE_RPM} ]; then
   EXEC_ARGS=""
+elif [ ${USE_RPM} == "/etc/init.d/appdynamics-machine-agent" ]; then
+  EXEC_ARGS="-t"
 else
-  echo "Error: must specify zip or rpm"
-  exit
+  EXEC_ARGS=""
 fi
 
 echo "Starting machine agent on web container..."; docker exec ${EXEC_ARGS} web /start-machine-agent.sh; echo "Done"
