@@ -19,7 +19,7 @@ startAtEnd: false
 #
 file:
     path: /opt/rh/httpd24/root/etc/httpd/logs
-    nameGlob: access_log
+    nameGlob: 'access_log'
 #
 # Optional property (Except "sourceType").
 #
@@ -29,9 +29,9 @@ file:
 #
 fields:
    sourceType: apache-httpserver-access-log
-   nodeName: Node1
-   tierName: Tier1
-   appName: App1
+   nodeName: _NODE_NAME
+   tierName: _TIER_NAME
+   appName: _APP_NAME
 
 # Optional property.
 #

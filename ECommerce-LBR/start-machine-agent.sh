@@ -2,6 +2,9 @@
 # Read env vars for Controller, Port, App, Tier and Node names
 source ${NATIVE_HOME}/env.sh
 
+echo "Configuring Machine Agent Analytics properties..."
+/configAnalytics.sh
+
 echo "Configuring Machine Agent:
   Controller: ${CONTROLLER}
   Port: ${APPD_PORT}

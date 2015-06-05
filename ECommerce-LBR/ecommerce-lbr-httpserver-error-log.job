@@ -19,7 +19,7 @@ startAtEnd: false
 #
 file:
     path: /opt/rh/httpd24/root/etc/httpd/logs
-    nameGlob: error_log
+    nameGlob: 'error_log'
 
 # Optional property.
 #
@@ -46,9 +46,9 @@ multiline:
 #
 fields:
    sourceType: apache-httpserver-error-log
-   nodeName: Node1
-   tierName: Tier1
-   appName: App1
+   nodeName: _NODE_NAME
+   tierName: _TIER_NAME
+   appName: _APP_NAME
 
 # Optional property.
 #
