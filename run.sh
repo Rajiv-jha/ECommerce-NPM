@@ -104,17 +104,3 @@ sleep 30
 
 echo -n "msg: "; docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load
 echo -n "dbagent: "; docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
-
-echo "Starting machine agent on web container..."; docker exec web /start-machine-agent.sh; echo "Done"
-echo "Starting machine agent on web1 container..."; docker exec web1 /start-machine-agent.sh; echo "Done"
-# Use this to start standalone analytics-agent rather than machine-agent
-# echo "Starting machine agent on web container..."; docker exec web /start-analytics-agent.sh; echo "Done"
-# echo "Starting machine agent on web1 container..."; docker exec web1 /start-analytics-agent.sh; echo "Done"
-echo "Starting machine agent on ws container..."; docker exec ws /start-machine-agent.sh; echo "Done"
-echo "Starting machine agent on msg container..."; docker exec msg /start-machine-agent.sh; echo "Done"
-echo "Starting machine agent on fulfillment container..."; docker exec fulfillment /start-machine-agent.sh; echo "Done"
-echo "Starting machine agent on fulfillment-client container..."; docker exec fulfillment-client /start-machine-agent.sh; echo "Done"
-sleep 60
-
-echo "Starting machine agent on lbr container..."; docker exec lbr /start-machine-agent.sh; echo "Done"
-

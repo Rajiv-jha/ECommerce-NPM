@@ -24,9 +24,11 @@ echo "Starting Machine Agent..."
 
 if [ -e /etc/init.d/appdynamics-machine-agent ]
 then
-  service appdynamics-machine-agent start
+  nohup service appdynamics-machine-agent start
+  echo "Started Machine Agent service"
 else
   echo MACHINE_AGENT_JAVA_OPTS: ${MACHINE_AGENT_JAVA_OPTS}
   echo JMX_OPTS: ${JMX_OPTS}
-  nohup java ${MACHINE_AGENT_JAVA_OPTS} -jar ${MACHINE_AGENT_HOME}/machineagent.jar  > ${MACHINE_AGENT_HOME}/machine_agent.log 2>&1 &
+  nohup java ${MACHINE_AGENT_JAVA_OPTS} -jar ${MACHINE_AGENT_HOME}/machineagent.jar > ${MACHINE_AGENT_HOME}/machine-agent.out 2>&1 &
+  echo "Started Machine Agent"
 fi

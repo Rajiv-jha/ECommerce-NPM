@@ -1,15 +1,6 @@
 ECommerce-Docker
 ================
 Dockerfiles and configuration scripts for the ECommerce demo. 
-These are used to build Docker images for all components of the ECommerce demo:
-
-1. [ecommerce-java](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Java)
-2. [ecommerce-tomcat](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Tomcat)
-3. [ecommerce-activemq](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-ActiveMQ)
-4. [ecommerce-dbagent](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-DBAgent)
-5. [ecommerce-lbr](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-LBR)
-6. [ecommerce-load](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Load)
-7. [ecommerce-synapse](https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Synapse)
 
 Building the Container Images
 -----------------------------
@@ -17,6 +8,28 @@ To build the containers, you need to supply paths to the App Server, Machine and
 or download the latest versions directly from the [AppDynamics download site](https://download.appdynamics.com)
 
 1. Run `build.sh` without commandline args to be prompted (with autocomplete) for the agent installer paths __or__
-2. Run `build.sh -a <Path to App Server Agent> -m <Path to Machine Agent> -d <Path to Database Agent>` to supply agent installer paths __or__
-3. Run `build.sh --download` to download latest agent installers from the [AppDynamics download site](https://download.appdynamics.com) (portal login required)
+2. Run `build.sh -a <App Server Agent> -m <Machine Agent> -d <Database Agent> -w <Web Server Agent> [-y <Analytics Agent>] [-j <Oracle JDK7>]` to supply agent installer paths 
 
+Running the ECommerce Demo
+--------------------------
+To run the demo:
+`./run.sh <tag> <app_name>` where 
+
+- `<tag>` is the docker tag for the container version to run 
+- `<app_name>` is the name to register for the application
+
+Starting the Machine Agent and Analytics Agent
+----------------------------------------------
+By default, on startup the containers will run the App Server / Database / Web Server Agents only.
+The Machine Agent or standalone Analytics Agent can be started using `docker exec` once the container is running:
+
+1. To start the Machine Agent (with integrated analytics-agent): `docker exec -t <container> /start-machine-agent.sh`
+2. To start the Standalone Analytics Agent: `docker exec -t <container> /start-analytics-agent.sh` (ecommerce-tomcat only)
+
+Tagging and Pushing to DockerHub
+--------------------------------
+Use the following utilities to manage container tags and push to DockerHhub
+
+- `./tagAll.sh <tag>`
+- `./untagAll.sh <tag>`
+- `./pushAll.sh <tag>`
