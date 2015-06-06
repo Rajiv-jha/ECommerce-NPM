@@ -102,5 +102,5 @@ echo -n "msg: "; docker run --name msg -h ${APP_NAME}-msg -e jms=true \
 	--link db:db --link jms:jms --link oracle-db:oracle-db --link fulfillment:fulfillment -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
-echo -n "msg: "; docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load
+echo -n "load-gen: "; docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load
 echo -n "dbagent: "; docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
