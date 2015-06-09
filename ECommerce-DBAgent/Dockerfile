@@ -8,7 +8,9 @@ ENV AGENT_HOME /dbagent
 ADD dbagent.zip /
 RUN unzip -q /dbagent.zip -d ${AGENT_HOME}
 RUN rm dbagent.zip
+ADD controller-info.xml /
 
+ADD env.sh /
 ADD startup.sh /
 RUN chmod +x /startup.sh
 WORKDIR /
