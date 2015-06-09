@@ -11,15 +11,30 @@ ln -s ${NATIVE_HOME}/WebServerAgent/Apache/libmod_appdynamics.so $HTTPD24/module
 echo "ServerName `hostname`:80" >> $HTTPD24/conf/httpd.conf
 
 # Configure Controller, Port, App, Tier and Node for mod_appdynamics
+# Account Access Key is required for 4.1 Agents
 sed -i "s/<your_controller>/${CONTROLLER}/g" $HTTPD_24/02-appd.conf
 sed -i "s/<your_controller_port>/${APPD_PORT}/g" $HTTPD_24/02-appd.conf
 sed -i "s/<your_app_name>/${APP_NAME}/g" $HTTPD_24/02-appd.conf
 sed -i "s/<your_tier_name>/${TIER_NAME}/g" $HTTPD_24/02-appd.conf
 sed -i "s/<your_node_name>/${NODE_NAME}/g" $HTTPD_24/02-appd.conf
+sed -i "s/<your_access_key>/${ACCESS_KEY}/g" $HTTPD_24/02-appd.conf
 mv ${HTTPD_24}/02-appd.conf ${HTTPD_24}/conf.modules.d/02-appd.conf
+
+# Configure Controller, Port, App, Tier and Node for Proxy Agent
+# Account Access Key is required for 4.1 Agents
+CONTROLLER_INFO_SETTINGS="s/CONTROLLERHOST/${CONTROLLER}/g;
+s/CONTROLLERPORT/${APPD_PORT}/g;
+s/APP/${APP_NAME}/g;s/TIER/${TIER_NAME}/g;
+s/NODE/${NODE_NAME}/g;
+s/FOO/${SIM_HIERARCHY_1}/g;
+s/BAR/${SIM_HIERARCHY_2}/g;
+s/BAZ/${HOSTNAME}/g;
+s/ACCOUNTACCESSKEY/${ACCESS_KEY}/g"
+
+sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > ${NATIVE_HOME}/proxy/conf/controller-info.xml
  
 echo "Starting Proxy Agent"
-su apache -c "nohup $NATIVE_HOME/runSDKProxy.sh &"
+su apache -c "nohup ${NATIVE_HOME}/runSDKProxy.sh &"
 
 echo 'export APPD_SDK_ENV_LOG_CONFIG_PATH=/$NATIVE_HOMEconf/appdynamics_sdk_log4cxx.xml' >>  /home/apache/.bash_profile
 /etc/init.d/httpd24-httpd start

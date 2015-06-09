@@ -72,7 +72,8 @@ echo -n "fulfillment: "; docker run --name fulfillment -h ${APP_NAME}-fulfillmen
 sleep 30
 
 echo -n "fulfillment-client: "; docker run --name fulfillment-client -h ${APP_NAME}-fulfillment-client \
-	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
+	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} \
+        -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
 	-e NODE_NAME=FulfillmentClient1 -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Client-Services \
 	-e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
@@ -103,4 +104,4 @@ echo -n "msg: "; docker run --name msg -h ${APP_NAME}-msg -e jms=true \
 sleep 30
 
 echo -n "load-gen: "; docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load
-echo -n "dbagent: "; docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
+echo -n "dbagent: "; docker run --name dbagent -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e ACCESS_KEY=${ACCESS_KEY} --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION

@@ -9,7 +9,7 @@ if [ -z "${APPD_PORT}" ]; then
 	export APPD_PORT=8090;
 fi
 
-JAVA_OPTS="-Duser.timezone=UTC -Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT}";
+JAVA_OPTS="-Duser.timezone=UTC -Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}";
 
 JAVA_OPTS="${JAVA_OPTS} -Xmx512m -XX:MaxPermSize=128m -Duser.timezone=UTC";
 

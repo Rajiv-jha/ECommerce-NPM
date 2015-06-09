@@ -13,11 +13,20 @@ echo "Configuring Machine Agent:
   Node: ${NODE_NAME}
   SIM Hierarchy: ${SIM_HIERARCHY_1}/${SIM_HIERARCHY_2}"
 
+CONTROLLER_INFO_SETTINGS="s/CONTROLLERHOST/${CONTROLLER}/g;
+s/CONTROLLERPORT/${APPD_PORT}/g;
+s/APP/${APP_NAME}/g;s/TIER/${TIER_NAME}/g;
+s/NODE/${NODE_NAME}/g;
+s/FOO/${SIM_HIERARCHY_1}/g;
+s/BAR/${SIM_HIERARCHY_2}/g;
+s/BAZ/${HOSTNAME}/g;
+s/ACCOUNTACCESSKEY/${ACCESS_KEY}/g"
+
 if [ -e /etc/init.d/appdynamics-machine-agent ]
 then
-  sed -e "s/CONTROLLERHOST/${CONTROLLER}/g;s/CONTROLLERPORT/${APPD_PORT}/g;s/APP/${APP_NAME}/g;s/TIER/${TIER_NAME}/g;s/NODE/${NODE_NAME}/g;s/FOO/${SIM_HIERARCHY_1}/g;s/BAR/${SIM_HIERARCHY_2}/g;s/BAZ/${HOSTNAME}/g" /controller-info.xml > /etc/appdynamics/machine-agent/controller-info.xml
+  sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > /etc/appdynamics/machine-agent/controller-info.xml
 else
-  sed -e "s/CONTROLLERHOST/${CONTROLLER}/g;s/CONTROLLERPORT/${APPD_PORT}/g;s/APP/${APP_NAME}/g;s/TIER/${TIER_NAME}/g;s/NODE/${NODE_NAME}/g;s/FOO/${SIM_HIERARCHY_1}/g;s/BAR/${SIM_HIERARCHY_2}/g;s/BAZ/${HOSTNAME}/g" /controller-info.xml > ${MACHINE_AGENT_HOME}/conf/controller-info.xml
+  sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > ${MACHINE_AGENT_HOME}/conf/controller-info.xml
 fi
 
 echo "Starting Machine Agent..."
