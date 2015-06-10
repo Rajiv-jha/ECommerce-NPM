@@ -25,7 +25,7 @@ cleanUp() {
   (cd ECommerce-Synapse && rm -f AppServerAgent.zip ${MACHINE_AGENT})
   (cd ECommerce-DBAgent && rm -f dbagent.zip)
   (cd ECommerce-Load && rm -rf ECommerce-Load)
-  (cd ECommerce-LBR && rm -f ${MACHINE_AGENT} webserver_agent.tar.gz)
+  (cd ECommerce-LBR && rm -f ${MACHINE_AGENT} webserver_agent.tar.gz adrum.js)
   rm -f ${MACHINE_AGENT}
  
   # Remove dangling images left-over from build
@@ -43,6 +43,7 @@ promptForAgents() {
   read -e -p "Enter path to Machine Agent: " MACHINE_AGENT_INPUT
   read -e -p "Enter path to DB Agent: " DB_AGENT
   read -e -p "Enter path to Web Server Agent: " WEB_AGENT
+  read -e -p "Enter path to Javascript Agent: " ADRUM_AGENT
   read -e -p "Enter path to Analytics Agent: " ANALYTICS_AGENT
   read -e -p "Enter path to Oracle JDK7: " ORACLE_JDK7
 }
@@ -54,7 +55,8 @@ then
           -a <Path to App Server Agent> 
           -m <Path to Machine Agent> 
           -d <Path to Database Agent> 
-          -w <Path to Web Server Agent> 
+          -w <Path to Web Server Agent>
+          -r <Path to JavaScript Agent> 
           -y <Path to Analytics Agent>
           -j <Path to Oracle JDK7>"
   echo "Prompt for agent locations: build.sh"
@@ -68,7 +70,7 @@ then
 
 else
   # Allow user to specify locations of App Server, Machine and Database Agents
-  while getopts "a:m:d:w:y:j:" opt; do
+  while getopts "a:m:d:w:r:y:j:" opt; do
     case $opt in
       a)
         APP_SERVER_AGENT=$OPTARG
@@ -94,6 +96,12 @@ else
           echo "Not found: ${WEB_AGENT}"; exit
         fi
         ;; 
+      r)
+        ADRUM_AGENT=$OPTARG
+        if [ ! -e ${ADRUM_AGENT} ]; then
+          echo "Not found: ${ADRUM_AGENT}"; exit
+        fi
+        ;;
       y)
         ANALYTICS_AGENT=$OPTARG 
 	if [ ! -e ${ANALYTICS_AGENT} ]; then
@@ -105,7 +113,7 @@ else
         if [ ! -e ${ORACLE_JDK7} ]; then
           echo "Not found: ${ORACLE_JDK7}"; exit
         fi
-        ;;              
+        ;; 
       \?)
         echo "Invalid option: -$OPTARG"
         ;;
@@ -127,6 +135,10 @@ fi
 
 if [ -z ${WEB_AGENT} ]; then
     echo "Error: Web Server Agent is required"; exit
+fi
+
+if [ -z ${ADRUM_AGENT} ]; then
+    echo "Error: Javascript Agent is required"; exit
 fi
 
 # Download Oracle JDK7 and build ecommerce-java base image
@@ -178,7 +190,8 @@ echo "Adding AppDynamics Agents:
   ${APP_SERVER_AGENT} 
   ${WEB_AGENT} 
   ${DB_AGENT}
-  ${MACHINE_AGENT_INPUT}" 
+  ${MACHINE_AGENT_INPUT}
+  ${ADRUM_AGENT}" 
 
 cp ${APP_SERVER_AGENT} ECommerce-Tomcat/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-Tomcat/${MACHINE_AGENT}
@@ -193,6 +206,8 @@ cp ${MACHINE_AGENT} ECommerce-Synapse/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-Synapse"
 
 cp ${WEB_AGENT} ECommerce-LBR/webserver_agent.tar.gz
+cp ${ADRUM_AGENT} ECommerce-LBR/adrum.zip
+(cd ECommerce-LBR; unzip adrum.zip; mv adrum*.js adrum.js; rm adrum.zip)
 cp ${MACHINE_AGENT} ECommerce-LBR/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-LBR"
 

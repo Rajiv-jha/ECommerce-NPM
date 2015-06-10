@@ -5,6 +5,7 @@ RUN useradd -U apache
 RUN cd /etc/yum.repos.d/; wget http://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo
 RUN yum -y install httpd24.x86_64
 ENV HTTPD_24 /opt/rh/httpd24/root/etc/httpd
+ENV HTTPD_DOC_ROOT ${HTTPD_24}/../../var/www/html
 ENV APPDYNAMICS_SIM_ENABLED true
 
 # Use Apache Worker MPM 
@@ -12,6 +13,9 @@ ADD 00-mpm.conf ${HTTPD_24}/conf.modules.d/00-mpm.conf
 
 # Add mod_appdynamics configuration file
 ADD 02-appd.conf ${HTTPD_24}/
+
+# Add Javascript agent to httpd doc root
+ADD adrum-4.1.0.0.js ${HTTPD_DOC_ROOT}/adrum.js
 
 # Add native SDK
 ENV SDK_HOME /opt
