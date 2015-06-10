@@ -11,7 +11,7 @@ s/BAR/${SIM_HIERARCHY_2}/g;
 s/BAZ/${HOSTNAME}/g;
 s/ACCOUNTACCESSKEY/${ACCESS_KEY}/g"
 
-sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > /${CATALINA_HOME}/appagent/conf/controller-info.xml
+sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > /${CLIENT_HOME}/appagent/conf/controller-info.xml
 echo "Starting Client ...."
 echo APP_AGENT_JAVA_OPTS: ${APP_AGENT_JAVA_OPTS};
 echo JMX_OPTS: ${JMX_OPTS}
