@@ -15,7 +15,7 @@ ADD 00-mpm.conf ${HTTPD_24}/conf.modules.d/00-mpm.conf
 ADD 02-appd.conf ${HTTPD_24}/
 
 # Add Javascript agent to httpd doc root
-ADD adrum-4.1.0.0.js ${HTTPD_DOC_ROOT}/adrum.js
+ADD adrum.js ${HTTPD_DOC_ROOT}/adrum.js
 
 # Add native SDK
 ENV SDK_HOME /opt
