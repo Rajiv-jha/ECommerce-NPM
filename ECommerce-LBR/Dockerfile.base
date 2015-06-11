@@ -13,6 +13,7 @@ ADD 00-mpm.conf ${HTTPD_24}/conf.modules.d/00-mpm.conf
 
 # Add mod_appdynamics configuration file
 ADD 02-appd.conf ${HTTPD_24}/
+ADD update-rum-key.sh /
 
 # Add Javascript agent to httpd doc root
 ADD adrum.js ${HTTPD_DOC_ROOT}/adrum.js
