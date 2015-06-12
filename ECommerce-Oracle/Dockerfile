@@ -6,10 +6,15 @@ RUN echo 'root:welcome1' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN /etc/init.d/ssh start
 
+# Generate Debian package installer from Oracle's RPM
+# Download RPM manually from http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/
+RUN apt-get install -y alien libaio1 unixodbc zip
+ADD oracle-xe-11.2.0-1.0.x86_64.rpm /
+RUN alien --scripts -d /oracle-xe-11.2.0-1.0.x86_64.rpm
+
 ADD chkconfig /sbin/chkconfig
 ADD init.ora /
 ADD initXETemp.ora /
-ADD oracle-xe_11.2.0-2_amd64.deb /
 
 RUN apt-get install -y libaio1 net-tools bc
 RUN ln -s /usr/bin/awk /bin/awk
