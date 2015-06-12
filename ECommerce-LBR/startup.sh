@@ -33,7 +33,7 @@ s/ACCOUNTACCESSKEY/${ACCESS_KEY}/g"
 
 sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > ${NATIVE_HOME}/proxy/conf/controller-info.xml
 
-if [ -z "NO_AGENT" ]; then 
+if [ -z "${NO_AGENT}" ]; then 
   echo "Starting Proxy Agent"
   su apache -c "nohup ${NATIVE_HOME}/runSDKProxy.sh &"
   echo 'export APPD_SDK_ENV_LOG_CONFIG_PATH=/$NATIVE_HOMEconf/appdynamics_sdk_log4cxx.xml' >>  /home/apache/.bash_profile
