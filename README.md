@@ -8,7 +8,7 @@ To build the containers, you need to supply paths to the AppDynamics agent insta
 Download the latest versions directly from the [AppDynamics download site](https://download.appdynamics.com)
 
 1. Run `build.sh` without commandline args to be prompted (with autocomplete) for the agent installer paths __or__
-2. Run `build.sh -a <App Server Agent> -m <Machine Agent> -d <Database Agent> -w <Web Server Agent> [-y <Analytics Agent>] [-j <Oracle JDK7>]` to supply agent installer paths 
+2. Run `build.sh -a <App Server Agent> -m <Machine Agent> -d <Database Agent> -w <Web Server Agent> -r <Javascript Agent> [-y <Analytics Agent>] [-j <Oracle JDK7>]` to supply agent installer paths 
 
 Running the ECommerce Demo
 --------------------------
