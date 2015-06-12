@@ -24,7 +24,7 @@ RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 
 # Pull ECommerce-Angular and build
 RUN git clone https://github.com/Appdynamics/ECommerce-Angular.git
-RUN (cd ECommerce-Angular; mvn clean install; cp target/AngularUI-1.0-SNAPSHOT.war ${CATALINA_HOME}/webapps)
+RUN (cd ECommerce-Angular; mvn clean install; cp target/AngularUI-1.0-SNAPSHOT.war ${CATALINA_HOME}/webapps/angular.war)
 
 ADD startup.sh /
 RUN chmod +x /startup.sh
