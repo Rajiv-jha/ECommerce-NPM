@@ -33,6 +33,7 @@ s/ACCOUNTACCESSKEY/${ACCESS_KEY}/g"
 
 sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > ${NATIVE_HOME}/proxy/conf/controller-info.xml
 
+# Run with docker run [...] -e NO_AGENT=true appdynamics/ecommerce-lbr to disable Web Server Agent/Proxy
 if [ -z "${NO_AGENT}" ]; then 
   echo "Starting Proxy Agent"
   su apache -c "nohup ${NATIVE_HOME}/runSDKProxy.sh &"
