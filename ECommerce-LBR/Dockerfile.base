@@ -14,6 +14,8 @@ ADD 00-mpm.conf ${HTTPD_24}/conf.modules.d/00-mpm.conf
 # Add mod_appdynamics configuration file
 ADD 02-appd.conf ${HTTPD_24}/
 ADD update-rum-key.sh /
+RUN chmod +x /update-rum-key.sh
+
 
 # Add Javascript agent to httpd doc root
 ADD adrum.js ${HTTPD_DOC_ROOT}/adrum.js
@@ -32,7 +34,7 @@ RUN ldconfig
 RUN (cd ${SDK_HOME} gunzip ${SDK_HOME}/webserver_agent.tar.gz)
 RUN (cd ${SDK_HOME} tar xf ${SDK_HOME}/webserver_agent.tar)
 RUN chmod 777 ${NATIVE_HOME}/logs
-RUN chmod 744 ${NATIVE_HOME}/install.sh
+RUN chmod 744 ${NATIVE_HOME}/install.sh 
 RUN ${NATIVE_HOME}/install.sh
 
 # Add libappdynamics_native_sdk
