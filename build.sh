@@ -242,6 +242,7 @@ echo; echo "Building ECommerce-LBR..."
 # Build Angular container
 echo; echo "Building ECommerce-Angular..."
 (cd ECommerce-Angular && git clone https://github.com/Appdynamics/ECommerce-Angular.git)
+(cd ECommerce-Angular; unzip adrum.zip; mv adrum*.js adrum.js; rm adrum.zip)
 (cd ECommerce-Angular && docker build -t appdynamics/ecommerce-angular .)
 
 # Build LoadGen container

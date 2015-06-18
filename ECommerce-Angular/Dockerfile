@@ -22,11 +22,14 @@ RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERS
     && mv apache-tomcat-${TOMCAT_MINOR_VERSION} tomcat
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 
-# Pull ECommerce-Angular and build
-RUN git clone https://github.com/Appdynamics/ECommerce-Angular.git
+# Build ECommerce-Angular
+ADD ECommerce-Angular /ECommerce-Angular
 RUN (cd ECommerce-Angular; mvn clean install; cp target/AngularUI-1.0-SNAPSHOT.war ${CATALINA_HOME}/webapps/angular.war)
 
-ADD startup.sh /
+ADD update-rum-key.sh /update-rum-key.sh
+ADD adrum.js /adrum.js
+ADD startup.sh /startup.sh
+RUN chmod +x /update-rum-key.sh
 RUN chmod +x /startup.sh
 
 WORKDIR /
