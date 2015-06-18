@@ -25,7 +25,8 @@ cleanUp() {
   (cd ECommerce-Synapse && rm -f AppServerAgent.zip ${MACHINE_AGENT})
   (cd ECommerce-DBAgent && rm -f dbagent.zip)
   (cd ECommerce-Load && rm -rf ECommerce-Load)
-  (cd ECommerce-LBR && rm -f ${MACHINE_AGENT} webserver_agent.tar.gz adrum.js)
+  (cd ECommerce-LBR && rm -f ${MACHINE_AGENT} webserver_agent.tar.gz adrum.*)
+  (cd ECommerce-Angular && rm -rf ECommerce-Angular adrum.*)
   rm -f ${MACHINE_AGENT}
  
   # Remove dangling images left-over from build
@@ -214,6 +215,9 @@ echo "Copied Agents for ECommerce-LBR"
 cp ${DB_AGENT} ECommerce-DBAgent/dbagent.zip
 echo "Copied Agents for ECommerce-DBAgent"
 
+cp ${ADRUM_AGENT} ECommerce-Angular/adrum.zip
+echo "Copied Agents for ECommerce-Angular"
+
 # Build Tomcat containers
 echo; echo "Building ECommerce-Tomcat..." 
 (cd ECommerce-Tomcat && git clone https://github.com/Appdynamics/ECommerce-Java.git)
@@ -234,6 +238,11 @@ echo; echo "Building ECommerce-DBAgent..."
 # Build Web Agent container
 echo; echo "Building ECommerce-LBR..."
 (cd ECommerce-LBR && docker build -t appdynamics/ecommerce-lbr .)
+
+# Build Angular container
+echo; echo "Building ECommerce-Angular..."
+(cd ECommerce-Angular && git clone https://github.com/Appdynamics/ECommerce-Angular.git)
+(cd ECommerce-Angular && docker build -t appdynamics/ecommerce-angular .)
 
 # Build LoadGen container
 echo; echo "Building ECommerce-Load..."
