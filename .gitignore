@@ -4,6 +4,7 @@ env.sh
 # Agent download sub-dirs
 3.*/**
 4.*/**
+*-build*/**
 
 # Ignore backups of run.sh/env.sh
 *.sh.*
@@ -13,3 +14,10 @@ ECommerce-LBR/Dockerfile
 ECommerce-Tomcat/Dockerfile
 ECommerce-Synapse/Dockerfile
 ECommerce-FulfillmentClient
+
+# ECommerce-Load build files
+ECommerce-Load/.gradle/
+ECommerce-Load/.idea/
+
+# Ignore jdk rpms
+jdk-*.rpm
