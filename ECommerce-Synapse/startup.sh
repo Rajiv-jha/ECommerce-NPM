@@ -20,7 +20,7 @@ if [ -z "${TIER_NAME}" ]; then
 	export TIER_NAME="FulfillmentESB";
 fi
 
-JAVA_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}";
+JAVA_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME} -Dappdynamics.agent.accountName=customer1 -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}";
 
 source /start-machine-agent.sh
 source /start-appserver-agent.sh
