@@ -108,5 +108,5 @@ echo -n "dbagent: "; docker run --name dbagent \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e ACCESS_KEY=${ACCESS_KEY} \
         --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
 echo -n "angular: "; docker run --name angular -h ${APP_NAME}-angular \
-	--link lbr:lbr -d appdynamics/ecommerce-angular:$VERSION
+	--link lbr:lbr -p 8080:8080 -d appdynamics/ecommerce-angular:$VERSION
 
