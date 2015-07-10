@@ -220,7 +220,7 @@ echo "Copied Agents for ECommerce-Angular"
 
 # Build Tomcat containers
 echo; echo "Building ECommerce-Tomcat..." 
-(cd ECommerce-Tomcat && git clone https://github.com/Appdynamics/ECommerce-Java.git)
+(cd ECommerce-Tomcat && git clone -b FaultInjection https://github.com/Appdynamics/ECommerce-Java.git)
 (cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat .)
 
 echo; echo "Building ECommerce-FulfillmentClient..."
@@ -245,7 +245,12 @@ echo; echo "Building ECommerce-Angular..."
 (cd ECommerce-Angular; unzip adrum.zip; mv adrum*.js adrum.js; rm adrum.zip)
 (cd ECommerce-Angular && docker build -t appdynamics/ecommerce-angular .)
 
+# Build Fault Injection UI container
+echo; echo "Building ECommerce-FaultInjection..."
+(cd ECommerce-FaultInjection && git clone https://github.com/Appdynamics/ECommerce-FaultInjectionUI.git)
+(cd ECommerce-FaultInjection && docker build -t appdynamics/ecommerce-faultinjection .)
+
 # Build LoadGen container
 echo; echo "Building ECommerce-Load..."
-(cd ECommerce-Load && git clone https://github.com/Appdynamics/ECommerce-Load.git)
+(cd ECommerce-Load && git clone -b FaultInjection https://github.com/Appdynamics/ECommerce-Load.git)
 (cd ECommerce-Load && docker build -t appdynamics/ecommerce-load .)
