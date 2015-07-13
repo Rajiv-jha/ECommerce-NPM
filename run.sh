@@ -8,7 +8,7 @@
 #
 # To run the ECommerce demo application, you will also need to:
 # 1. Build and run the ECommerce-Oracle docker container
-#    The Dockerfile is available here (https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Oracle) 
+#    The Dockerfile is available here (https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Oracle)
 #    The container requires you to downlaod an appropriate version of the Oracle Database Express Edition 11g Release 2
 #    (http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html)
 # 2. Download and run the official Docker mysql container
@@ -93,7 +93,7 @@ echo -n "lbr: "; docker run --name=lbr -h ${APP_NAME}-lbr \
 	-e APP_NAME=${APP_NAME} -e TIER_NAME=Web-Tier-Services -e NODE_NAME=${APP_NAME}-Apache \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
-	--link web:web -p 80:80 -d appdynamics/ecommerce-lbr:$VERSION 
+	--link web:web -p 80:80 -d appdynamics/ecommerce-lbr:$VERSION
 	--link web1:web1 -p 80:80 -d appdynamics/ecommerce-lbr:$VERSION
 
 echo -n "msg: "; docker run --name msg -h ${APP_NAME}-msg -e jms=true \
@@ -104,7 +104,7 @@ echo -n "msg: "; docker run --name msg -h ${APP_NAME}-msg -e jms=true \
 	--link db:db --link jms:jms --link oracle-db:oracle-db --link fulfillment:fulfillment -d appdynamics/ecommerce-tomcat:$VERSION
 #sleep 30
 
-echo -n "load-gen: "; docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load
+echo -n "load-gen: "; docker run --name=load-gen --link lbr:lbr --link db:db -d appdynamics/ecommerce-load
 
 echo -n "dbagent: "; docker run --name dbagent \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e ACCESS_KEY=${ACCESS_KEY} \
@@ -113,5 +113,5 @@ echo -n "dbagent: "; docker run --name dbagent \
 echo -n "angular: "; docker run --name angular -h ${APP_NAME}-angular \
 	--link lbr:lbr -p 8080:8080 -d appdynamics/ecommerce-angular:$VERSION
 
-echo -n "faultinjection: "; docker run --name faultinjection -h ${APP_NAME}-faultinjection \ 
+echo -n "faultinjection: "; docker run --name faultinjection -h ${APP_NAME}-faultinjection \
 	--link lbr:lbr -p 8088:8080 -d appdynamics/ecommerce-faultinjection:$VERSION
