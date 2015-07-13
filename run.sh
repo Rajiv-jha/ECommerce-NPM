@@ -59,7 +59,7 @@ echo -n "web: "; docker run --name web -h ${APP_NAME}-web -e JVM_ROUTE=route1 -e
 	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
 	-e NODE_NAME=${APP_NAME}_WEB1_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
-	--link db:db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
+	--link db:db --link oracle-db:oracle-db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
 echo -n "fulfillment: "; docker run --name fulfillment -h ${APP_NAME}-fulfillment -e create_schema=true -e web=true \
@@ -85,7 +85,7 @@ echo -n "web1: "; docker run --name web1 -h ${APP_NAME}-web1 -e JVM_ROUTE=route2
 	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
 	-e NODE_NAME=${APP_NAME}_WEB2_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
-	--link db:db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
+	--link db:db --link oracle-db:oracle-db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
 echo -n "lbr: "; docker run --name=lbr -h ${APP_NAME}-lbr \
