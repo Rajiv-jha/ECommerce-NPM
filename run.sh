@@ -47,7 +47,7 @@ echo -n "db: "; docker run --name db -e MYSQL_ROOT_PASSWORD=singcontroller -p 33
 echo -n "jms: "; docker run --name jms -d appdynamics/ecommerce-activemq:
 sleep 30
 
-echo -n "ws: "; docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true \
+echo -n "ws: "; docker run --name ws -h ${APP_NAME}-ws -e ws=true \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
 	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
 	-e NODE_NAME=${APP_NAME}_WS_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=Inventory-Services \
@@ -62,7 +62,7 @@ echo -n "web: "; docker run --name web -h ${APP_NAME}-web -e JVM_ROUTE=route1 -e
 	--link db:db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
-echo -n "fulfillment: "; docker run --name fulfillment -h ${APP_NAME}-fulfillment -e web=true \
+echo -n "fulfillment: "; docker run --name fulfillment -h ${APP_NAME}-fulfillment -e create_schema=true -e web=true \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
 	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
 	-e NODE_NAME=Fulfillment -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Services \
