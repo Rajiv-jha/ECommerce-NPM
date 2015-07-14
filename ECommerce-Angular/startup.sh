@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Replacing CDN endpoint for early access to JS Agent
-sed -i "s/cdn.appdynamics.com/s3-us-west-1.amazonaws.com\/jsagent-trunk.appdynamics.com/;" /adrum.js
+# sed -i "s/cdn.appdynamics.com/s3-us-west-1.amazonaws.com\/jsagent-trunk.appdynamics.com/;" /adrum.js
 
 CATALINA_HOME=/tomcat
 
