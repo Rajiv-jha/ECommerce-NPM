@@ -29,23 +29,7 @@ fi
 if [ -z "${TARGET_ANGULARPORT}" ]; then
         export TARGET_ANGULARPORT="8080";
 fi
-
 # 7th param to LoadRunner call
-if [ -z "${MYSQL_HOST}" ]; then
-        export MYSQL_HOST="db";
-fi
-
-# 8th param to LoadRunner call
-if [ -z "${MYSQL_USERNAME}" ]; then
-        export MYSQL_USERNAME="root";
-fi
-
-# 9th param to LoadRunner call
-if [ -z "${MYSQL_PWD}" ]; then
-        export MYSQL_PWD="singcontroller";
-fi
-
-# 10th param to LoadRunner call
 if [ -z "${WAIT_TIME}" ]; then
         export WAIT_TIME="1000";
 fi
