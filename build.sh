@@ -13,7 +13,7 @@
 #    (http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html)
 # 2. Download and run the official Docker mysql container
 #    (https://registry.hub.docker.com/_/mysql/)
- 
+
 #! /bin/bash
 
 cleanUp() {
@@ -28,7 +28,7 @@ cleanUp() {
   (cd ECommerce-LBR && rm -f ${MACHINE_AGENT} webserver_agent.tar.gz adrum.*)
   (cd ECommerce-Angular && rm -rf ECommerce-Angular adrum.*)
   rm -f ${MACHINE_AGENT}
- 
+
   # Remove dangling images left-over from build
   if [[ `docker images -q --filter "dangling=true"` ]]
   then
@@ -52,12 +52,12 @@ promptForAgents() {
 # Usage information
 if [[ $1 == *--help* ]]
 then
-  echo "Specify agent locations: build.sh 
-          -a <Path to App Server Agent> 
-          -m <Path to Machine Agent> 
-          -d <Path to Database Agent> 
+  echo "Specify agent locations: build.sh
+          -a <Path to App Server Agent>
+          -m <Path to Machine Agent>
+          -d <Path to Database Agent>
           -w <Path to Web Server Agent>
-          -r <Path to JavaScript Agent> 
+          -r <Path to JavaScript Agent>
           -y <Path to Analytics Agent>
           -j <Path to Oracle JDK7>"
   echo "Prompt for agent locations: build.sh"
@@ -66,7 +66,7 @@ fi
 
 # Prompt for location of App Server, Machine and Database Agents
 if  [ $# -eq 0 ]
-then   
+then
   promptForAgents
 
 else
@@ -96,7 +96,7 @@ else
         if [ ! -e ${WEB_AGENT} ]; then
           echo "Not found: ${WEB_AGENT}"; exit
         fi
-        ;; 
+        ;;
       r)
         ADRUM_AGENT=$OPTARG
         if [ ! -e ${ADRUM_AGENT} ]; then
@@ -104,17 +104,17 @@ else
         fi
         ;;
       y)
-        ANALYTICS_AGENT=$OPTARG 
+        ANALYTICS_AGENT=$OPTARG
 	if [ ! -e ${ANALYTICS_AGENT} ]; then
-          echo "Not found: ${ANALYTICS_AGENT}"; exit         
+          echo "Not found: ${ANALYTICS_AGENT}"; exit
         fi
-        ;; 
+        ;;
       j)
         ORACLE_JDK7=$OPTARG
         if [ ! -e ${ORACLE_JDK7} ]; then
           echo "Not found: ${ORACLE_JDK7}"; exit
         fi
-        ;; 
+        ;;
       \?)
         echo "Invalid option: -$OPTARG"
         ;;
@@ -166,7 +166,7 @@ else
     echo "Installing standalone Analytics Agent"
     echo "  ${ANALYTICS_AGENT}"
     cp ${ANALYTICS_AGENT} ECommerce-Tomcat/AnalyticsAgent.zip
-    
+
     # Add analytics agent when creating Dockerfile for machine agent
     DOCKERFILE_OPTIONS="analytics"
 fi
@@ -175,7 +175,7 @@ if [ ${MACHINE_AGENT_INPUT: -4} == ".zip" ]
 then
     source ./makeDockerfiles.sh zip ${DOCKERFILE_OPTIONS}
     cp ${MACHINE_AGENT_INPUT} MachineAgent.zip
-    MACHINE_AGENT="MachineAgent.zip"        
+    MACHINE_AGENT="MachineAgent.zip"
 elif [ ${MACHINE_AGENT_INPUT: -4} == ".rpm" ]
 then
     source ./makeDockerfiles.sh rpm ${DOCKERFILE_OPTIONS}
@@ -187,12 +187,12 @@ else
 fi
 
 # Copy Agent zips to build dirs
-echo "Adding AppDynamics Agents: 
-  ${APP_SERVER_AGENT} 
-  ${WEB_AGENT} 
+echo "Adding AppDynamics Agents:
+  ${APP_SERVER_AGENT}
+  ${WEB_AGENT}
   ${DB_AGENT}
   ${MACHINE_AGENT_INPUT}
-  ${ADRUM_AGENT}" 
+  ${ADRUM_AGENT}"
 
 cp ${APP_SERVER_AGENT} ECommerce-Tomcat/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-Tomcat/${MACHINE_AGENT}
@@ -219,7 +219,7 @@ cp ${ADRUM_AGENT} ECommerce-Angular/adrum.zip
 echo "Copied Agents for ECommerce-Angular"
 
 # Build Tomcat containers
-echo; echo "Building ECommerce-Tomcat..." 
+echo; echo "Building ECommerce-Tomcat..."
 (cd ECommerce-Tomcat && git clone -b FaultInjection https://github.com/Appdynamics/ECommerce-Java.git)
 (cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat .)
 

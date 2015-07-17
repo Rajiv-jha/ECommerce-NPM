@@ -59,7 +59,7 @@ echo -n "web: "; docker run --name web -h ${APP_NAME}-web -e JVM_ROUTE=route1 -e
 	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
 	-e NODE_NAME=${APP_NAME}_WEB1_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
-	--link db:db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
+	--link db:db --link oracle-db:oracle-db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
 echo -n "fulfillment: "; docker run --name fulfillment -h ${APP_NAME}-fulfillment -e web=true \
@@ -85,7 +85,7 @@ echo -n "web1: "; docker run --name web1 -h ${APP_NAME}-web1 -e JVM_ROUTE=route2
 	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
 	-e NODE_NAME=${APP_NAME}_WEB2_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
-	--link db:db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
+	--link db:db --link oracle-db:oracle-db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
 echo -n "lbr: "; docker run --name=lbr -h ${APP_NAME}-lbr \
@@ -93,8 +93,7 @@ echo -n "lbr: "; docker run --name=lbr -h ${APP_NAME}-lbr \
 	-e APP_NAME=${APP_NAME} -e TIER_NAME=Web-Tier-Services -e NODE_NAME=${APP_NAME}-Apache \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
-	--link web:web -p 80:80 -d appdynamics/ecommerce-lbr:$VERSION
-	--link web1:web1 -p 80:80 -d appdynamics/ecommerce-lbr:$VERSION
+	--link web:web --link web1:web1 -p 80:80 -d appdynamics/ecommerce-lbr:$VERSION
 
 echo -n "msg: "; docker run --name msg -h ${APP_NAME}-msg -e jms=true \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
@@ -102,16 +101,12 @@ echo -n "msg: "; docker run --name msg -h ${APP_NAME}-msg -e jms=true \
 	-e NODE_NAME=${APP_NAME}_JMS_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=Order-Processing-Services \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
 	--link db:db --link jms:jms --link oracle-db:oracle-db --link fulfillment:fulfillment -d appdynamics/ecommerce-tomcat:$VERSION
-#sleep 30
-
-echo -n "load-gen: "; docker run --name=load-gen --link lbr:lbr --link db:db -d appdynamics/ecommerce-load
-
+sleep 30
+echo -n "angular: "; docker run --name angular -h ${APP_NAME}-angular \
+	--link lbr:lbr -p 8080:8080 -d appdynamics/ecommerce-angular:$VERSION
+echo -n "faultinjection: "; docker run --name faultinjection -h ${APP_NAME}-faultinjection \
+  	--link lbr:lbr -p 8088:8080 -d appdynamics/ecommerce-faultinjection:$VERSION
+echo -n "load-gen: "; docker run --name=load-gen --link lbr:lbr --link angular:angular -d appdynamics/ecommerce-load
 echo -n "dbagent: "; docker run --name dbagent \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e ACCESS_KEY=${ACCESS_KEY} \
         --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
-
-echo -n "angular: "; docker run --name angular -h ${APP_NAME}-angular \
-	--link lbr:lbr -p 8080:8080 -d appdynamics/ecommerce-angular:$VERSION
-
-echo -n "faultinjection: "; docker run --name faultinjection -h ${APP_NAME}-faultinjection \
-	--link lbr:lbr -p 8088:8080 -d appdynamics/ecommerce-faultinjection:$VERSION
