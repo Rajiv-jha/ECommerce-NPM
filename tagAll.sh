@@ -6,12 +6,12 @@ else
         export TAG_VERSION=$1;
 fi
 
-export TOMCAT_LATEST=`docker images | grep 'tomcat' | grep 'latest' | awk '{print $3}'`
-export LBR_LATEST=`docker images | grep 'lbr' | grep 'latest' | awk '{print $3}'`
-export DBAGENT_LATEST=`docker images | grep 'dbagent' | grep 'latest' | awk '{print $3}'`
-export SYNAPSE_LATEST=`docker images | grep 'synapse' | grep 'latest' | awk '{print $3}'`
-export FULFILLMENT_CLIENT_LATEST=`docker images | grep 'fulfillment-client' | grep 'latest' | awk '{print $3}'`
-export ANGULAR_LATEST=`docker images | grep 'angular' | grep 'latest' | awk '{print $3}'`
+export TOMCAT_LATEST=`docker images | grep 'ecommerce-tomcat' | grep 'latest' | awk '{print $3}'`
+export LBR_LATEST=`docker images | grep 'ecommerce-lbr' | grep 'latest' | awk '{print $3}'`
+export DBAGENT_LATEST=`docker images | grep 'ecommerce-dbagent' | grep 'latest' | awk '{print $3}'`
+export SYNAPSE_LATEST=`docker images | grep 'ecommerce-synapse' | grep 'latest' | awk '{print $3}'`
+export FULFILLMENT_CLIENT_LATEST=`docker images | grep 'ecommerce-fulfillment-client' | grep 'latest' | awk '{print $3}'`
+export ANGULAR_LATEST=`docker images | grep 'ecommerce-angular' | grep 'latest' | awk '{print $3}'`
 
 docker tag -f $TOMCAT_LATEST appdynamics/ecommerce-tomcat:$TAG_VERSION
 docker tag -f $LBR_LATEST appdynamics/ecommerce-lbr:$TAG_VERSION
