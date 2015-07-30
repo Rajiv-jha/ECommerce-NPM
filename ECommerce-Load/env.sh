@@ -2,7 +2,7 @@
 
 # 1st param to LoadRunner call
 if [ -z "${NUM_OF_USERS}" ]; then
-        export NUM_OF_USERS="5";
+        export NUM_OF_USERS="2";
 fi
 
 # 2nd param to LoadRunner call
