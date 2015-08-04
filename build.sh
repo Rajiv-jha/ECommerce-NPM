@@ -142,28 +142,29 @@ if [ -z ${ADRUM_AGENT} ]; then
     echo "Error: Javascript Agent is required"; exit
 fi
 
-# Download Oracle JDK7 and build ecommerce-java base image
-echo; echo "Building ECommerce-Java base image..."
-
+# Re-build ecommerce-java base image with specified JDK7
 if [ -z ${ORACLE_JDK7} ]
 then
-    echo "Downloading Oracle Java 7 JDK"
-    (cd ECommerce-Java; curl -j -k -L -H "Cookie:oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u71-b13/jdk-7u71-linux-x64.rpm -o jdk-linux-x64.rpm)
+    echo "Using existing base image: appdynamics/ecommerce-java:oracle-java7"
 else
-    echo "Using JDK: ${ORACLE_JDK7}"
-    cp ${ORACLE_JDK7} ECommerce-Java/jdk-linux-x64.rpm
+    if [ ${ORACLE_JDK7: -4} == ".rpm" ]
+    then
+        echo "Building ECommerce-Java base image..."
+        echo "Using JDK: ${ORACLE_JDK7}"
+        cp ${ORACLE_JDK7} ECommerce-Java/jdk-linux-x64.rpm
+        (cd ECommerce-Java; docker build -t appdynamics/ecommerce-java:oracle-java7 .)
+        echo
+    else
+        echo "Error: Oracle JDK7 (jdk-7uXX-linux-x64.rpm) is required"; exit
+    fi
 fi
-
-echo "Building ECommerce-Java..."
-(cd ECommerce-Java; docker build -t appdynamics/ecommerce-java .)
-echo
 
 # If supplied, add standalone analytics agent to build
 if [ -z ${ANALYTICS_AGENT} ]
 then
     echo "Skipping standalone Analytics Agent install"
 else
-    echo "Installing standalone Analytics Agent"
+    echo "Using standalone Analytics Agent"
     echo "  ${ANALYTICS_AGENT}"
     cp ${ANALYTICS_AGENT} ECommerce-Tomcat/AnalyticsAgent.zip
     

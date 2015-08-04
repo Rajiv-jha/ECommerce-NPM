@@ -35,7 +35,7 @@ fi
 
 if [ $# -eq 2 ] && [ $2 == "analytics" ]
 then
-  echo "Adding standalone analytics-agent"
+  echo "Adding standalone Analytics Agent"
   (cd ECommerce-Tomcat; sed -i ${SED_OPTS} '/# Analytics Agent Install/ r Dockerfile.include.analytics-agent' Dockerfile; rm -f Dockerfile.bak)
   echo "Updated ECommerce-Tomcat/Dockerfile"
 fi
