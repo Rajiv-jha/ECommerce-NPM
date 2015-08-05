@@ -27,6 +27,9 @@ cleanUp() {
   (cd ECommerce-Load && rm -rf ECommerce-Load)
   (cd ECommerce-LBR && rm -f ${MACHINE_AGENT} webserver_agent.tar.gz adrum.*)
   (cd ECommerce-Angular && rm -rf ECommerce-Angular adrum.*)
+  (cd ECommerce-FaultInjection && rm -rf ECommerce-FaultInjectionUI)
+  (cd ECommerce-SurveyClient && rm -f AppServerAgent.zip ${MACHINE_AGENT})
+  (cd ECommerce-SurveyClient && rm -rf monitors ECommerce-Java)
   rm -f ${MACHINE_AGENT}
 
   # Remove dangling images left-over from build
@@ -202,6 +205,10 @@ cp ${APP_SERVER_AGENT} ECommerce-FulfillmentClient/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-FulfillmentClient/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-FulfillmentClient"
 
+cp ${APP_SERVER_AGENT} ECommerce-SurveyClient/AppServerAgent.zip
+cp ${MACHINE_AGENT} ECommerce-SurveyClient/${MACHINE_AGENT}
+echo "Copied Agents for ECommerce-SurveyClient"
+
 cp ${APP_SERVER_AGENT} ECommerce-Synapse/AppServerAgent.zip
 cp ${MACHINE_AGENT} ECommerce-Synapse/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-Synapse"
@@ -224,8 +231,12 @@ echo; echo "Building ECommerce-Tomcat..."
 (cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat .)
 
 echo; echo "Building ECommerce-FulfillmentClient..."
-(cd ECommerce-FulfillmentClient && git clone https://github.com/Appdynamics/ECommerce-Java.git)
+(cd ECommerce-FulfillmentClient && git clone -b FaultInjection https://github.com/Appdynamics/ECommerce-Java.git)
 (cd ECommerce-FulfillmentClient && docker build -t appdynamics/ecommerce-fulfillment-client .)
+
+echo; echo "Building ECommerce-Customer Survey Client..."
+(cd ECommerce-SurveyClient && git clone -b FaultInjection https://github.com/Appdynamics/ECommerce-Java.git)
+(cd ECommerce-SurveyClient && docker build -t appdynamics/ecommerce-survey-client .)
 
 # Build Synapse container
 echo; echo "Building ECommerce-Synapse..."

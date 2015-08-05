@@ -88,6 +88,15 @@ echo -n "web1: "; docker run --name web1 -h ${APP_NAME}-web1 -e JVM_ROUTE=route2
 	--link db:db --link oracle-db:oracle-db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
+echo -n "customer-survey: "; docker run --name customer-survey -h ${APP_NAME}-customer-survey \
+	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} \
+        -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
+	-e NODE_NAME=${APP_NAME}_Customer-Survey -e APP_NAME=${APP_NAME} -e TIER_NAME=Customer-Survey-Services \
+	-e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} \
+	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
+	-d --link jms:jms --link db:db --link oracle-db:oracle-db --link ws:ws appdynamics/ecommerce-survey-client:$VERSION
+sleep 30
+
 echo -n "lbr: "; docker run --name=lbr -h ${APP_NAME}-lbr \
 	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
 	-e APP_NAME=${APP_NAME} -e TIER_NAME=Web-Tier-Services -e NODE_NAME=${APP_NAME}-Apache \
