@@ -16,17 +16,35 @@
  
 #! /bin/bash
 
+# Version-independent agent names used by Dockerfiles 
+ZIP_MACHINE_AGENT=MachineAgent.zip
+RPM_MACHINE_AGENT=machineagent.rpm
+WEB_SERVER_AGENT=webserver_agent.tar.gz
+APP_SERVER_AGENT=AppServerAgent.zip
+ANALYTICS_AGENT=AnalyticsAgent.zip
+DB_AGENT=dbagent.zip
+JS_AGENT=adrum.js
+ADRUM_ZIP=adrum.zip
+
 cleanUp() {
+  # Delete JDK from docker buid dir
   (cd ECommerce-Java && rm -f jdk-linux-x64.rpm)
-  (cd ECommerce-Tomcat && rm -f AppServerAgent.zip ${MACHINE_AGENT} AnalyticsAgent.zip)
-  (cd ECommerce-Tomcat && rm -rf monitors ECommerce-Java)
-  (cd ECommerce-FulfillmentClient && rm -f AppServerAgent.zip ${MACHINE_AGENT})
-  (cd ECommerce-FulfillmentClient && rm -rf monitors ECommerce-Java)
-  (cd ECommerce-Synapse && rm -f AppServerAgent.zip ${MACHINE_AGENT})
-  (cd ECommerce-DBAgent && rm -f dbagent.zip)
+
+  # Delete agent distros from docker build dirs
+  (cd ECommerce-Tomcat && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${ANALYTICS_AGENT})
+  (cd ECommerce-FulfillmentClient && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT})
+  (cd ECommerce-Synapse && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT})
+  (cd ECommerce-LBR && rm -f ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${WEB_SERVER_AGENT} ${JS_AGENT})
+  (cd ECommerce-DBAgent && rm -f ${DB_AGENT})
+  (cd ECommerce-Angular && rm -f ${JS_AGENT})
+
+  # Delete cloned repos from docker build dirs
+  (cd ECommerce-Tomcat && rm -rf ECommerce-Java)
+  (cd ECommerce-FulfillmentClient && rm -rf ECommerce-Java)
   (cd ECommerce-Load && rm -rf ECommerce-Load)
-  (cd ECommerce-LBR && rm -f ${MACHINE_AGENT} webserver_agent.tar.gz adrum.*)
-  (cd ECommerce-Angular && rm -rf ECommerce-Angular adrum.*)
+  (cd ECommerce-Angular && rm -rf ECommerce-Angular)
+
+  # Delete temp copy of machine agent distro
   rm -f ${MACHINE_AGENT}
  
   # Remove dangling images left-over from build
@@ -40,12 +58,12 @@ cleanUp() {
 trap cleanUp EXIT
 
 promptForAgents() {
-  read -e -p "Enter path to App Server Agent: " APP_SERVER_AGENT
+  read -e -p "Enter path to App Server Agent: " APP_SERVER_AGENT_INPUT
   read -e -p "Enter path to Machine Agent: " MACHINE_AGENT_INPUT
-  read -e -p "Enter path to DB Agent: " DB_AGENT
-  read -e -p "Enter path to Web Server Agent: " WEB_AGENT
-  read -e -p "Enter path to Javascript Agent: " ADRUM_AGENT
-  read -e -p "Enter path to Analytics Agent: " ANALYTICS_AGENT
+  read -e -p "Enter path to DB Agent: " DB_AGENT_INPUT
+  read -e -p "Enter path to Web Server Agent: " WEB_AGENT_INPUT
+  read -e -p "Enter path to Javascript Agent: " ADRUM_AGENT_INPUT
+  read -e -p "Enter path to Analytics Agent: " ANALYTICS_AGENT_INPUT
   read -e -p "Enter path to Oracle JDK7: " ORACLE_JDK7
 }
 
@@ -74,9 +92,9 @@ else
   while getopts "a:m:d:w:r:y:j:" opt; do
     case $opt in
       a)
-        APP_SERVER_AGENT=$OPTARG
-        if [ ! -e ${APP_SERVER_AGENT} ]; then
-          echo "Not found: ${APP_SERVER_AGENT}"; exit
+        APP_SERVER_AGENT_INPUT=$OPTARG
+        if [ ! -e ${APP_SERVER_AGENT_INPUT} ]; then
+          echo "Not found: ${APP_SERVER_AGENT_INPUT}"; exit
         fi
         ;;
       m)
@@ -86,27 +104,27 @@ else
         fi
         ;;
       d)
-        DB_AGENT=$OPTARG
-        if [ ! -e ${DB_AGENT} ]; then
-          echo "Not found: ${DB_AGENT}"; exit
+        DB_AGENT_INPUT=$OPTARG
+        if [ ! -e ${DB_AGENT_INPUT} ]; then
+          echo "Not found: ${DB_AGENT_INPUT}"; exit
         fi
         ;;
       w)
-        WEB_AGENT=$OPTARG
-        if [ ! -e ${WEB_AGENT} ]; then
-          echo "Not found: ${WEB_AGENT}"; exit
+        WEB_AGENT_INPUT=$OPTARG
+        if [ ! -e ${WEB_AGENT_INPUT} ]; then
+          echo "Not found: ${WEB_AGENT_INPUT}"; exit
         fi
         ;; 
       r)
-        ADRUM_AGENT=$OPTARG
-        if [ ! -e ${ADRUM_AGENT} ]; then
-          echo "Not found: ${ADRUM_AGENT}"; exit
+        ADRUM_AGENT_INPUT=$OPTARG
+        if [ ! -e ${ADRUM_AGENT_INPUT} ]; then
+          echo "Not found: ${ADRUM_AGENT_INPUT}"; exit
         fi
         ;;
       y)
-        ANALYTICS_AGENT=$OPTARG 
-	if [ ! -e ${ANALYTICS_AGENT} ]; then
-          echo "Not found: ${ANALYTICS_AGENT}"; exit         
+        ANALYTICS_AGENT_INPUT=$OPTARG 
+	if [ ! -e ${ANALYTICS_AGENT_INPUT} ]; then
+          echo "Not found: ${ANALYTICS_AGENT_INPUT}"; exit         
         fi
         ;; 
       j)
@@ -122,7 +140,7 @@ else
   done
 fi
 
-if [ -z ${APP_SERVER_AGENT} ]; then
+if [ -z ${APP_SERVER_AGENT_INPUT} ]; then
     echo "Error: App Server Agent is required"; exit
 fi
 
@@ -130,15 +148,15 @@ if [ -z ${MACHINE_AGENT_INPUT} ]; then
     echo "Error: Machine Agent is required"; exit
 fi
 
-if [ -z ${DB_AGENT} ]; then
+if [ -z ${DB_AGENT_INPUT} ]; then
     echo "Error: Database Agent is required"; exit
 fi
 
-if [ -z ${WEB_AGENT} ]; then
+if [ -z ${WEB_AGENT_INPUT} ]; then
     echo "Error: Web Server Agent is required"; exit
 fi
 
-if [ -z ${ADRUM_AGENT} ]; then
+if [ -z ${ADRUM_AGENT_INPUT} ]; then
     echo "Error: Javascript Agent is required"; exit
 fi
 
@@ -160,13 +178,13 @@ else
 fi
 
 # If supplied, add standalone analytics agent to build
-if [ -z ${ANALYTICS_AGENT} ]
+if [ -z ${ANALYTICS_AGENT_INPUT} ]
 then
     echo "Skipping standalone Analytics Agent install"
 else
     echo "Using standalone Analytics Agent"
-    echo "  ${ANALYTICS_AGENT}"
-    cp ${ANALYTICS_AGENT} ECommerce-Tomcat/AnalyticsAgent.zip
+    echo "  ${ANALYTICS_AGENT_INPUT}"
+    cp ${ANALYTICS_AGENT_INPUT} ECommerce-Tomcat/${ANALYTICS_AGENT}
     
     # Add analytics agent when creating Dockerfile for machine agent
     DOCKERFILE_OPTIONS="analytics"
@@ -189,34 +207,34 @@ fi
 
 # Copy Agent zips to build dirs
 echo "Adding AppDynamics Agents: 
-  ${APP_SERVER_AGENT} 
-  ${WEB_AGENT} 
-  ${DB_AGENT}
+  ${APP_SERVER_AGENT_INPUT} 
+  ${WEB_AGENT_INPUT} 
+  ${DB_AGENT_INPUT}
   ${MACHINE_AGENT_INPUT}
-  ${ADRUM_AGENT}" 
+  ${ADRUM_AGENT_INPUT}" 
 
-cp ${APP_SERVER_AGENT} ECommerce-Tomcat/AppServerAgent.zip
+cp ${APP_SERVER_AGENT_INPUT} ECommerce-Tomcat/${APP_SERVER_AGENT}
 cp ${MACHINE_AGENT} ECommerce-Tomcat/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-Tomcat"
 
-cp ${APP_SERVER_AGENT} ECommerce-FulfillmentClient/AppServerAgent.zip
+cp ${APP_SERVER_AGENT_INPUT} ECommerce-FulfillmentClient/${APP_SERVER_AGENT}
 cp ${MACHINE_AGENT} ECommerce-FulfillmentClient/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-FulfillmentClient"
 
-cp ${APP_SERVER_AGENT} ECommerce-Synapse/AppServerAgent.zip
+cp ${APP_SERVER_AGENT_INPUT} ECommerce-Synapse/${APP_SERVER_AGENT}
 cp ${MACHINE_AGENT} ECommerce-Synapse/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-Synapse"
 
-cp ${WEB_AGENT} ECommerce-LBR/webserver_agent.tar.gz
-cp ${ADRUM_AGENT} ECommerce-LBR/adrum.zip
-(cd ECommerce-LBR; unzip adrum.zip; mv adrum*.js adrum.js; rm adrum.zip)
+cp ${WEB_AGENT_INPUT} ECommerce-LBR/${WEB_SERVER_AGENT}
+cp ${ADRUM_AGENT_INPUT} ECommerce-LBR/${ADRUM_ZIP}
+(cd ECommerce-LBR; unzip ${ADRUM_ZIP}; mv adrum*.js ${JS_AGENT}; rm ${ADRUM_ZIP})
 cp ${MACHINE_AGENT} ECommerce-LBR/${MACHINE_AGENT}
 echo "Copied Agents for ECommerce-LBR"
 
-cp ${DB_AGENT} ECommerce-DBAgent/dbagent.zip
+cp ${DB_AGENT_INPUT} ECommerce-DBAgent/${DB_AGENT}
 echo "Copied Agents for ECommerce-DBAgent"
 
-cp ${ADRUM_AGENT} ECommerce-Angular/adrum.zip
+cp ${ADRUM_AGENT_INPUT} ECommerce-Angular/${ADRUM_ZIP}
 echo "Copied Agents for ECommerce-Angular"
 
 # Build Tomcat containers
@@ -243,7 +261,8 @@ echo; echo "Building ECommerce-LBR..."
 # Build Angular container
 echo; echo "Building ECommerce-Angular..."
 (cd ECommerce-Angular && git clone https://github.com/Appdynamics/ECommerce-Angular.git)
-(cd ECommerce-Angular; unzip adrum.zip; mv adrum*.js adrum.js; rm adrum.zip)
+cp ${ADRUM_AGENT_INPUT} ECommerce-Angular/${ADRUM_ZIP}
+(cd ECommerce-Angular; unzip ${ADRUM_ZIP}; mv adrum*.js ${JS_AGENT}; rm ${ADRUM_ZIP})
 (cd ECommerce-Angular && docker build -t appdynamics/ecommerce-angular .)
 
 # Build LoadGen container
