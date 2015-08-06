@@ -10,6 +10,8 @@ Download the latest versions directly from the [AppDynamics download site](https
 1. Run `build.sh` without commandline args to be prompted (with autocomplete) for the agent installer paths __or__
 2. Run `build.sh -a <App Server Agent> -m <Machine Agent> -d <Database Agent> -w <Web Server Agent> -r <Javascript Agent> [-y <Analytics Agent>] [-j <Oracle JDK7>]` to supply agent installer paths 
 
+Note: Run build.sh with the `-p` flag to prepare the build environment but skip the actual docker cobntainer builds.  This will build the Dockerfiles and add the AppDyanmics agents: the containers can then be built manually with `docker build -t <container-name> .`.  Use this option to save time when making updates to only one container.
+
 Running the ECommerce Demo
 --------------------------
 To run the demo:
@@ -17,6 +19,8 @@ To run the demo:
 
 - `<tag>` is the docker tag for the container version to run 
 - `<app_name>` is the name to register for the application
+
+Note: The run.sh script will get controller host/port and analytics/events-service configuration from env.sh in the root of this project.  These values will be injected into the running containers via environment variables.  
 
 Starting the Machine Agent and Analytics Agent
 ----------------------------------------------
