@@ -12,6 +12,9 @@ s/ACCOUNTACCESSKEY/${ACCESS_KEY}/g"
 
 sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > /${CATALINA_HOME}/appagent/conf/controller-info.xml
 
+# Enable dbcam integration for AppD4DB in app-agent-config.xml
+sed -i '/transactions.xml/ r app-agent-config-dbcam.xml' $(find ${CATALINA_HOME}/appagent -name app-agent-config.xml)
+
 echo "Starting Tomcat with App Server Agent..."
 echo APP_AGENT_JAVA_OPTS: ${APP_AGENT_JAVA_OPTS};
 echo JMX_OPTS: ${JMX_OPTS}
