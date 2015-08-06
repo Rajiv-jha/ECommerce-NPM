@@ -27,22 +27,24 @@ JS_AGENT=adrum.js
 ADRUM_ZIP=adrum.zip
 
 cleanUp() {
-  # Delete JDK from docker buid dir
-  (cd ECommerce-Java && rm -f jdk-linux-x64.rpm)
+  if [ -z ${PREPARE_ONLY} ]; then 
+    # Delete JDK from docker buid dir
+    (cd ECommerce-Java && rm -f jdk-linux-x64.rpm)
 
-  # Delete agent distros from docker build dirs
-  (cd ECommerce-Tomcat && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${ANALYTICS_AGENT})
-  (cd ECommerce-FulfillmentClient && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT})
-  (cd ECommerce-Synapse && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT})
-  (cd ECommerce-LBR && rm -f ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${WEB_SERVER_AGENT} ${JS_AGENT})
-  (cd ECommerce-DBAgent && rm -f ${DB_AGENT})
-  (cd ECommerce-Angular && rm -f ${JS_AGENT})
+    # Delete agent distros from docker build dirs
+    (cd ECommerce-Tomcat && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${ANALYTICS_AGENT})
+    (cd ECommerce-FulfillmentClient && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT})
+    (cd ECommerce-Synapse && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT})
+    (cd ECommerce-LBR && rm -f ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${WEB_SERVER_AGENT} ${JS_AGENT})
+    (cd ECommerce-DBAgent && rm -f ${DB_AGENT})
+    (cd ECommerce-Angular && rm -f ${JS_AGENT})
 
-  # Delete cloned repos from docker build dirs
-  (cd ECommerce-Tomcat && rm -rf ECommerce-Java)
-  (cd ECommerce-FulfillmentClient && rm -rf ECommerce-Java)
-  (cd ECommerce-Load && rm -rf ECommerce-Load)
-  (cd ECommerce-Angular && rm -rf ECommerce-Angular)
+    # Delete cloned repos from docker build dirs
+    (cd ECommerce-Tomcat && rm -rf ECommerce-Java)
+    (cd ECommerce-FulfillmentClient && rm -rf ECommerce-Java)
+    (cd ECommerce-Load && rm -rf ECommerce-Load)
+    (cd ECommerce-Angular && rm -rf ECommerce-Angular)
+  fi
 
   # Delete temp copy of machine agent distro
   rm -f ${MACHINE_AGENT}
@@ -67,6 +69,73 @@ promptForAgents() {
   read -e -p "Enter path to Oracle JDK7: " ORACLE_JDK7
 }
 
+# Copy Agent zips to build dirs
+copyAgents() {
+  echo "Adding AppDynamics Agents: 
+    ${APP_SERVER_AGENT_INPUT} 
+    ${WEB_AGENT_INPUT} 
+    ${DB_AGENT_INPUT}
+    ${MACHINE_AGENT_INPUT}
+    ${ADRUM_AGENT_INPUT}" 
+
+  cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-Tomcat/${APP_SERVER_AGENT}
+  cp -f ${MACHINE_AGENT} ECommerce-Tomcat/${MACHINE_AGENT}
+  echo "Copied Agents for ECommerce-Tomcat"
+
+  cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-FulfillmentClient/${APP_SERVER_AGENT}
+  cp -f ${MACHINE_AGENT} ECommerce-FulfillmentClient/${MACHINE_AGENT}
+  echo "Copied Agents for ECommerce-FulfillmentClient"
+
+  cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-Synapse/${APP_SERVER_AGENT}
+  cp -f ${MACHINE_AGENT} ECommerce-Synapse/${MACHINE_AGENT}
+  echo "Copied Agents for ECommerce-Synapse"
+
+  cp -f ${WEB_AGENT_INPUT} ECommerce-LBR/${WEB_SERVER_AGENT}
+  cp -f ${ADRUM_AGENT_INPUT} ECommerce-LBR/${ADRUM_ZIP}
+  (cd ECommerce-LBR; rm -f adrum*.js; unzip -o ${ADRUM_ZIP}; mv adrum*.js ${JS_AGENT}; rm ${ADRUM_ZIP})
+  cp -f ${MACHINE_AGENT} ECommerce-LBR/${MACHINE_AGENT}
+  echo "Copied Agents for ECommerce-LBR"
+
+  cp -f ${DB_AGENT_INPUT} ECommerce-DBAgent/${DB_AGENT}
+  echo "Copied Agents for ECommerce-DBAgent"
+
+  cp -f ${ADRUM_AGENT_INPUT} ECommerce-Angular/${ADRUM_ZIP}
+  (cd ECommerce-Angular; rm -f adrum*.js; unzip -o ${ADRUM_ZIP}; mv adrum*.js ${JS_AGENT}; rm ${ADRUM_ZIP})
+  echo "Copied Agents for ECommerce-Angular"
+}
+
+# Clone ECommerce source projects into docker build dirs
+cloneProjects() {
+  (cd ECommerce-Tomcat && rm -rf ECommerce-Java && git clone https://github.com/Appdynamics/ECommerce-Java.git)
+  (cd ECommerce-FulfillmentClient && rm -rf ECommerce-Java && git clone https://github.com/Appdynamics/ECommerce-Java.git)
+  (cd ECommerce-Angular && rm -rf ECommerce-Angular && git clone https://github.com/Appdynamics/ECommerce-Angular.git)
+  (cd ECommerce-Load && rm -rf ECommerce-Load && git clone https://github.com/Appdynamics/ECommerce-Load.git)
+}
+
+# Build Docker containers
+buildContainers() {
+  echo; echo "Building ECommerce-Tomcat..." 
+  (cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat .)
+
+  echo; echo "Building ECommerce-FulfillmentClient..."
+  (cd ECommerce-FulfillmentClient && docker build -t appdynamics/ecommerce-fulfillment-client .)
+
+  echo; echo "Building ECommerce-Synapse..."
+  (cd ECommerce-Synapse && docker build -t appdynamics/ecommerce-synapse .)
+
+  echo; echo "Building ECommerce-DBAgent..."
+  (cd ECommerce-DBAgent && docker build -t appdynamics/ecommerce-dbagent .)
+
+  echo; echo "Building ECommerce-LBR..."
+  (cd ECommerce-LBR && docker build -t appdynamics/ecommerce-lbr .)
+
+  echo; echo "Building ECommerce-Angular..."
+  (cd ECommerce-Angular && docker build -t appdynamics/ecommerce-angular .)
+
+  echo; echo "Building ECommerce-Load..."
+  (cd ECommerce-Load && docker build -t appdynamics/ecommerce-load .)
+}
+
 # Usage information
 if [[ $1 == *--help* ]]
 then
@@ -89,7 +158,7 @@ then
 
 else
   # Allow user to specify locations of App Server, Machine and Database Agents
-  while getopts "a:m:d:w:r:y:j:" opt; do
+  while getopts "a:m:d:w:r:y:j:prepare" opt; do
     case $opt in
       a)
         APP_SERVER_AGENT_INPUT=$OPTARG
@@ -133,6 +202,10 @@ else
           echo "Not found: ${ORACLE_JDK7}"; exit
         fi
         ;; 
+      p)
+        echo "Prepare build environment only - no docker builds"
+        PREPARE_ONLY=true;
+        ;;
       \?)
         echo "Invalid option: -$OPTARG"
         ;;
@@ -169,7 +242,7 @@ else
     then
         echo "Building ECommerce-Java base image..."
         echo "Using JDK: ${ORACLE_JDK7}"
-        cp ${ORACLE_JDK7} ECommerce-Java/jdk-linux-x64.rpm
+        cp -f ${ORACLE_JDK7} ECommerce-Java/jdk-linux-x64.rpm
         (cd ECommerce-Java; docker build -t appdynamics/ecommerce-java:oracle-java7 .)
         echo
     else
@@ -184,7 +257,7 @@ then
 else
     echo "Using standalone Analytics Agent"
     echo "  ${ANALYTICS_AGENT_INPUT}"
-    cp ${ANALYTICS_AGENT_INPUT} ECommerce-Tomcat/${ANALYTICS_AGENT}
+    cp -f ${ANALYTICS_AGENT_INPUT} ECommerce-Tomcat/${ANALYTICS_AGENT}
     
     # Add analytics agent when creating Dockerfile for machine agent
     DOCKERFILE_OPTIONS="analytics"
@@ -193,79 +266,26 @@ fi
 if [ ${MACHINE_AGENT_INPUT: -4} == ".zip" ]
 then
     source ./makeDockerfiles.sh zip ${DOCKERFILE_OPTIONS}
-    cp ${MACHINE_AGENT_INPUT} MachineAgent.zip
+    cp -f ${MACHINE_AGENT_INPUT} MachineAgent.zip
     MACHINE_AGENT="MachineAgent.zip"        
 elif [ ${MACHINE_AGENT_INPUT: -4} == ".rpm" ]
 then
     source ./makeDockerfiles.sh rpm ${DOCKERFILE_OPTIONS}
-    cp ${MACHINE_AGENT_INPUT} machineagent.rpm
+    cp -f ${MACHINE_AGENT_INPUT} machineagent.rpm
     MACHINE_AGENT="machineagent.rpm"
 else
     echo "Machine agent file extension not recognized"
     exit
 fi
 
-# Copy Agent zips to build dirs
-echo "Adding AppDynamics Agents: 
-  ${APP_SERVER_AGENT_INPUT} 
-  ${WEB_AGENT_INPUT} 
-  ${DB_AGENT_INPUT}
-  ${MACHINE_AGENT_INPUT}
-  ${ADRUM_AGENT_INPUT}" 
+copyAgents
 
-cp ${APP_SERVER_AGENT_INPUT} ECommerce-Tomcat/${APP_SERVER_AGENT}
-cp ${MACHINE_AGENT} ECommerce-Tomcat/${MACHINE_AGENT}
-echo "Copied Agents for ECommerce-Tomcat"
+cloneProjects
 
-cp ${APP_SERVER_AGENT_INPUT} ECommerce-FulfillmentClient/${APP_SERVER_AGENT}
-cp ${MACHINE_AGENT} ECommerce-FulfillmentClient/${MACHINE_AGENT}
-echo "Copied Agents for ECommerce-FulfillmentClient"
+# Skip build if -p flag (Prepare only) set
+if [ "${PREPARE_ONLY}" = true ] ; then
+    echo "Skipping build phase"
+else
+    buildContainers
+fi
 
-cp ${APP_SERVER_AGENT_INPUT} ECommerce-Synapse/${APP_SERVER_AGENT}
-cp ${MACHINE_AGENT} ECommerce-Synapse/${MACHINE_AGENT}
-echo "Copied Agents for ECommerce-Synapse"
-
-cp ${WEB_AGENT_INPUT} ECommerce-LBR/${WEB_SERVER_AGENT}
-cp ${ADRUM_AGENT_INPUT} ECommerce-LBR/${ADRUM_ZIP}
-(cd ECommerce-LBR; unzip ${ADRUM_ZIP}; mv adrum*.js ${JS_AGENT}; rm ${ADRUM_ZIP})
-cp ${MACHINE_AGENT} ECommerce-LBR/${MACHINE_AGENT}
-echo "Copied Agents for ECommerce-LBR"
-
-cp ${DB_AGENT_INPUT} ECommerce-DBAgent/${DB_AGENT}
-echo "Copied Agents for ECommerce-DBAgent"
-
-cp ${ADRUM_AGENT_INPUT} ECommerce-Angular/${ADRUM_ZIP}
-echo "Copied Agents for ECommerce-Angular"
-
-# Build Tomcat containers
-echo; echo "Building ECommerce-Tomcat..." 
-(cd ECommerce-Tomcat && git clone https://github.com/Appdynamics/ECommerce-Java.git)
-(cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat .)
-
-echo; echo "Building ECommerce-FulfillmentClient..."
-(cd ECommerce-FulfillmentClient && git clone https://github.com/Appdynamics/ECommerce-Java.git)
-(cd ECommerce-FulfillmentClient && docker build -t appdynamics/ecommerce-fulfillment-client .)
-
-# Build Synapse container
-echo; echo "Building ECommerce-Synapse..."
-(cd ECommerce-Synapse && docker build -t appdynamics/ecommerce-synapse .)
-
-# Build DBAgent container
-echo; echo "Building ECommerce-DBAgent..."
-(cd ECommerce-DBAgent && docker build -t appdynamics/ecommerce-dbagent .)
-
-# Build Web Agent container
-echo; echo "Building ECommerce-LBR..."
-(cd ECommerce-LBR && docker build -t appdynamics/ecommerce-lbr .)
-
-# Build Angular container
-echo; echo "Building ECommerce-Angular..."
-(cd ECommerce-Angular && git clone https://github.com/Appdynamics/ECommerce-Angular.git)
-cp ${ADRUM_AGENT_INPUT} ECommerce-Angular/${ADRUM_ZIP}
-(cd ECommerce-Angular; unzip ${ADRUM_ZIP}; mv adrum*.js ${JS_AGENT}; rm ${ADRUM_ZIP})
-(cd ECommerce-Angular && docker build -t appdynamics/ecommerce-angular .)
-
-# Build LoadGen container
-echo; echo "Building ECommerce-Load..."
-(cd ECommerce-Load && git clone https://github.com/Appdynamics/ECommerce-Load.git)
-(cd ECommerce-Load && docker build -t appdynamics/ecommerce-load .)
