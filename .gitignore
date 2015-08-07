@@ -20,4 +20,4 @@ ECommerce-Load/.gradle/
 ECommerce-Load/.idea/
 
 # Ignore jdk rpms
-jdk-*.rpm
+dk-*.rpm
