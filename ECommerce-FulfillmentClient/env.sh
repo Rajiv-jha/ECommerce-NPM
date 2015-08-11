@@ -29,7 +29,7 @@ if [ -z "${EVENT_ENDPOINT}" ]; then
 fi
 
 if [ -z "${ACCOUNT_NAME}" ]; then
-	export ACCOUNT_NAME="analytics-customer1";
+	export ACCOUNT_NAME="customer1";
 fi
 
 if [ -z "${ACCESS_KEY}" ]; then
@@ -73,5 +73,5 @@ export VERSION_STRING="_VERSION_STRING"
 export JAVA_OPTS="-Xmx512m -XX:MaxPermSize=128m"
 export APPD_JAVA_OPTS="${JAVA_OPTS} -Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}" 
 export MACHINE_AGENT_JAVA_OPTS="-Dappdynamics.sim.enabled=true ${JAVA_OPTS} ${APPD_JAVA_OPTS}"
-export APP_AGENT_JAVA_OPTS="${JAVA_OPTS} ${APPD_JAVA_OPTS} -Dappdynamics.agent.accountName=customer1 -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}"
+export APP_AGENT_JAVA_OPTS="${JAVA_OPTS} ${APPD_JAVA_OPTS} -Dappdynamics.agent.accountName=${ACCOUNT_NAME%%_*} -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}"
 export JMX_OPTS="-Dcom.sun.management.jmxremote.port=8888  -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"

@@ -17,7 +17,7 @@ s/ACCOUNTACCESSKEY/${ACCESS_KEY}/g"
 
 sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > /${AGENT_HOME}/conf/controller-info.xml
 
-JAVA_OPTS="-Duser.timezone=UTC -Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.accountName=customer1 -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}";
+JAVA_OPTS="-Duser.timezone=UTC -Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.accountName=${ACCOUNT_NAME%%_*} -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}";
 JAVA_OPTS="${JAVA_OPTS} -Xmx512m -XX:MaxPermSize=128m -Duser.timezone=UTC";
 echo $JAVA_OPTS;
 
