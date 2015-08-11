@@ -13,7 +13,7 @@ env.sh
 ECommerce-LBR/Dockerfile
 ECommerce-Tomcat/Dockerfile
 ECommerce-Synapse/Dockerfile
-ECommerce-FulfillmentClient
+ECommerce-FulfillmentClient/Dockerfile
 
 # ECommerce-Load build files
 ECommerce-Load/.gradle/
