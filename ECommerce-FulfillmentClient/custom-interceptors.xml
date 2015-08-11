@@ -1,0 +1,17 @@
+<custom-interceptors>
+<custom-interceptor>
+
+    <interceptor-class-name>com.singularity.SQSEntryPoint</interceptor-class-name>
+
+    <match-class type="matches-class">
+        <name filter-type="equals">aws.sqs.test.ASQSConsumer</name>
+    </match-class>
+
+    <match-method>
+        <name>processMessage</name>
+    </match-method>
+
+    <configuration type="param" param-index="0" operation="getter-chain" operation-config="this"/>
+
+</custom-interceptor>
+</custom-interceptors>
