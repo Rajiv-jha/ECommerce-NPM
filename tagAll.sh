@@ -13,6 +13,7 @@ export SYNAPSE_LATEST=`docker images | grep 'synapse' | grep 'latest' | awk '{pr
 export FULFILLMENT_CLIENT_LATEST=`docker images | grep 'fulfillment-client' | grep 'latest' | awk '{print $3}'`
 export ANGULAR_LATEST=`docker images | grep 'angular' | grep 'latest' | awk '{print $3}'`
 export FAULTINJECTION_LATEST=`docker images | grep 'faultinjection' | grep 'latest' | awk '{print $3}'`
+export LOAD_LATEST=`docker images | grep 'load' | grep 'latest' | awk '{print $3}'`
 
 docker tag -f $TOMCAT_LATEST appdynamics/ecommerce-tomcat:$TAG_VERSION
 docker tag -f $LBR_LATEST appdynamics/ecommerce-lbr:$TAG_VERSION
@@ -21,6 +22,7 @@ docker tag -f $SYNAPSE_LATEST appdynamics/ecommerce-synapse:$TAG_VERSION
 docker tag -f $FULFILLMENT_CLIENT_LATEST appdynamics/ecommerce-fulfillment-client:$TAG_VERSION
 docker tag -f $ANGULAR_LATEST appdynamics/ecommerce-angular:$TAG_VERSION
 docker tag -f $FAULTINJECTION_LATEST appdynamics/ecommerce-faultinjection:$TAG_VERSION
+docker tag -f $LOAD_LATEST appdynamics/ecommerce-load:$TAG_VERSION
 
 if [[ `docker images -q --filter "dangling=true"` ]]
 then
