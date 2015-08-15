@@ -22,7 +22,7 @@ mv ${HTTPD_24}/02-appd.conf ${HTTPD_24}/conf.modules.d/02-appd.conf
 # sed -i "s/cdn.appdynamics.com/s3-us-west-1.amazonaws.com\/jsagent-trunk.appdynamics.com/g" ${HTTPD_DOC_ROOT}/adrum.js
 
 # Configure Controller, Port, App, Tier and Node for Proxy Agent
-# Account Access Key is required for 4.1 Agents
+# Account Name and Access Key are required for 4.1 Agents
 CONTROLLER_INFO_SETTINGS="s/CONTROLLERHOST/${CONTROLLER}/g;
 s/CONTROLLERPORT/${APPD_PORT}/g;
 s/APP/${APP_NAME}/g;s/TIER/${TIER_NAME}/g;
@@ -30,6 +30,7 @@ s/NODE/${NODE_NAME}/g;
 s/FOO/${SIM_HIERARCHY_1}/g;
 s/BAR/${SIM_HIERARCHY_2}/g;
 s/BAZ/${HOSTNAME}/g;
+s/ACCOUNTNAME/${ACCOUNT_NAME%%_*}/g;
 s/ACCOUNTACCESSKEY/${ACCESS_KEY}/g"
 
 sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > ${NATIVE_HOME}/proxy/conf/controller-info.xml

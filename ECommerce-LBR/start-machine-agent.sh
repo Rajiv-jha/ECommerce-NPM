@@ -20,6 +20,7 @@ s/NODE/${NODE_NAME}/g;
 s/FOO/${SIM_HIERARCHY_1}/g;
 s/BAR/${SIM_HIERARCHY_2}/g;
 s/BAZ/${HOSTNAME}/g;
+s/ACCOUNTNAME/${ACCOUNT_NAME%%_*}/g;
 s/ACCOUNTACCESSKEY/${ACCESS_KEY}/g"
 
 if [ -e /etc/init.d/appdynamics-machine-agent ]
