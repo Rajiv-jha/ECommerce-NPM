@@ -1,11 +1,11 @@
 # Controller host/port
-CONTR_HOST=staging.demo.appdynamics.com
-CONTR_PORT=8090
+CONTR_HOST=
+CONTR_PORT=
 
 # Analytics config parameters
-ACCOUNT_NAME=customer1_15c38295-24b6-450a-96bb-728c5977fb8f
-ACCESS_KEY=SJ5b2m7d1\$354
-EVENT_ENDPOINT=50.112.122.229:9080
+ACCOUNT_NAME=
+ACCESS_KEY=
+EVENT_ENDPOINT=
 
 # SIM Hierarchy parameters
 SIM_HIERARCHY_1=
