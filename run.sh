@@ -32,15 +32,37 @@ else
 fi
 echo "Application Name: $APP_NAME"
 
-# AWS Credentials for Fulfillment SQS Correlation
-if [ -z "$AWS_ACCESS_KEY" ]; then
-        echo "AWS_ACCESS_KEY not set";
-fi
-if [ -z "$AWS_SECRET_KEY" ]; then
-        echo "AWS_SECRET_KEY not set";
-fi
+checkOptional() {
+    eval VALUE=\$$1
+    if [ -z "$VALUE" ]; then
+        echo "$1 not set - ignoring"
+    fi
+}
 
-source env.sh
+checkRequired() {
+    eval VALUE=\$$1
+    if [[ -z "$VALUE" ]]; then
+        echo "$1 not set - exiting"; exit
+    fi
+    echo "$1: $VALUE"
+}
+
+checkEnv() {
+    # AWS Credentials for Fulfillment SQS Correlation
+    checkOptional "AWS_ACCESS_KEY"
+    checkOptional "AWS_SECRET_KEY"
+
+    # Controller Host/Port
+    checkRequired "CONTR_HOST" 
+    checkRequired "CONTR_PORT" 
+ 
+    # Analytics config parameters
+    checkRequired "ACCOUNT_NAME"
+    checkRequired "ACCESS_KEY" 
+    checkRequired "EVENT_ENDPOINT" 
+}
+
+checkEnv
 
 echo -n "oracle-db: "; docker run --name oracle-db -d -p 1521:1521 appdynamics/ecommerce-oracle
 echo -n "db: "; docker run --name db -e MYSQL_ROOT_PASSWORD=singcontroller -p 3306:3306 -d mysql

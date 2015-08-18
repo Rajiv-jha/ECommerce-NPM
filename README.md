@@ -20,7 +20,15 @@ To run the demo:
 - `<tag>` is the docker tag for the container version to run 
 - `<app_name>` is the name to register for the application
 
-Note: The run.sh script will get controller host/port and analytics/events-service configuration from env.sh in the root of this project.  These values will be injected into the running containers via environment variables.  
+Note: The run.sh script will get AWS credentails (optional), controller host/port and analytics/events-service configuration from the following environment variables, which will be injected into the running containers:
+
+- `AWS_ACCESS_KEY (optional - used for FulfillmentClient container)`
+- `AWS_SECRET_KEY (optional - used for FulfillmentClient container)`
+- `CONTR_HOST`
+- `CONTR_PORT`
+- `ACCOUNT_NAME`
+- `ACCESS_KEY`
+- `EVENT_ENDPOINT`  
 
 Starting the Machine Agent and Analytics Agent
 ----------------------------------------------
