@@ -1,0 +1,9 @@
+ENV ANALYTICS_AGENT_HOME /analytics-agent
+ADD AnalyticsAgent.zip /
+RUN unzip AnalyticsAgent.zip
+RUN rm -f AnalyticsAgent.zip
+ADD configAnalyticsAgent.sh /
+RUN chmod +x /configAnalyticsAgent.sh
+ADD ecommerce-log4j.job ${ANALYTICS_AGENT_HOME}/conf/job/
+ADD start-analytics-agent.sh /
+RUN chmod +x /start-analytics-agent.sh

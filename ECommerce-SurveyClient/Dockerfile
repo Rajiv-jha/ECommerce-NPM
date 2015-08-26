@@ -20,11 +20,10 @@ RUN unzip -q /AppServerAgent.zip -d ${CLIENT_HOME}/appagent;rm AppServerAgent.zi
 
 # (Placeholder - build script will update with zip/rpm directives)
 # Machine Agent Install
-# Zip Machine Agent Install
-ENV MACHINE_AGENT_HOME /machine-agent
-ADD MachineAgent.zip /
-RUN unzip -q /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
-RUN rm MachineAgent.zip
+# RPM Machine Agent Install
+ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
+ADD machineagent.rpm /
+RUN rpm -i /machineagent.rpm; rm /machineagent.rpm
 ADD controller-info.xml /
 
 # Analytics Agent config
@@ -49,3 +48,4 @@ CMD ["/bin/bash","/startup.sh"]
 EXPOSE 80	
 EXPOSE 8080
 EXPOSE 8009
+
