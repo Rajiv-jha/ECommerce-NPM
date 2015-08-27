@@ -1,5 +1,9 @@
 FROM ubuntu:latest
 
+# set timezone to UTC
+RUN mv /etc/localtime /etc/localtime.bak
+RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
+
 RUN apt-get update && apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
 RUN echo 'root:welcome1' | chpasswd

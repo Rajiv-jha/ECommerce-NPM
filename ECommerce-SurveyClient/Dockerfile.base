@@ -1,5 +1,9 @@
 FROM appdynamics/ecommerce-java:oracle-java7
 
+# set timezone to UTC
+RUN mv /etc/localtime /etc/localtime.bak
+RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
+
 # Install Gradle
 RUN curl -O http://downloads.gradle.org/distributions/gradle-2.1-bin.zip
 RUN unzip -q gradle-2.1-bin.zip -d /opt/
@@ -40,7 +44,7 @@ RUN chmod +x /configAnalytics.sh
 WORKDIR /
 CMD ["/bin/bash","/startup.sh"]
 
-EXPOSE 80	
+EXPOSE 80
 EXPOSE 8080
 EXPOSE 8009
 
