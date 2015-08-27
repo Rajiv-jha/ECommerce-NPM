@@ -1,5 +1,9 @@
 FROM appdynamics/ecommerce-java:oracle-java7
 
+# set timezone to UTC
+RUN mv /etc/localtime /etc/localtime.bak
+RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
+
 RUN yum -y install tar
 RUN yum -y install ntp
 RUN yum -y install git
@@ -35,8 +39,8 @@ RUN chmod +x /startup.sh
 WORKDIR /
 
 # Note: This command should not return or the container will exit
-CMD "/startup.sh" 
+CMD "/startup.sh"
 
-EXPOSE 80	
+EXPOSE 80
 EXPOSE 8080
 EXPOSE 8009

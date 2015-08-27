@@ -1,5 +1,9 @@
 FROM appdynamics/ecommerce-java:oracle-java7
 
+# set timezone to UTC
+RUN mv /etc/localtime /etc/localtime.bak
+RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
+
 # Centos 6 installs Apache 2.2 by default: we want 2.4
 RUN useradd -U apache
 RUN cd /etc/yum.repos.d/; wget http://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo
@@ -8,7 +12,7 @@ ENV HTTPD_24 /opt/rh/httpd24/root/etc/httpd
 ENV HTTPD_DOC_ROOT ${HTTPD_24}/../../var/www/html
 ENV APPDYNAMICS_SIM_ENABLED true
 
-# Use Apache Worker MPM 
+# Use Apache Worker MPM
 ADD 00-mpm.conf ${HTTPD_24}/conf.modules.d/00-mpm.conf
 
 # Add mod_appdynamics configuration file
@@ -34,12 +38,12 @@ RUN ldconfig
 RUN (cd ${SDK_HOME} gunzip ${SDK_HOME}/webserver_agent.tar.gz)
 RUN (cd ${SDK_HOME} tar xf ${SDK_HOME}/webserver_agent.tar)
 RUN chmod 777 ${NATIVE_HOME}/logs
-RUN chmod 744 ${NATIVE_HOME}/install.sh 
+RUN chmod 744 ${NATIVE_HOME}/install.sh
 RUN ${NATIVE_HOME}/install.sh
 
 # Add libappdynamics_native_sdk
 RUN ln -s ${NATIVE_HOME}/sdk_lib/lib/libappdynamics_native_sdk.so /usr/lib64/libappdynamics_native_sdk.so
-RUN ln -s ${NATIVE_HOME}/WebServerAgent/Apache/libmod_appdynamics.so $HTTPD_24/modules/mod_appdynamics.so 
+RUN ln -s ${NATIVE_HOME}/WebServerAgent/Apache/libmod_appdynamics.so $HTTPD_24/modules/mod_appdynamics.so
 
 # ECommerce reverse proxy configuration
 ADD ajp_proxy.conf ${HTTPD_24}/conf.d/
