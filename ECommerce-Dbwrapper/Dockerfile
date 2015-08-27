@@ -34,17 +34,6 @@ ADD AppServerAgent.zip /
 RUN unzip -q /AppServerAgent.zip -d ${CATALINA_HOME}/appagent;rm /AppServerAgent.zip
 
 # (Placeholder - build script will update with zip/rpm directives)
-# Machine Agent Install
-# RPM Machine Agent Install
-ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
-ADD machineagent.rpm /
-RUN rpm -i /machineagent.rpm; rm /machineagent.rpm
-ADD controller-info.xml /
-# RPM Machine Agent Install
-ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
-ADD machineagent.rpm /
-RUN rpm -i /machineagent.rpm; rm /machineagent.rpm
-ADD controller-info.xml /
 
 # Analytics Agent config
 ADD configAnalytics.sh /
