@@ -16,6 +16,8 @@ sed -i "s/<your_controller_port>/${APPD_PORT}/g" $HTTPD_24/02-appd.conf
 sed -i "s/<your_app_name>/${APP_NAME}/g" $HTTPD_24/02-appd.conf
 sed -i "s/<your_tier_name>/${TIER_NAME}/g" $HTTPD_24/02-appd.conf
 sed -i "s/<your_node_name>/${NODE_NAME}/g" $HTTPD_24/02-appd.conf
+sed -i "s/<your_account_name>/${ACCOUNT_NAME%%_*}/g" $HTTPD_24/02-appd.conf
+sed -i "s/<your_access_key>/${ACCESS_KEY}/g" $HTTPD_24/02-appd.conf
 mv ${HTTPD_24}/02-appd.conf ${HTTPD_24}/conf.modules.d/02-appd.conf
 
 # Replacing CDN endpoint for early access to JS Agent
