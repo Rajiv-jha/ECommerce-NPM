@@ -4,7 +4,7 @@
     <interceptor-class-name>com.singularity.SQSEntryPoint</interceptor-class-name>
 
     <match-class type="matches-class">
-        <name filter-type="equals">aws.sqs.test.ASQSConsumer</name>
+        <name filter-type="equals">com.appdynamicspilot.sqs.FulfillmentClient</name>
     </match-class>
 
     <match-method>
