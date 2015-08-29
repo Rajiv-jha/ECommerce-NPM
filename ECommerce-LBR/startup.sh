@@ -41,7 +41,6 @@ sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > ${NATIVE_HOME}/proxy
 if [ -z "${NO_AGENT}" ]; then 
   echo "Starting Proxy Agent"
   su apache -c "nohup ${NATIVE_HOME}/runSDKProxy.sh &"
-  echo 'export APPD_SDK_ENV_LOG_CONFIG_PATH=/$NATIVE_HOMEconf/appdynamics_sdk_log4cxx.xml' >>  /home/apache/.bash_profile
 else
   echo "AppDynamicsEnabled Off - Proxy Agent not started"
   sed -i s/"AppDynamicsEnabled On"/"AppDynamicsEnabled Off"/g ${HTTPD_24}/conf.modules.d/02-appd.conf
