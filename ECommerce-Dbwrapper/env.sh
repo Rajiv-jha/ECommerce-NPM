@@ -5,7 +5,7 @@ if [ -n "${create_schema}" ]; then
 fi
 
 if [ -z "${APP_NAME}" ]; then
-	export APP_NAME="ECommerce-dbwrapper";
+	export APP_NAME="ECommerce-Address";
 fi
 
 if [ -z "${CONTROLLER}" ]; then
@@ -37,7 +37,7 @@ if [ -z "${NODE_NAME}" ]; then
 fi
 
 if [ -z "${TIER_NAME}" ]; then
-	export TIER_NAME="Docker-Dbwrapper";
+	export TIER_NAME="Fulfillment-Address-Services";
 fi
 
 

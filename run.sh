@@ -44,7 +44,7 @@ source env.sh
 
 echo -n "oracle-db: "; docker run --name oracle-db -d -p 1521:1521 appdynamics/ecommerce-oracle
 echo -n "db: "; docker run --name db -e MYSQL_ROOT_PASSWORD=singcontroller -p 3306:3306 -d mysql
-echo -n "jms: "; docker run --name jms -d appdynamics/ecommerce-activemq:
+echo -n "jms: "; docker run --name jms -p 61616:61616 -d appdynamics/ecommerce-activemq:
 sleep 30
 
 echo -n "ws: "; docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true \
@@ -57,7 +57,7 @@ echo -n "ws: "; docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e 
 echo -n "rds-dbwrapper: "; docker run --name rds-dbwrapper -h rds-dbwrapper \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
-        -e NODE_NAME=${APP_NAME}_NODE -e APP_NAME=${APP_NAME}-rds-dbwrapper -e TIER_NAME=rds-dbwrapper-Services \
+        -e NODE_NAME=${APP_NAME}_NODE -e APP_NAME=${APP_NAME}-Address -e TIER_NAME=Fulfillment-Address-Services \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
         --link oracle-db:oracle-db -d appdynamics/ecommerce-dbwrapper:$VERSION
 

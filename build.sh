@@ -31,7 +31,7 @@ cleanUp() {
   (cd ECommerce-SurveyClient && rm -f AppServerAgent.zip ${MACHINE_AGENT})
   (cd ECommerce-SurveyClient && rm -rf monitors ECommerce-Java)
   (cd ECommerce-Dbwrapper && rm -rf AppServerAgent.zip ${MACHINE_AGENT} docker-dbwrapper)
-  
+
   rm -f ${MACHINE_AGENT}
 
   # Remove dangling images left-over from build
@@ -233,15 +233,15 @@ echo "Copied Agents for ECommerce-Dbwrapper"
 
 # Build Tomcat containers
 echo; echo "Building ECommerce-Tomcat..."
-(cd ECommerce-Tomcat && git clone -b cxf_to_jaxws https://github.com/Appdynamics/ECommerce-Java.git)
+#(cd ECommerce-Tomcat && git clone -b cxf_to_jaxws https://github.com/Appdynamics/ECommerce-Java.git)
 (cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat .)
 
 echo; echo "Building ECommerce-FulfillmentClient..."
-(cd ECommerce-FulfillmentClient && git clone -b cxf_to_jaxws https://github.com/Appdynamics/ECommerce-Java.git)
+#(cd ECommerce-FulfillmentClient && git clone -b cxf_to_jaxws https://github.com/Appdynamics/ECommerce-Java.git)
 (cd ECommerce-FulfillmentClient && docker build -t appdynamics/ecommerce-fulfillment-client .)
 
 echo; echo "Building ECommerce-Customer Survey Client..."
-(cd ECommerce-SurveyClient && git clone -b cxf_to_jaxws https://github.com/Appdynamics/ECommerce-Java.git)
+#(cd ECommerce-SurveyClient && git clone -b cxf_to_jaxws https://github.com/Appdynamics/ECommerce-Java.git)
 (cd ECommerce-SurveyClient && docker build -t appdynamics/ecommerce-survey-client .)
 
 # Build Synapse container
@@ -269,7 +269,7 @@ echo; echo "Building ECommerce-FaultInjection..."
 
 # Build DBWrapper container
 echo rds-dbwrapper; echo "Build ECommerce-Dbwrapper..."
-(cd ECommerce-Dbwrapper && git clone https://github.com/AppDynamics/docker-dbwrapper.git)
+#(cd ECommerce-Dbwrapper && git clone https://github.com/AppDynamics/docker-dbwrapper.git)
 (cd ECommerce-Dbwrapper && docker build -t appdynamics/ecommerce-dbwrapper .)
 
 # Build LoadGen container
