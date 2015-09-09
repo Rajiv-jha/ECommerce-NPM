@@ -10,7 +10,12 @@ Download the latest versions directly from the [AppDynamics download site](https
 1. Run `build.sh` without commandline args to be prompted (with autocomplete) for the agent installer paths __or__
 2. Run `build.sh -a <App Server Agent> -m <Machine Agent> -d <Database Agent> -w <Web Server Agent> -r <Javascript Agent> [-y <Analytics Agent>] [-j <Oracle JDK7>]` to supply agent installer paths 
 
-Note: Run build.sh with the `-p` flag to prepare the build environment but skip the actual docker container builds.  This will build the Dockerfiles and add the AppDyanmics agents to the build dirs: the containers can then be built manually with `docker build -t <container-name> .`.  Use this option to save time when making updates to only one container.
+Note: Run build.sh with the `-p` flag to prepare the build environment but skip the actual docker container builds.  This will build the Dockerfiles and add the AppDynamics agents to the build dirs: the containers can then be built manually with `docker build -t <container-name> .`.  Use this option to save time when making updates to only one container.
+
+The database containers (`ecommerce-oracle` and `ecommerce-mysql`) do not include AppDynamics agents and only need to be rebuilt if you want to refresh the database or OS version. You will need to download the Linux x64 RPM package installer for Oracle Database XE 11g R2 from the [Oracle Download Site](http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads). To build the database containers, cd to the relevant build directories and run:
+
+- ECommerce-Oracle `docker build -t appdynamics/ecommerce-oracle .`
+- ECommerce-MySQL `docker build -t appdynamics/ecommerce-mysql .`
 
 Running the ECommerce Demo
 --------------------------
