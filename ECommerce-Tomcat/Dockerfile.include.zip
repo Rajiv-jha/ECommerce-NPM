@@ -1,7 +1,7 @@
 # Zip Machine Agent Install
 ENV MACHINE_AGENT_HOME /machine-agent
 ADD MachineAgent.zip /
-RUN unzip -q /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
+RUN unzip -oq /MachineAgent.zip -d ${MACHINE_AGENT_HOME}
 RUN rm MachineAgent.zip
 ADD controller-info.xml /
 RUN echo "export MACHINE_AGENT_HOME=${MACHINE_AGENT_HOME}" >> /env.sh
