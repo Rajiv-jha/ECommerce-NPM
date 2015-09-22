@@ -64,9 +64,9 @@ checkEnv() {
 
 checkEnv
 
-echo -n "oracle-db: "; docker run --name oracle-db -d -p 1521:1521 appdynamics/ecommerce-oracle
-echo -n "db: "; docker run --name db -e MYSQL_ROOT_PASSWORD=singcontroller -p 3306:3306 -d mysql
-echo -n "jms: "; docker run --name jms -d appdynamics/ecommerce-activemq:
+echo -n "oracle-db: "; docker run --name oracle-db -d -p 1521:1521 -p 2222:22 appdynamics/ecommerce-oracle
+echo -n "db: "; docker run --name db -p 3306:3306 -p 2223:22 -e MYSQL_ROOT_PASSWORD=singcontroller -d appdynamics/ecommerce-mysql
+echo -n "jms: "; docker run --name jms -d appdynamics/ecommerce-activemq
 sleep 30
 
 echo -n "ws: "; docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true \
