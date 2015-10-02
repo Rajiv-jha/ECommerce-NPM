@@ -31,7 +31,7 @@ cleanUp() {
   (cd ECommerce-SurveyClient && rm -f AppServerAgent.zip ${MACHINE_AGENT})
   (cd ECommerce-SurveyClient && rm -rf monitors ECommerce-Java)
   (cd ECommerce-Dbwrapper && rm -rf AppServerAgent.zip ${MACHINE_AGENT} docker-dbwrapper)
-  
+
   rm -f ${MACHINE_AGENT}
 
   # Remove dangling images left-over from build
@@ -269,7 +269,7 @@ echo; echo "Building ECommerce-FaultInjection..."
 
 # Build DBWrapper container
 echo rds-dbwrapper; echo "Build ECommerce-Dbwrapper..."
-(cd ECommerce-Dbwrapper && git clone https://github.com/AppDynamics/docker-dbwrapper.git)
+#(cd ECommerce-Dbwrapper && git clone https://github.com/AppDynamics/docker-dbwrapper.git)
 (cd ECommerce-Dbwrapper && docker build -t appdynamics/ecommerce-dbwrapper .)
 
 # Build LoadGen container
