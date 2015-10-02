@@ -269,7 +269,7 @@ echo; echo "Building ECommerce-FaultInjection..."
 
 # Build DBWrapper container
 echo rds-dbwrapper; echo "Build ECommerce-Dbwrapper..."
-#(cd ECommerce-Dbwrapper && git clone https://github.com/AppDynamics/docker-dbwrapper.git)
+(cd ECommerce-Dbwrapper && git clone https://github.com/AppDynamics/docker-dbwrapper.git)
 (cd ECommerce-Dbwrapper && docker build -t appdynamics/ecommerce-dbwrapper .)
 
 # Build LoadGen container

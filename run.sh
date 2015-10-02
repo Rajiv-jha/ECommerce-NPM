@@ -44,7 +44,7 @@ source env.sh
 
 echo -n "oracle-db: "; docker run --name oracle-db -d -p 1521:1521 appdynamics/ecommerce-oracle
 echo -n "db: "; docker run --name db -e MYSQL_ROOT_PASSWORD=singcontroller -p 3306:3306 -d mysql
-echo -n "jms: "; docker run --name jms -d appdynamics/ecommerce-activemq:
+echo -n "jms: "; docker run --name jms -p 61616:61616 -d appdynamics/ecommerce-activemq:
 sleep 30
 
 echo -n "rds-dbwrapper: "; docker run --name rds-dbwrapper -h rds-dbwrapper \
