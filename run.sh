@@ -47,19 +47,19 @@ echo -n "db: "; docker run --name db -e MYSQL_ROOT_PASSWORD=singcontroller -p 33
 echo -n "jms: "; docker run --name jms -d appdynamics/ecommerce-activemq:
 sleep 30
 
+echo -n "rds-dbwrapper: "; docker run --name rds-dbwrapper -h rds-dbwrapper \
+	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
+  -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
+  -e NODE_NAME=${APP_NAME}_NODE -e APP_NAME=${APP_NAME}-rds-dbwrapper -e TIER_NAME=rds-dbwrapper-Services \
+  -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
+  --link oracle-db:oracle-db -d appdynamics/ecommerce-dbwrapper:$VERSION
+
 echo -n "ws: "; docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
 	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
 	-e NODE_NAME=${APP_NAME}_WS_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=Inventory-Services \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} --link db:db \
-	--link jms:jms --link oracle-db:oracle-db -d appdynamics/ecommerce-tomcat:$VERSION
-
-echo -n "rds-dbwrapper: "; docker run --name rds-dbwrapper -h rds-dbwrapper \
-	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
-        -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
-        -e NODE_NAME=${APP_NAME}_NODE -e APP_NAME=${APP_NAME}-rds-dbwrapper -e TIER_NAME=rds-dbwrapper-Services \
-        -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
-        --link oracle-db:oracle-db -d appdynamics/ecommerce-dbwrapper:$VERSION
+	--link jms:jms --link oracle-db:oracle-db --link rds-dbwrapper:rds-dbwrapper -d appdynamics/ecommerce-tomcat:$VERSION
 
 echo -n "web: "; docker run --name web -h ${APP_NAME}-web -e JVM_ROUTE=route1 -e web=true \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
@@ -75,7 +75,7 @@ echo -n "fulfillment: "; docker run --name fulfillment -h ${APP_NAME}-fulfillmen
 	-e NODE_NAME=Fulfillment -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Services \
 	-e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
-	--link db:db --link ws:ws --link jms:jms --link oracle-db:oracle-db --link rds-dbwrapper:rds-dbwrapper -d appdynamics/ecommerce-tomcat:$VERSION
+	--link db:db --link ws:ws --link jms:jms --link oracle-db:oracle-db -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
 echo -n "fulfillment-client: "; docker run --name fulfillment-client -h ${APP_NAME}-fulfillment-client \
