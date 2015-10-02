@@ -50,7 +50,7 @@ sleep 30
 echo -n "rds-dbwrapper: "; docker run --name rds-dbwrapper -h rds-dbwrapper \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
   -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
-  -e NODE_NAME=${APP_NAME}_NODE -e APP_NAME=${APP_NAME}-rds-dbwrapper -e TIER_NAME=rds-dbwrapper-Services \
+  -e NODE_NAME=${APP_NAME}_NODE -e APP_NAME=${APP_NAME}-Address -e TIER_NAME=Fulfillment-Address-Services \
   -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
   --link oracle-db:oracle-db -d appdynamics/ecommerce-dbwrapper:$VERSION
 
