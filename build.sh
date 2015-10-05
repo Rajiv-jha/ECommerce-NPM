@@ -83,21 +83,21 @@ copyAgents() {
     ${ADRUM_AGENT_INPUT}" 
 
   cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-Tomcat/${APP_SERVER_AGENT}
-  cp -f ${MACHINE_AGENT} ECommerce-Tomcat/${MACHINE_AGENT}
+  cp -f ${MACHINE_AGENT_INPUT} ECommerce-Tomcat/${MACHINE_AGENT}
   echo "Copied Agents for ECommerce-Tomcat"
 
   cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-FulfillmentClient/${APP_SERVER_AGENT}
-  cp -f ${MACHINE_AGENT} ECommerce-FulfillmentClient/${MACHINE_AGENT}
+  cp -f ${MACHINE_AGENT_INPUT} ECommerce-FulfillmentClient/${MACHINE_AGENT}
   echo "Copied Agents for ECommerce-FulfillmentClient"
 
   cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-Synapse/${APP_SERVER_AGENT}
-  cp -f ${MACHINE_AGENT} ECommerce-Synapse/${MACHINE_AGENT}
+  cp -f ${MACHINE_AGENT_INPUT} ECommerce-Synapse/${MACHINE_AGENT}
   echo "Copied Agents for ECommerce-Synapse"
 
   cp -f ${WEB_AGENT_INPUT} ECommerce-LBR/${WEB_SERVER_AGENT}
   cp -f ${ADRUM_AGENT_INPUT} ECommerce-LBR/${ADRUM_ZIP}
   (cd ECommerce-LBR; rm -f adrum*.js; unzip -o ${ADRUM_ZIP}; mv adrum*.js ${JS_AGENT}; rm ${ADRUM_ZIP})
-  cp -f ${MACHINE_AGENT} ECommerce-LBR/${MACHINE_AGENT}
+  cp -f ${MACHINE_AGENT_INPUT} ECommerce-LBR/${MACHINE_AGENT}
   echo "Copied Agents for ECommerce-LBR"
 
   cp -f ${DB_AGENT_INPUT} ECommerce-DBAgent/${DB_AGENT}
@@ -107,12 +107,12 @@ copyAgents() {
   (cd ECommerce-Angular; rm -f adrum*.js; unzip -o ${ADRUM_ZIP}; mv adrum*.js ${JS_AGENT}; rm ${ADRUM_ZIP})
   echo "Copied Agents for ECommerce-Angular"
 
-  cp -f ${APP_SERVER_AGENT} ECommerce-SurveyClient/AppServerAgent.zip
-  cp -f ${MACHINE_AGENT} ECommerce-SurveyClient/${MACHINE_AGENT}
+  cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-SurveyClient/AppServerAgent.zip
+  cp -f ${MACHINE_AGENT_INPUT} ECommerce-SurveyClient/${MACHINE_AGENT}
   echo "Copied Agents for ECommerce-SurveyClient"
 
-  cp -f ${MACHINE_AGENT} ECommerce-Dbwrapper/${MACHINE_AGENT}
-  cp -f ${APP_SERVER_AGENT} ECommerce-Dbwrapper/AppServerAgent.zip
+  cp -f ${MACHINE_AGENT_INPUT} ECommerce-Dbwrapper/${MACHINE_AGENT}
+  cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-Dbwrapper/AppServerAgent.zip
   echo "Copied Agents for ECommerce-Dbwrapper"
 }
 
