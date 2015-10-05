@@ -8,7 +8,7 @@
 #
 # To run the ECommerce demo application, you will also need to:
 # 1. Build and run the ECommerce-Oracle docker container
-#    The Dockerfile is available here (https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Oracle) 
+#    The Dockerfile is available here (https://github.com/Appdynamics/ECommerce-Docker/tree/master/ECommerce-Oracle)
 #    The container requires you to downlaod an appropriate version of the Oracle Database Express Edition 11g Release 2
 #    (http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html)
 # 2. Download and run the official Docker mysql container
@@ -69,12 +69,19 @@ echo -n "db: "; docker run --name db -p 3306:3306 -p 2223:22 -e MYSQL_ROOT_PASSW
 echo -n "jms: "; docker run --name jms -d appdynamics/ecommerce-activemq
 sleep 30
 
+echo -n "rds-dbwrapper: "; docker run --name rds-dbwrapper -h rds-dbwrapper \
+	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
+  -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
+  -e NODE_NAME=${APP_NAME}_NODE -e APP_NAME=${APP_NAME}-Address -e TIER_NAME=Fulfillment-Address-Services \
+  -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
+  --link oracle-db:oracle-db -d appdynamics/ecommerce-dbwrapper:$VERSION
+
 echo -n "ws: "; docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
 	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
 	-e NODE_NAME=${APP_NAME}_WS_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=Inventory-Services \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} --link db:db \
-	--link jms:jms --link oracle-db:oracle-db -d appdynamics/ecommerce-tomcat:$VERSION
+	--link jms:jms --link oracle-db:oracle-db --link rds-dbwrapper:rds-dbwrapper -d appdynamics/ecommerce-tomcat:$VERSION
 
 echo -n "web: "; docker run --name web -h ${APP_NAME}-web -e JVM_ROUTE=route1 -e web=true \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
@@ -110,6 +117,15 @@ echo -n "web1: "; docker run --name web1 -h ${APP_NAME}-web1 -e JVM_ROUTE=route2
 	--link db:db --link oracle-db:oracle-db --link ws:ws --link jms:jms -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
 
+echo -n "customer-survey: "; docker run --name customer-survey -h ${APP_NAME}-customer-survey \
+	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} \
+        -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
+	-e NODE_NAME=${APP_NAME}_Customer-Survey -e APP_NAME=${APP_NAME} -e TIER_NAME=Customer-Survey-Services \
+	-e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} \
+	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
+	-d --link jms:jms --link db:db --link oracle-db:oracle-db --link ws:ws appdynamics/ecommerce-survey-client:$VERSION
+sleep 30
+
 echo -n "lbr: "; docker run --name=lbr -h ${APP_NAME}-lbr \
 	-e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
 	-e APP_NAME=${APP_NAME} -e TIER_NAME=Web-Tier-Services -e NODE_NAME=${APP_NAME}-Apache \
@@ -124,11 +140,17 @@ echo -n "msg: "; docker run --name msg -h ${APP_NAME}-msg -e jms=true \
 	-e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
 	--link db:db --link jms:jms --link oracle-db:oracle-db --link fulfillment:fulfillment -d appdynamics/ecommerce-tomcat:$VERSION
 sleep 30
-
-echo -n "load-gen: "; docker run --name=load-gen --link lbr:lbr -d appdynamics/ecommerce-load
-echo -n "dbagent: "; docker run --name dbagent \
-        -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e ACCESS_KEY=${ACCESS_KEY} \
-        --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION
 echo -n "angular: "; docker run --name angular -h ${APP_NAME}-angular \
 	--link lbr:lbr -p 8080:8080 -d appdynamics/ecommerce-angular:$VERSION
 
+echo -n "faultinjection: "; docker run --name faultinjection -h ${APP_NAME}-faultinjection \
+  	--link lbr:lbr -p 8088:8080 -d appdynamics/ecommerce-faultinjection:$VERSION
+
+#Waiting for all services to be running before being accessed by load-gen
+sleep 30
+
+echo -n "load-gen: "; docker run --name=load-gen --link lbr:lbr --link angular:angular -d appdynamics/ecommerce-load
+
+echo -n "dbagent: "; docker run --name dbagent \
+        -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e ACCESS_KEY=${ACCESS_KEY} \
+        --link db:db --link oracle-db:oracle-db -d appdynamics/ecommerce-dbagent:$VERSION

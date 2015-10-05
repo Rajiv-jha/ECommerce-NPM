@@ -1,5 +1,8 @@
 FROM appdynamics/ecommerce-java:oracle-java7
 
+# set timezone to UTC
+RUN mv /etc/localtime /etc/localtime.bak
+RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
 ENV MQ_HOME /apache-activemq-5.9.0
 #active mq 5.10

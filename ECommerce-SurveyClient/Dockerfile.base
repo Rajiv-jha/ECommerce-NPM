@@ -10,19 +10,17 @@ RUN unzip -q gradle-2.1-bin.zip -d /opt/
 RUN rm gradle-2.1-bin.zip
 ENV GRADLE_HOME /opt/gradle-2.1
 ENV PATH $PATH:$GRADLE_HOME/bin
-ENV CLIENT_HOME /opt/fulfillment-client
+ENV CLIENT_HOME /opt/survey-client
 
 # Copy ECommerce-Java project from build dir
 ADD ECommerce-Java /ECommerce-Java
 
 # Gradle build
-RUN cd /ECommerce-Java; gradle uberJar; mkdir ${CLIENT_HOME}; cp /ECommerce-Java/ECommerce-FulfillmentClient/build/libs/ECommerce-FulfillmentClient.jar ${CLIENT_HOME}; rm -rf /ECommerce-Java;
+RUN cd /ECommerce-Java; gradle uberJar; mkdir ${CLIENT_HOME}; cp /ECommerce-Java/ECommerce-SurveyClient/build/libs/ECommerce-SurveyClient-1.0.jar ${CLIENT_HOME}; rm -rf /ECommerce-Java;
 
 # App Server Agent Install
 ADD AppServerAgent.zip /
-
 RUN unzip -q /AppServerAgent.zip -d ${CLIENT_HOME}/appagent;rm AppServerAgent.zip
-ADD custom-interceptors.xml ${CLIENT_HOME}/appagent/conf/
 
 # (Placeholder - build script will update with zip/rpm directives)
 # Machine Agent Install
@@ -49,3 +47,4 @@ CMD ["/bin/bash","/startup.sh"]
 EXPOSE 80
 EXPOSE 8080
 EXPOSE 8009
+

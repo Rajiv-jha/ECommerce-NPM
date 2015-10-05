@@ -13,7 +13,7 @@
 #    (http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html)
 # 2. Download and run the official Docker mysql container
 #    (https://registry.hub.docker.com/_/mysql/)
- 
+
 #! /bin/bash
 
 # Version-independent agent names used by Dockerfiles 
@@ -38,6 +38,10 @@ cleanUp() {
     (cd ECommerce-LBR && rm -f ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${WEB_SERVER_AGENT} ${JS_AGENT})
     (cd ECommerce-DBAgent && rm -f ${DB_AGENT})
     (cd ECommerce-Angular && rm -f ${JS_AGENT})
+    (cd ECommerce-FaultInjection && rm -rf ECommerce-FaultInjectionUI)
+    (cd ECommerce-SurveyClient && rm -f AppServerAgent.zip ${MACHINE_AGENT})
+    (cd ECommerce-SurveyClient && rm -rf monitors ECommerce-Java)
+    (cd ECommerce-Dbwrapper && rm -rf AppServerAgent.zip ${MACHINE_AGENT} docker-dbwrapper)
 
     # Delete cloned repos from docker build dirs
     (cd ECommerce-Tomcat && rm -rf ECommerce-Java)
@@ -48,7 +52,7 @@ cleanUp() {
 
   # Delete temp copy of machine agent distro
   rm -f ${MACHINE_AGENT}
- 
+
   # Remove dangling images left-over from build
   if [[ `docker images -q --filter "dangling=true"` ]]
   then
@@ -102,6 +106,14 @@ copyAgents() {
   cp -f ${ADRUM_AGENT_INPUT} ECommerce-Angular/${ADRUM_ZIP}
   (cd ECommerce-Angular; rm -f adrum*.js; unzip -o ${ADRUM_ZIP}; mv adrum*.js ${JS_AGENT}; rm ${ADRUM_ZIP})
   echo "Copied Agents for ECommerce-Angular"
+
+  cp -f ${APP_SERVER_AGENT} ECommerce-SurveyClient/AppServerAgent.zip
+  cp -f ${MACHINE_AGENT} ECommerce-SurveyClient/${MACHINE_AGENT}
+  echo "Copied Agents for ECommerce-SurveyClient"
+
+  cp -f ${MACHINE_AGENT} ECommerce-Dbwrapper/${MACHINE_AGENT}
+  cp -f ${APP_SERVER_AGENT} ECommerce-Dbwrapper/AppServerAgent.zip
+  echo "Copied Agents for ECommerce-Dbwrapper"
 }
 
 # Clone ECommerce source projects into docker build dirs
@@ -110,6 +122,9 @@ cloneProjects() {
   (cd ECommerce-FulfillmentClient && rm -rf ECommerce-Java && git clone https://github.com/Appdynamics/ECommerce-Java.git)
   (cd ECommerce-Angular && rm -rf ECommerce-Angular && git clone https://github.com/Appdynamics/ECommerce-Angular.git)
   (cd ECommerce-Load && rm -rf ECommerce-Load && git clone https://github.com/Appdynamics/ECommerce-Load.git)
+  (cd ECommerce-SurveyClient && git clone https://github.com/Appdynamics/ECommerce-Java.git)
+  (cd ECommerce-FaultInjection && git clone https://github.com/Appdynamics/ECommerce-FaultInjectionUI.git)
+  (cd ECommerce-Dbwrapper && git clone https://github.com/AppDynamics/docker-dbwrapper.git)
 }
 
 # Build Docker containers
@@ -134,17 +149,26 @@ buildContainers() {
 
   echo; echo "Building ECommerce-Load..."
   (cd ECommerce-Load && docker build -t appdynamics/ecommerce-load .)
+
+  echo; echo "Building ECommerce-Customer Survey Client..."
+  (cd ECommerce-SurveyClient && docker build -t appdynamics/ecommerce-survey-client .)
+
+  echo; echo "Building ECommerce-FaultInjection..."
+  (cd ECommerce-FaultInjection && docker build -t appdynamics/ecommerce-faultinjection .)
+
+  echo rds-dbwrapper; echo "Build ECommerce-Dbwrapper..."
+  (cd ECommerce-Dbwrapper && docker build -t appdynamics/ecommerce-dbwrapper .)
 }
 
 # Usage information
 if [[ $1 == *--help* ]]
 then
-  echo "Specify agent locations: build.sh 
-          -a <Path to App Server Agent> 
-          -m <Path to Machine Agent> 
-          -d <Path to Database Agent> 
+  echo "Specify agent locations: build.sh
+          -a <Path to App Server Agent>
+          -m <Path to Machine Agent>
+          -d <Path to Database Agent>
           -w <Path to Web Server Agent>
-          -r <Path to JavaScript Agent> 
+          -r <Path to JavaScript Agent>
           -y <Path to Analytics Agent>
           -j <Path to Oracle JDK7>"
   echo "Prompt for agent locations: build.sh"
@@ -153,7 +177,7 @@ fi
 
 # Prompt for location of App Server, Machine and Database Agents
 if  [ $# -eq 0 ]
-then   
+then
   promptForAgents
 
 else
@@ -183,7 +207,7 @@ else
         if [ ! -e ${WEB_AGENT_INPUT} ]; then
           echo "Not found: ${WEB_AGENT_INPUT}"; exit
         fi
-        ;; 
+        ;;
       r)
         ADRUM_AGENT_INPUT=$OPTARG
         if [ ! -e ${ADRUM_AGENT_INPUT} ]; then
@@ -195,7 +219,7 @@ else
 	if [ ! -e ${ANALYTICS_AGENT_INPUT} ]; then
           echo "Not found: ${ANALYTICS_AGENT_INPUT}"; exit         
         fi
-        ;; 
+        ;;
       j)
         ORACLE_JDK7=$OPTARG
         if [ ! -e ${ORACLE_JDK7} ]; then

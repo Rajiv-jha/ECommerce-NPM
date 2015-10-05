@@ -9,7 +9,7 @@ RUN yum -y install ntp
 RUN yum -y install git
 
 # Install Maven
-RUN (cd /usr/local; curl -O -k http://apache.mirrors.ionfish.org//maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz; tar -xzf apache-maven-3.3.3-bin.tar.gz)
+RUN (cd /usr/local; wget --quiet http://www.webhostingjams.com/mirror/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz; tar -xzf apache-maven-3.3.3-bin.tar.gz)
 RUN ln -s /usr/local/apache-maven-3.3.3/bin/mvn /usr/bin/mvn
 
 # Environment vars: Tomcat
@@ -27,13 +27,11 @@ RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERS
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 
 # Build ECommerce-Angular
-ADD ECommerce-Angular /ECommerce-Angular
-RUN (cd ECommerce-Angular; mvn clean install; cp target/AngularUI-1.0-SNAPSHOT.war ${CATALINA_HOME}/webapps/angular.war)
+ADD ECommerce-FaultInjectionUI /ECommerce-FaultInjectionUI
+RUN (cd ECommerce-FaultInjectionUI; mvn clean install; cp target/FaultInjectionUI-0.0.1-SNAPSHOT.war ${CATALINA_HOME}/webapps/faultinjection-ui.war)
 
-ADD update-rum-key.sh /update-rum-key.sh
-ADD adrum.js /adrum.js
+
 ADD startup.sh /startup.sh
-RUN chmod +x /update-rum-key.sh
 RUN chmod +x /startup.sh
 
 WORKDIR /
@@ -43,4 +41,3 @@ CMD "/startup.sh"
 
 EXPOSE 80
 EXPOSE 8080
-EXPOSE 8009

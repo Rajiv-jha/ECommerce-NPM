@@ -14,7 +14,7 @@ fi
 
 if [ -z "${TIER_NAME}" ]; then
 	export TIER_NAME="ECommerce-WebTier";
-fi 
+fi
 
 if [ -z "${NODE_NAME}" ]; then
 	export NODE_NAME="ECommerce-Apache";
@@ -25,5 +25,5 @@ export NATIVE_SDK_HOME=/opt/appdynamics-sdk-native
 
 export AGENT_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME} -Dappdynamics.agent.accountName=${ACCOUNT_NAME%%_*} -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}"
 
-export JAVA_OPTS="-Xmx512m -XX:MaxPermSize=128m"
+export JAVA_OPTS="-Xmx512m -XX:MaxPermSize=256m"
 export MACHINE_AGENT_JAVA_OPTS="-Dappdynamics.sim.enabled=true ${JAVA_OPTS} ${AGENT_OPTS}"
