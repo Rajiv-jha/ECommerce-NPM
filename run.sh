@@ -53,13 +53,13 @@ checkEnv() {
     checkOptional "AWS_SECRET_KEY"
 
     # Controller Host/Port
-    checkRequired "CONTR_HOST" 
-    checkRequired "CONTR_PORT" 
- 
+    checkRequired "CONTR_HOST"
+    checkRequired "CONTR_PORT"
+
     # Analytics config parameters
     checkRequired "ACCOUNT_NAME"
-    checkRequired "ACCESS_KEY" 
-    checkRequired "EVENT_ENDPOINT" 
+    checkRequired "ACCESS_KEY"
+    checkRequired "EVENT_ENDPOINT"
 }
 
 checkEnv
@@ -72,7 +72,7 @@ sleep 30
 echo -n "rds-dbwrapper: "; docker run --name rds-dbwrapper -h rds-dbwrapper \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
   -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
-  -e NODE_NAME=${APP_NAME}_NODE -e APP_NAME=${APP_NAME}-Address -e TIER_NAME=Fulfillment-Address-Services \
+  -e NODE_NAME=${APP_NAME}_NODE -e APP_NAME=${APP_NAME} -e TIER_NAME=Address-Services \
   -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
   --link oracle-db:oracle-db -d appdynamics/ecommerce-dbwrapper:$VERSION
 
@@ -149,7 +149,7 @@ echo -n "faultinjection: "; docker run --name faultinjection -h ${APP_NAME}-faul
 #Waiting for all services to be running before being accessed by load-gen
 sleep 30
 
-echo -n "load-gen: "; docker run --name=load-gen --link lbr:lbr --link angular:angular -d appdynamics/ecommerce-load
+echo -n "load-gen: "; docker run --name=load-gen --link lbr:lbr --link angular:angular -d appdynamics/ecommerce-load:$VERSION
 
 echo -n "dbagent: "; docker run --name dbagent \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e ACCESS_KEY=${ACCESS_KEY} \
