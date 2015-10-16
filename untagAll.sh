@@ -1,24 +1,23 @@
 #! /bin/bash
 
-if [ -z "$1" ]; then
+if [ "$#" -ne 2 ]; then
   read -e -p "Version: " TAG_VERSION;
+  read -e -p "Registry: " REGISTRY;
 else
-        export TAG_VERSION=$1;
+  export TAG_VERSION=$1;
+  export REGISTRY="$2";
 fi
 
-export TOMCAT_LATEST=`docker images | grep 'ecommerce-tomcat' | grep 'latest' | awk '{print $3}'`
-export LBR_LATEST=`docker images | grep 'ecommerce-lbr' | grep 'latest' | awk '{print $3}'`
-export DBAGENT_LATEST=`docker images | grep 'ecommerce-dbagent' | grep 'latest' | awk '{print $3}'`
-export SYNAPSE_LATEST=`docker images | grep 'ecommerce-synapse' | grep 'latest' | awk '{print $3}'`
-export FULFILLMENT_CLIENT_LATEST=`docker images | grep 'ecommerce-fulfillment-client' | grep 'latest' | awk '{print $3}'`
-export ANGULAR_LATEST=`docker images | grep 'ecommerce-angular' | grep 'latest' | awk '{print $3}'`
-
-docker rmi appdynamics/ecommerce-tomcat:$TAG_VERSION
-docker rmi appdynamics/ecommerce-lbr:$TAG_VERSION
-docker rmi appdynamics/ecommerce-dbagent:$TAG_VERSION
-docker rmi appdynamics/ecommerce-synapse:$TAG_VERSION
-docker rmi appdynamics/ecommerce-fulfillment-client:$TAG_VERSION
-docker rmi appdynamics/ecommerce-angular:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce/ecommerce-tomcat:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce/ecommerce-lbr:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce/ecommerce-dbagent:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce/ecommerce-synapse:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce/ecommerce-fulfillment-client:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce/ecommerce-angular:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce/ecommerce-faultinjection:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce/ecommerce-load:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce/ecommerce-survey-client:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce/ecommerce-dbwrapper:$TAG_VERSION
 
 if [[ `docker images -q --filter "dangling=true"` ]]
 then

@@ -9,7 +9,7 @@ RUN yum -y install ntp
 RUN yum -y install git
 
 # Install Maven
-RUN (cd /usr/local; wget --quiet http://www.webhostingjams.com/mirror/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz; tar -xzf apache-maven-3.3.3-bin.tar.gz)
+RUN (cd /usr/local; wget --quiet http://apache.arvixe.com/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz; tar -xzf apache-maven-3.3.3-bin.tar.gz)
 RUN ln -s /usr/local/apache-maven-3.3.3/bin/mvn /usr/bin/mvn
 
 # Environment vars: Tomcat
