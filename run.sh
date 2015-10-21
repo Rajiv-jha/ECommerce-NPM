@@ -77,24 +77,24 @@ echo -n "db: "; docker run --name db -p 3306:3306 -p 2223:22 -e MYSQL_ROOT_PASSW
 echo -n "jms: "; docker run --name jms -d ${DOCKER_REGISTRY}/ecommerce-activemq
 sleep 30
 
-echo -n "rds-dbwrapper: "; docker run --name rds-dbwrapper -h rds-dbwrapper \
+echo -n "dbwrapper: "; docker run --name dbwrapper -h dbwrapper \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
-        -e NODE_NAME=${APP_NAME}_NODE -e APP_NAME=${APP_NAME} -e TIER_NAME=Address-Services \
+        -e NODE_NAME=${APP_NAME}_ADDRESS -e APP_NAME=${APP_NAME} -e TIER_NAME=Address-Services \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
         --link oracle-db:oracle-db -d ${DOCKER_REGISTRY}/ecommerce-dbwrapper:$VERSION
 
 echo -n "ws: "; docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
-        -e NODE_NAME=${APP_NAME}_WS_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=Inventory-Services \
+        -e NODE_NAME=${APP_NAME}_WS -e APP_NAME=$APP_NAME -e TIER_NAME=Inventory-Services \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} --link db:db \
         --link jms:jms --link oracle-db:oracle-db --link rds-dbwrapper:rds-dbwrapper -d ${DOCKER_REGISTRY}/ecommerce-tomcat:$VERSION
 
 echo -n "web: "; docker run --name web -h ${APP_NAME}-web -e JVM_ROUTE=route1 -e web=true \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
-        -e NODE_NAME=${APP_NAME}_WEB1_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
+        -e NODE_NAME=${APP_NAME}_WEB1 -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
         --link db:db --link oracle-db:oracle-db --link ws:ws --link jms:jms -d ${DOCKER_REGISTRY}/ecommerce-tomcat:$VERSION
 sleep 30
@@ -111,7 +111,7 @@ sleep 30
 echo -n "fulfillment-client: "; docker run --name fulfillment-client -h ${APP_NAME}-fulfillment-client \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
-        -e NODE_NAME=FulfillmentClient1 -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Client-Services \
+        -e NODE_NAME=FulfillmentClient -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Client-Services \
         -e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
 -d ${DOCKER_REGISTRY}/ecommerce-fulfillment-client:$VERSION
@@ -120,7 +120,7 @@ sleep 30
 echo -n "web1: "; docker run --name web1 -h ${APP_NAME}-web1 -e JVM_ROUTE=route2 -e web=true \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
-        -e NODE_NAME=${APP_NAME}_WEB2_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
+        -e NODE_NAME=${APP_NAME}_WEB2 -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
         --link db:db --link oracle-db:oracle-db --link ws:ws --link jms:jms -d ${DOCKER_REGISTRY}/ecommerce-tomcat:$VERSION
 sleep 30
@@ -136,7 +136,7 @@ sleep 30
 
 echo -n "lbr: "; docker run --name=lbr -h ${APP_NAME}-lbr \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
-        -e APP_NAME=${APP_NAME} -e TIER_NAME=Web-Tier-Services -e NODE_NAME=${APP_NAME}-Apache \
+        -e APP_NAME=${APP_NAME} -e TIER_NAME=Web-Tier-Services -e NODE_NAME=${APP_NAME}_Apache \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
         --link web:web --link web1:web1 -p 80:80 -d ${DOCKER_REGISTRY}/ecommerce-lbr:$VERSION
