@@ -7,6 +7,7 @@ RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
 RUN yum -y install tar
 RUN yum -y install ntp
 RUN yum -y install git
+RUN yum -y install wget
 
 # Install Maven
 RUN (cd /usr/local; wget --quiet http://apache.arvixe.com/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz; tar -xzf apache-maven-3.3.3-bin.tar.gz)
