@@ -14,7 +14,8 @@ RUN /etc/init.d/ssh start
 # Download RPM manually from http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/
 RUN apt-get install -y alien libaio1 unixodbc zip
 ADD oracle-xe-11.2.0-1.0.x86_64.rpm /
-RUN alien --scripts -d /oracle-xe-11.2.0-1.0.x86_64.rpm
+# NOTE: this command can take a long time to generate the .deb package  
+RUN alien --scripts -v -d /oracle-xe-11.2.0-1.0.x86_64.rpm
 
 ADD chkconfig /sbin/chkconfig
 ADD init.ora /
