@@ -77,7 +77,7 @@ echo -n "db: "; docker run --name db -p 3306:3306 -p 2223:22 -e MYSQL_ROOT_PASSW
 echo -n "jms: "; docker run --name jms -d ${DOCKER_REGISTRY}/ecommerce-activemq
 sleep 30
 
-echo -n "dbwrapper: "; docker run --name dbwrapper -h dbwrapper \
+echo -n "dbwrapper: "; docker run --name rds-dbwrapper -h rds-dbwrapper \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
         -e NODE_NAME=${APP_NAME}_ADDRESS -e APP_NAME=${APP_NAME} -e TIER_NAME=Address-Services \
