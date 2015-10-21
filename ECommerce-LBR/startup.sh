@@ -2,7 +2,7 @@
 
 # Read env vars for Controller, Port, App, Tier and Node names
 source ${NATIVE_HOME}/env.sh
-
+sleep 60
 /etc/init.d/httpd24-httpd stop
 
 ln -s ${NATIVE_HOME}/WebServerAgent/Apache/libmod_appdynamics.so $HTTPD24/modules/mod_appdynamics.so
