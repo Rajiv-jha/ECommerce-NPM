@@ -20,7 +20,7 @@ sed -i "s/<your_access_key>/${ACCESS_KEY}/g" $HTTPD_24/02-appd.conf
 mv ${HTTPD_24}/02-appd.conf ${HTTPD_24}/conf.modules.d/02-appd.conf
 
 # Replacing CDN endpoint for early access to JS Agent
-# sed -i "s/cdn.appdynamics.com/s3-us-west-1.amazonaws.com\/jsagent-trunk.appdynamics.com/g" ${HTTPD_DOC_ROOT}/adrum.js
+sed -i "s/cdn.appdynamics.com/s3-us-west-1.amazonaws.com\/jsagent-trunk.appdynamics.com/g" ${HTTPD_DOC_ROOT}/adrum.js
 
 # Configure Controller, Port, App, Tier and Node for Proxy Agent
 # Account Name and Access Key are required for 4.1 Agents
