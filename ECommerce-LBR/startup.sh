@@ -4,7 +4,7 @@
 source ${NATIVE_HOME}/env.sh
 /etc/init.d/httpd24-httpd stop
 
-ln -s ${NATIVE_HOME}/WebServerAgent/Apache/libmod_appdynamics.so $HTTPD24/modules/mod_appdynamics.so
+ln -s ${NATIVE_HOME}/WebServerAgent/Apache/libmod_appdynamics.so $HTTPD_24/modules/mod_appdynamics.so
 
 # Set Apache ServerName using container's hostname
 echo "ServerName `hostname`:80" >> $HTTPD24/conf/httpd.conf
