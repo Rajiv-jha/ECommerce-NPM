@@ -155,10 +155,10 @@ echo -n "faultinjection: "; docker run --name faultinjection -h ${APP_NAME}-faul
         --link lbr:lbr -p 8088:8080 -d ${DOCKER_REGISTRY}/ecommerce-faultinjection:$VERSION
 
 # Wait for all services to be running before starting load-gen
-sleep 30
+sleep 60
 
 echo -n "load-gen: "; docker run --name=load-gen --link lbr:lbr --link angular:angular -d ${DOCKER_REGISTRY}/ecommerce-load:$VERSION
 
-echo -n "dbagent: "; docker run --name dbagent \
+echo -n "dbagent: "; docker run --name dbagent -h ${APP_NAME}-dbagent \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e ACCESS_KEY=${ACCESS_KEY} \
         --link db:db --link oracle-db:oracle-db -d ${DOCKER_REGISTRY}/ecommerce-dbagent:$VERSION
