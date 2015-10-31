@@ -23,5 +23,5 @@ JAVA_OPTS="${JAVA_OPTS} -Xmx512m -XX:MaxPermSize=128m -Duser.timezone=UTC";
 echo $JAVA_OPTS;
 
 cd ${CATALINA_HOME}/bin;
-java ${JAVA_OPTS} -Ddbagent.name=$(hostname)-dbagent -jar ${AGENT_HOME}/db-agent.jar 
+java ${JAVA_OPTS} -Ddbagent.name=$(hostname) -jar ${AGENT_HOME}/db-agent.jar 
 cd ${CWD}
