@@ -6,6 +6,7 @@ RUN mv /etc/localtime /etc/localtime.bak
 RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
 RUN yum -y install unzip
+RUN yum -y install openssh-server openssh-clients
 
 #Agent Install
 ENV AGENT_HOME /dbagent
