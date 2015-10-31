@@ -15,6 +15,8 @@ RUN apt-get -y install openssh-server
 RUN mkdir /var/run/sshd
 RUN echo 'root:welcome1' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
 # Configure MySQL
 RUN sed -i '/^bind-address/c\bind-address=0.0.0.0' /etc/mysql/my.cnf
