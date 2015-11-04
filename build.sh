@@ -118,46 +118,46 @@ copyAgents() {
 
 # Clone ECommerce source projects into docker build dirs
 cloneProjects() {
-  (cd ECommerce-Tomcat && rm -rf ECommerce-Java && git clone https://github.com/Appdynamics/ECommerce-Java.git)
-  (cd ECommerce-FulfillmentClient && rm -rf ECommerce-Java && git clone https://github.com/Appdynamics/ECommerce-Java.git)
-  (cd ECommerce-Angular && rm -rf ECommerce-Angular && git clone https://github.com/Appdynamics/ECommerce-Angular.git)
-  (cd ECommerce-Load && rm -rf ECommerce-Load && git clone https://github.com/Appdynamics/ECommerce-Load.git)
-  (cd ECommerce-SurveyClient && git clone https://github.com/Appdynamics/ECommerce-Java.git)
-  (cd ECommerce-FaultInjection && git clone https://github.com/Appdynamics/ECommerce-FaultInjectionUI.git)
-  (cd ECommerce-Dbwrapper && git clone https://github.com/AppDynamics/docker-dbwrapper.git)
+  (cd ECommerce-Tomcat && rm -rf ECommerce-Java && git clone https://github.com/Appdynamics/ECommerce-Java.git) || exit $?
+  (cd ECommerce-FulfillmentClient && rm -rf ECommerce-Java && git clone https://github.com/Appdynamics/ECommerce-Java.git) || exit $?
+  (cd ECommerce-Angular && rm -rf ECommerce-Angular && git clone https://github.com/Appdynamics/ECommerce-Angular.git) || exit $?
+  (cd ECommerce-Load && rm -rf ECommerce-Load && git clone https://github.com/Appdynamics/ECommerce-Load.git) || exit $?
+  (cd ECommerce-SurveyClient && git clone https://github.com/Appdynamics/ECommerce-Java.git) || exit $?
+  (cd ECommerce-FaultInjection && git clone https://github.com/Appdynamics/ECommerce-FaultInjectionUI.git) || exit $?
+  (cd ECommerce-Dbwrapper && git clone https://github.com/AppDynamics/docker-dbwrapper.git) || exit $?
 }
 
 # Build Docker containers
 buildContainers() {
   echo; echo "Building ECommerce-Tomcat..." 
-  (cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat .)
+  (cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat .) || exit $?
 
   echo; echo "Building ECommerce-FulfillmentClient..."
-  (cd ECommerce-FulfillmentClient && docker build -t appdynamics/ecommerce-fulfillment-client .)
+  (cd ECommerce-FulfillmentClient && docker build -t appdynamics/ecommerce-fulfillment-client .) || exit $?
 
   echo; echo "Building ECommerce-Synapse..."
-  (cd ECommerce-Synapse && docker build -t appdynamics/ecommerce-synapse .)
+  (cd ECommerce-Synapse && docker build -t appdynamics/ecommerce-synapse .) || exit $?
 
   echo; echo "Building ECommerce-DBAgent..."
-  (cd ECommerce-DBAgent && docker build -t appdynamics/ecommerce-dbagent .)
+  (cd ECommerce-DBAgent && docker build -t appdynamics/ecommerce-dbagent .) || exit $?
 
   echo; echo "Building ECommerce-LBR..."
-  (cd ECommerce-LBR && docker build -t appdynamics/ecommerce-lbr .)
+  (cd ECommerce-LBR && docker build -t appdynamics/ecommerce-lbr .) || exit $?
 
   echo; echo "Building ECommerce-Angular..."
-  (cd ECommerce-Angular && docker build -t appdynamics/ecommerce-angular .)
+  (cd ECommerce-Angular && docker build -t appdynamics/ecommerce-angular .) || exit $?
 
   echo; echo "Building ECommerce-Load..."
-  (cd ECommerce-Load && docker build -t appdynamics/ecommerce-load .)
+  (cd ECommerce-Load && docker build -t appdynamics/ecommerce-load .) || exit $?
 
   echo; echo "Building ECommerce-Customer Survey Client..."
-  (cd ECommerce-SurveyClient && docker build -t appdynamics/ecommerce-survey-client .)
+  (cd ECommerce-SurveyClient && docker build -t appdynamics/ecommerce-survey-client .) || exit $?
 
   echo; echo "Building ECommerce-FaultInjection..."
-  (cd ECommerce-FaultInjection && docker build -t appdynamics/ecommerce-faultinjection .)
+  (cd ECommerce-FaultInjection && docker build -t appdynamics/ecommerce-faultinjection .) || exit $?
 
   echo rds-dbwrapper; echo "Build ECommerce-Dbwrapper..."
-  (cd ECommerce-Dbwrapper && docker build -t appdynamics/ecommerce-dbwrapper .)
+  (cd ECommerce-Dbwrapper && docker build -t appdynamics/ecommerce-dbwrapper .) || exit $?
 }
 
 # Usage information
@@ -172,7 +172,7 @@ then
           -y <Path to Analytics Agent>
           -j <Path to Oracle JDK7>"
   echo "Prompt for agent locations: build.sh"
-  exit
+  exit 0
 fi
 
 # Prompt for location of App Server, Machine and Database Agents
@@ -187,43 +187,43 @@ else
       a)
         APP_SERVER_AGENT_INPUT=$OPTARG
         if [ ! -e ${APP_SERVER_AGENT_INPUT} ]; then
-          echo "Not found: ${APP_SERVER_AGENT_INPUT}"; exit
+          echo "Not found: ${APP_SERVER_AGENT_INPUT}"; exit 1
         fi
         ;;
       m)
         export MACHINE_AGENT_INPUT=$OPTARG
         if [ ! -e ${MACHINE_AGENT_INPUT} ]; then
-          echo "Not found: ${MACHINE_AGENT_INPUT}"; exit
+          echo "Not found: ${MACHINE_AGENT_INPUT}"; exit 1
         fi
         ;;
       d)
         DB_AGENT_INPUT=$OPTARG
         if [ ! -e ${DB_AGENT_INPUT} ]; then
-          echo "Not found: ${DB_AGENT_INPUT}"; exit
+          echo "Not found: ${DB_AGENT_INPUT}"; exit 1
         fi
         ;;
       w)
         WEB_AGENT_INPUT=$OPTARG
         if [ ! -e ${WEB_AGENT_INPUT} ]; then
-          echo "Not found: ${WEB_AGENT_INPUT}"; exit
+          echo "Not found: ${WEB_AGENT_INPUT}"; exit 1
         fi
         ;;
       r)
         ADRUM_AGENT_INPUT=$OPTARG
         if [ ! -e ${ADRUM_AGENT_INPUT} ]; then
-          echo "Not found: ${ADRUM_AGENT_INPUT}"; exit
+          echo "Not found: ${ADRUM_AGENT_INPUT}"; exit 1
         fi
         ;;
       y)
         ANALYTICS_AGENT_INPUT=$OPTARG 
 	if [ ! -e ${ANALYTICS_AGENT_INPUT} ]; then
-          echo "Not found: ${ANALYTICS_AGENT_INPUT}"; exit         
+          echo "Not found: ${ANALYTICS_AGENT_INPUT}"; exit 1        
         fi
         ;;
       j)
         ORACLE_JDK7=$OPTARG
         if [ ! -e ${ORACLE_JDK7} ]; then
-          echo "Not found: ${ORACLE_JDK7}"; exit
+          echo "Not found: ${ORACLE_JDK7}"; exit 1
         fi
         ;; 
       p)
@@ -238,23 +238,23 @@ else
 fi
 
 if [ -z ${APP_SERVER_AGENT_INPUT} ]; then
-    echo "Error: App Server Agent is required"; exit
+    echo "Error: App Server Agent is required"; exit 1
 fi
 
 if [ -z ${MACHINE_AGENT_INPUT} ]; then
-    echo "Error: Machine Agent is required"; exit
+    echo "Error: Machine Agent is required"; exit 1
 fi
 
 if [ -z ${DB_AGENT_INPUT} ]; then
-    echo "Error: Database Agent is required"; exit
+    echo "Error: Database Agent is required"; exit 1
 fi
 
 if [ -z ${WEB_AGENT_INPUT} ]; then
-    echo "Error: Web Server Agent is required"; exit
+    echo "Error: Web Server Agent is required"; exit 1
 fi
 
 if [ -z ${ADRUM_AGENT_INPUT} ]; then
-    echo "Error: Javascript Agent is required"; exit
+    echo "Error: Javascript Agent is required"; exit 1
 fi
 
 # Re-build ecommerce-java base image with specified JDK7
@@ -267,10 +267,10 @@ else
         echo "Building ECommerce-Java base image..."
         echo "Using JDK: ${ORACLE_JDK7}"
         cp -f ${ORACLE_JDK7} ECommerce-Java/jdk-linux-x64.rpm
-        (cd ECommerce-Java; docker build -t appdynamics/ecommerce-java:oracle-java7 .)
+        (cd ECommerce-Java; docker build -t appdynamics/ecommerce-java:oracle-java7 .) || exit $?
         echo
     else
-        echo "Error: Oracle JDK7 (jdk-7uXX-linux-x64.rpm) is required"; exit
+        echo "Error: Oracle JDK7 (jdk-7uXX-linux-x64.rpm) is required"; exit 1
     fi
 fi
 
@@ -298,8 +298,7 @@ then
     cp -f ${MACHINE_AGENT_INPUT} machineagent.rpm
     MACHINE_AGENT="machineagent.rpm"
 else
-    echo "Machine agent file extension not recognized"
-    exit
+    echo "Machine agent file extension not recognized"; exit 1
 fi
 
 copyAgents
