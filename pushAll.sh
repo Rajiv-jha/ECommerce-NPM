@@ -7,16 +7,15 @@ if [ "$#" -eq 1 ]; then
     echo Pushing:  $i:${TAG_VERSION}
     docker push $i:$TAG_VERSION
   done
-elif [ "$#" -eq 3 ]; then
+elif [ "$#" -eq 2 ]; then
   export TAG_VERSION=$1;
   export REGISTRY=$2;
-  export APP_NAME=$3;
-  echo "Pushing images with tag: ${TAG_VERSION} to ${REGISTRY}/${APP_NAME}"
-  for i in $(docker images | grep ${REGISTRY} | grep ${APP_NAME} | grep $TAG_VERSION | awk {'print $1'}); do
+  echo "Pushing images with tag: ${TAG_VERSION} to ${REGISTRY}"
+  for i in $(docker images | grep ${REGISTRY} | grep $TAG_VERSION | awk {'print $1'}); do
     echo Pushing:  $i:${TAG_VERSION}
     docker push $i:$TAG_VERSION
   done
 else
-  echo "Usage: pushAll.sh <tag> [<registry> <application>]"
+  echo "Usage: pushAll.sh <tag> [<registry>]"
   exit
 fi
