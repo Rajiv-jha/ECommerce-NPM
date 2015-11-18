@@ -8,16 +8,16 @@ else
   export REGISTRY="$2";
 fi
 
-docker rmi ${REGISTRY}/ecommerce/ecommerce-tomcat:$TAG_VERSION
-docker rmi ${REGISTRY}/ecommerce/ecommerce-lbr:$TAG_VERSION
-docker rmi ${REGISTRY}/ecommerce/ecommerce-dbagent:$TAG_VERSION
-docker rmi ${REGISTRY}/ecommerce/ecommerce-synapse:$TAG_VERSION
-docker rmi ${REGISTRY}/ecommerce/ecommerce-fulfillment-client:$TAG_VERSION
-docker rmi ${REGISTRY}/ecommerce/ecommerce-angular:$TAG_VERSION
-docker rmi ${REGISTRY}/ecommerce/ecommerce-faultinjection:$TAG_VERSION
-docker rmi ${REGISTRY}/ecommerce/ecommerce-load:$TAG_VERSION
-docker rmi ${REGISTRY}/ecommerce/ecommerce-survey-client:$TAG_VERSION
-docker rmi ${REGISTRY}/ecommerce/ecommerce-dbwrapper:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce-tomcat:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce-lbr:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce-dbagent:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce-synapse:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce-fulfillment-client:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce-angular:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce-faultinjection:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce-load:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce-survey-client:$TAG_VERSION
+docker rmi ${REGISTRY}/ecommerce-dbwrapper:$TAG_VERSION
 
 if [[ `docker images -q --filter "dangling=true"` ]]
 then
