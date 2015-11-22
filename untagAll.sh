@@ -1,11 +1,14 @@
 #! /bin/bash
 
-if [ "$#" -ne 2 ]; then
-  read -e -p "Version: " TAG_VERSION;
-  read -e -p "Registry: " REGISTRY;
-else
+if [ "$#" -eq 1 ]; then
+  export TAG_VERSION=$1
+  export REGISTRY="appdynamics"
+elif [ "$#" -eq 2 ]; then
   export TAG_VERSION=$1;
-  export REGISTRY="$2";
+  export REGISTRY=$2;
+else
+  echo "Usage: tagAll.sh <tag> [<registry>]"
+  exit
 fi
 
 docker rmi ${REGISTRY}/ecommerce-tomcat:$TAG_VERSION
