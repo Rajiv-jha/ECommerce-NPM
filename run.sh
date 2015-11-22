@@ -75,7 +75,7 @@ checkEnv
 echo -n "oracle-db: "; docker run --name oracle-db -d -p 1521:1521 -p 2222:22 ${DOCKER_REGISTRY}/ecommerce-oracle
 echo -n "db: "; docker run --name db -p 3306:3306 -p 2223:22 -e MYSQL_ROOT_PASSWORD=singcontroller -d ${DOCKER_REGISTRY}/ecommerce-mysql
 echo -n "jms: "; docker run --name jms -d ${DOCKER_REGISTRY}/ecommerce-activemq
-sleep 30
+sleep 60
 
 echo -n "dbwrapper: "; docker run --name rds-dbwrapper -h rds-dbwrapper \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
@@ -97,7 +97,7 @@ echo -n "web: "; docker run --name web -h ${APP_NAME}-web -e JVM_ROUTE=route1 -e
         -e NODE_NAME=${APP_NAME}_WEB1 -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
         --link db:db --link oracle-db:oracle-db --link ws:ws --link jms:jms -d ${DOCKER_REGISTRY}/ecommerce-tomcat:$VERSION
-sleep 30
+sleep 60
 
 echo -n "fulfillment: "; docker run --name fulfillment -h ${APP_NAME}-fulfillment -e web=true \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
@@ -106,7 +106,7 @@ echo -n "fulfillment: "; docker run --name fulfillment -h ${APP_NAME}-fulfillmen
         -e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
         --link db:db --link ws:ws --link jms:jms --link oracle-db:oracle-db -d ${DOCKER_REGISTRY}/ecommerce-tomcat:$VERSION
-sleep 30
+sleep 60
 
 echo -n "fulfillment-client: "; docker run --name fulfillment-client -h ${APP_NAME}-fulfillment-client \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} \
@@ -115,7 +115,8 @@ echo -n "fulfillment-client: "; docker run --name fulfillment-client -h ${APP_NA
         -e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
 -d ${DOCKER_REGISTRY}/ecommerce-fulfillment-client:$VERSION
-sleep 30
+
+sleep 60
 
 echo -n "web1: "; docker run --name web1 -h ${APP_NAME}-web1 -e JVM_ROUTE=route2 -e web=true \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
@@ -123,7 +124,7 @@ echo -n "web1: "; docker run --name web1 -h ${APP_NAME}-web1 -e JVM_ROUTE=route2
         -e NODE_NAME=${APP_NAME}_WEB2 -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
         --link db:db --link oracle-db:oracle-db --link ws:ws --link jms:jms -d ${DOCKER_REGISTRY}/ecommerce-tomcat:$VERSION
-sleep 30
+sleep 60
 
 echo -n "customer-survey: "; docker run --name customer-survey -h ${APP_NAME}-customer-survey \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} \
@@ -132,7 +133,7 @@ echo -n "customer-survey: "; docker run --name customer-survey -h ${APP_NAME}-cu
         -e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_KEY=${AWS_SECRET_KEY} \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
         -d --link jms:jms --link db:db --link oracle-db:oracle-db --link ws:ws ${DOCKER_REGISTRY}/ecommerce-survey-client:$VERSION
-sleep 30
+sleep 60
 
 echo -n "lbr: "; docker run --name=lbr -h ${APP_NAME}-lbr \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} \
@@ -147,7 +148,9 @@ echo -n "msg: "; docker run --name msg -h ${APP_NAME}-msg -e jms=true \
         -e NODE_NAME=${APP_NAME}_JMS_NODE -e APP_NAME=$APP_NAME -e TIER_NAME=Order-Processing-Services \
         -e SIM_HIERARCHY_1=${SIM_HIERARCHY_1} -e SIM_HIERARCHY_2=${SIM_HIERARCHY_2} \
         --link db:db --link jms:jms --link oracle-db:oracle-db --link fulfillment:fulfillment -d ${DOCKER_REGISTRY}/ecommerce-tomcat:$VERSION
-sleep 30
+
+sleep 60
+
 echo -n "angular: "; docker run --name angular -h ${APP_NAME}-angular \
         --link lbr:lbr -p 8080:8080 -d ${DOCKER_REGISTRY}/ecommerce-angular:$VERSION
 
