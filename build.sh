@@ -41,7 +41,7 @@ cleanUp() {
     (cd ECommerce-FaultInjection && rm -rf ECommerce-FaultInjectionUI)
     (cd ECommerce-SurveyClient && rm -f AppServerAgent.zip ${MACHINE_AGENT})
     (cd ECommerce-SurveyClient && rm -rf monitors ECommerce-Java)
-    (cd ECommerce-Dbwrapper && rm -rf AppServerAgent.zip ${MACHINE_AGENT} docker-dbwrapper)
+    (cd ECommerce-AddressService && rm -rf AppServerAgent.zip ${MACHINE_AGENT} docker-dbwrapper)
 
     # Delete cloned repos from docker build dirs
     (cd ECommerce-Tomcat && rm -rf ECommerce-Java)
@@ -111,9 +111,9 @@ copyAgents() {
   cp -f ${MACHINE_AGENT_INPUT} ECommerce-SurveyClient/${MACHINE_AGENT}
   echo "Copied Agents for ECommerce-SurveyClient"
 
-  cp -f ${MACHINE_AGENT_INPUT} ECommerce-Dbwrapper/${MACHINE_AGENT}
-  cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-Dbwrapper/AppServerAgent.zip
-  echo "Copied Agents for ECommerce-Dbwrapper"
+  cp -f ${MACHINE_AGENT_INPUT} ECommerce-AddressService/${MACHINE_AGENT}
+  cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-AddressService/AppServerAgent.zip
+  echo "Copied Agents for ECommerce-AddressService"
 }
 
 # Clone ECommerce source projects into docker build dirs
@@ -124,7 +124,7 @@ cloneProjects() {
   (cd ECommerce-Load && rm -rf ECommerce-Load && git clone https://github.com/Appdynamics/ECommerce-Load.git) || exit $?
   (cd ECommerce-SurveyClient && git clone https://github.com/Appdynamics/ECommerce-Java.git) || exit $?
   (cd ECommerce-FaultInjection && git clone https://github.com/Appdynamics/ECommerce-FaultInjectionUI.git) || exit $?
-  (cd ECommerce-Dbwrapper && git clone https://github.com/AppDynamics/docker-dbwrapper.git) || exit $?
+  (cd ECommerce-AddressService && git clone https://github.com/AppDynamics/docker-dbwrapper.git) || exit $?
 }
 
 # Build Docker containers
@@ -156,8 +156,8 @@ buildContainers() {
   echo; echo "Building ECommerce-FaultInjection..."
   (cd ECommerce-FaultInjection && docker build -t appdynamics/ecommerce-faultinjection .) || exit $?
 
-  echo rds-dbwrapper; echo "Build ECommerce-Dbwrapper..."
-  (cd ECommerce-Dbwrapper && docker build -t appdynamics/ecommerce-dbwrapper .) || exit $?
+  echo rds-dbwrapper; echo "Build ECommerce-AddressService..."
+  (cd ECommerce-AddressService && docker build -t appdynamics/ecommerce-dbwrapper .) || exit $?
 }
 
 # Usage information
