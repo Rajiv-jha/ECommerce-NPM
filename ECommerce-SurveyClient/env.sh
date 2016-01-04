@@ -20,34 +20,34 @@ if [ -z "JVM_ROUTE" ]; then
 	export JVM_ROUTE="route1";
 fi
 
-if [ -z "${EVENT_ENDPOINT}" ]; then
-        export EVENT_ENDPOINT="eumcloud.demo.appdynamics.com:9080";
-fi
-
-if [ -z "${ACCOUNT_NAME}" ]; then
-	export ACCOUNT_NAME="analytics-customer1";
-fi
-
-if [ -z "${ACCESS_KEY}" ]; then
-	export ACCESS_KEY="your-account-access-key";
-fi
-
 if [ -z "${NODE_NAME}" ]; then
-	export NODE_NAME="Node_8000";
+	export NODE_NAME="ECommerce-SURVEY";
 fi
 
 if [ -z "${TIER_NAME}" ]; then
-	export TIER_NAME="Customer-Survey-Client";
+	export TIER_NAME="Customer-Survey";
 fi                
 
+if [ -z "${MACHINE_PATH_1}" ]; then
+        export MACHINE_PATH_1="ECommerce";
+fi
 
+if [ -z "${MACHINE_PATH_2}" ]; then
+        export MACHINE_PATH_2="Customer-Survey";
+fi
 
 # Set in Dockerfile based on installed App Server Agent version: _VERSION_STRING will be replaced during build
 export VERSION_STRING="_VERSION_STRING"
 
 export JAVA_OPTS="-Xmx512m -XX:MaxPermSize=128m"
-export APPD_JAVA_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME} -Dappdynamics.agent.accountName=${ACCOUNT_NAME%%_*} -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}" 
-export MACHINE_AGENT_JAVA_OPTS="-Dappdynamics.sim.enabled=true ${JAVA_OPTS} ${APPD_JAVA_OPTS}"
-export APP_AGENT_JAVA_OPTS="${JAVA_OPTS} ${APPD_JAVA_OPTS}"
 export JMX_OPTS="-Dcom.sun.management.jmxremote.port=8888  -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
 
+# Uncomment these lines to use system proeprties to override controller-info.xml settings
+export APPD_CONTROLLER_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT}"
+export APPD_APPLICATION_OPTS="-Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}"
+export APPD_ACCOUNT_OPTS="-Dappdynamics.agent.accountName=${ACCOUNT_NAME%%_*} -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}"
+#export APPD_HOSTID_OPTS="-DuniqueHostId=${HOSTNAME}"
+export APPD_SIM_OPTS="-Dappdynamics.sim.enabled=true"
+
+export MACHINE_AGENT_JAVA_OPTS="${JAVA_OPTS} ${APPD_CONTROLLER_OPTS} ${APPD_ACCOUNT_OPTS} ${APPD_HOSTID_OPTS} ${APPD_SIM_OPTS}"
+export APP_AGENT_JAVA_OPTS="${JAVA_OPTS} ${APPD_CONTROLLER_OPTS} ${APPD_ACCOUNT_OPTS} ${APPD_APPLICATION_OPTS} ${APPD_HOSTID_OPTS} -DjvmRoute=${JVM_ROUTE} -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager";

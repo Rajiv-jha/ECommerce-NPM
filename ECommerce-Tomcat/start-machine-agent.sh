@@ -5,29 +5,39 @@ source /env.sh
 echo "Configuring Machine Agent Analytics properties..."
 /configAnalytics.sh
 
-echo "Configuring Machine Agent:
-  Controller: ${CONTROLLER}
-  Port: ${APPD_PORT}
-  App: ${APP_NAME}
-  Tier: ${TIER_NAME}
-  Node: ${NODE_NAME}
-  SIM Hierarchy: ${SIM_HIERARCHY_1}/${SIM_HIERARCHY_2}"
-
-CONTROLLER_INFO_SETTINGS="s/CONTROLLERHOST/${CONTROLLER}/g;
-s/CONTROLLERPORT/${APPD_PORT}/g;
-s/APP/${APP_NAME}/g;s/TIER/${TIER_NAME}/g;
-s/NODE/${NODE_NAME}/g;
-s/FOO/${SIM_HIERARCHY_1}/g;
-s/BAR/${SIM_HIERARCHY_2}/g;
-s/BAZ/${HOSTNAME}/g;
-s/ACCOUNTACCESSKEY/${ACCESS_KEY}/g"
-
 if [ -e /etc/init.d/appdynamics-machine-agent ]
 then
-  sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > /etc/appdynamics/machine-agent/controller-info.xml
+  # Using RPM installer
+  AGENT_CONFIG=/etc/appdynamics/machine-agent/controller-info.xml
 else
-  sed -e "${CONTROLLER_INFO_SETTINGS}" /controller-info.xml > ${MACHINE_AGENT_HOME}/conf/controller-info.xml
+  # Using zip installer
+  AGENT_CONFIG=${MACHINE_AGENT_HOME}/conf/controller-info.xml
 fi
+
+# Uncomment to configure Agent using controller-info.xml
+echo "Configuring Agent properties: ${AGENT_CONFIG}"
+sed -i "s/<controller-host>/<controller-host>${CONTROLLER}/g" ${AGENT_CONFIG}
+echo " controller-host: ${CONTROLLER}"
+sed -i "s/<controller-port>/<controller-port>${APPD_PORT}/g" ${AGENT_CONFIG}
+echo " controller-port: ${APPD_PORT}"
+sed -i "s/<account-access-key>/<account-access-key>${ACCESS_KEY}/g" ${AGENT_CONFIG}
+echo " account-access-key: ${ACCESS_KEY}"
+sed -i "s/<application-name>/<application-name>${APP_NAME}/g" ${AGENT_CONFIG}
+echo " application-name: ${APP_NAME}"
+sed -i "s/<tier-name>/<tier-name>${TIER_NAME}/g" ${AGENT_CONFIG}
+echo " tier-name: ${TIER_NAME}"
+sed -i "s/<node-name>/<node-name>${NODE_NAME}/g" ${AGENT_CONFIG}
+echo " node-name: ${NODE_NAME}"
+sed -i "s/<sim-enabled>false/<sim-enabled>true/g" ${AGENT_CONFIG}
+echo " sim-enabled: true"
+#sed -i "s/<unique-host-id>/<unique-host-id>${UNIQUE_HOST_ID}/g" ${AGENT_CONFIG}
+#echo " unique-host-id: ${UNIQUE_HOST_ID}"
+sed -i "s/<machine-path>/<machine-path>${MACHINE_PATH_1}|${MACHINE_PATH_2}/g" ${AGENT_CONFIG}
+echo " machine-path: ${MACHINE_PATH_1}|${MACHINE_PATH_2}"
+
+# Uncomment for multi-tenant controllers
+# sed -i "s/<account-name>/<account-name>${ACCOUNT_NAME%%_*}/g" ${AGENT_CONFIG}
+# echo " account-name: ${ACCOUNT_NAME%%_*}/g"
 
 echo "Starting Machine Agent..."
 

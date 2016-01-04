@@ -2,5 +2,4 @@
 ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
 ADD machineagent.rpm /
 RUN rpm -i /machineagent.rpm; rm /machineagent.rpm
-ADD controller-info.xml /
 RUN echo "export MACHINE_AGENT_HOME=${MACHINE_AGENT_HOME}" >> /env.sh

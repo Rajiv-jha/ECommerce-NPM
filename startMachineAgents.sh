@@ -16,5 +16,8 @@ echo "Starting machine agent on ws container..."; docker exec ${EXEC_ARGS} ws /s
 echo "Starting machine agent on msg container..."; docker exec ${EXEC_ARGS} msg /start-machine-agent.sh; echo "Done"
 echo "Starting machine agent on fulfillment container..."; docker exec ${EXEC_ARGS} fulfillment /start-machine-agent.sh; echo "Done"
 echo "Starting machine agent on fulfillment-client container..."; docker exec ${EXEC_ARGS} fulfillment-client /start-machine-agent.sh; echo "Done"
+echo "Starting machine agent on rds-dbwrapper container..."; docker exec ${EXEC_ARGS} rds-dbwrapper /start-machine-agent.sh; echo "Done"
+echo "Starting machine agent on customer-survey container..."; docker exec ${EXEC_ARGS} customer-survey /start-machine-agent.sh; echo "Done"
+
 sleep 60
 echo "Starting machine agent on lbr container..."; docker exec ${EXEC_ARGS} lbr /start-machine-agent.sh; echo "Done"

@@ -20,10 +20,24 @@ if [ -z "${NODE_NAME}" ]; then
 	export NODE_NAME="ECommerce-Apache";
 fi
 
+if [ -z "${MACHINE_PATH_1}" ]; then
+        export MACHINE_PATH_1="ECommerce";
+fi
+
+if [ -z "${MACHINE_PATH_2}" ]; then
+        export MACHINE_PATH_2="WebTier-Apache";
+fi
+
 export HTTPD_24=/opt/rh/httpd24/root/etc/httpd
 export NATIVE_SDK_HOME=/opt/appdynamics-sdk-native
 
-export AGENT_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT} -Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME} -Dappdynamics.agent.accountName=${ACCOUNT_NAME%%_*} -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}"
-
 export JAVA_OPTS="-Xmx512m -XX:MaxPermSize=256m"
-export MACHINE_AGENT_JAVA_OPTS="-Dappdynamics.sim.enabled=true ${JAVA_OPTS} ${AGENT_OPTS}"
+
+# Uncomment these lines to use system proeprties to override controller-info.xml settings
+export APPD_CONTROLLER_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT}"
+export APPD_APPLICATION_OPTS="-Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}"
+export APPD_ACCOUNT_OPTS="-Dappdynamics.agent.accountName=${ACCOUNT_NAME%%_*} -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}"
+export APPD_HOSTID_OPTS="-DuniqueHostId=${HOSTNAME}"
+export APPD_SIM_OPTS="-Dappdynamics.sim.enabled=true"
+
+export MACHINE_AGENT_JAVA_OPTS="${JAVA_OPTS} ${APPD_CONTROLLER_OPTS} ${APPD_ACCOUNT_OPTS} ${APPD_HOSTID_OPTS} ${APPD_SIM_OPTS}"
