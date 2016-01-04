@@ -24,10 +24,6 @@ if [ -z "${APP_NAME}" ]; then
 	export APP_NAME="ECommerce-Demo";
 fi
 
-if [ -z "${EVENT_ENDPOINT}" ]; then
-        export EVENT_ENDPOINT="eumcloud.demo.appdynamics.com:9080";
-fi
-
 if [ -z "${ACCOUNT_NAME}" ]; then
 	export ACCOUNT_NAME="customer1";
 fi
