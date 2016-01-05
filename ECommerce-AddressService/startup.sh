@@ -1,10 +1,11 @@
 #!/bin/bash
-
-CWD=${PWD}
-
 source /env.sh
 
-#source /start-machine-agent.sh
-source /start-appserver-agent.sh
+# This script should not return or the container will exit
+# The last command called should execute in the foreground
 
-cd ${CWD}
+# Start Machine Agent
+# Start manually with: docker exec <container> /start-machine-agent.sh
+# /start-machine-agent.sh
+
+/start-appserver-agent.sh
