@@ -18,7 +18,7 @@ then
   echo "Created ECommerce-FulfillmentClient/Dockerfile"
   (cd ECommerce-Synapse; cp -f Dockerfile.base Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
   echo "Created ECommerce-Synapse/Dockerfile"
-  (cd ECommerce-Dbwrapper; cp -f Dockerfile.base Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
+  (cd ECommerce-AddressService; cp -f Dockerfile.base Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
   echo "Created ECommerce-Dbwrapper/Dockerfile"
   (cd ECommerce-SurveyClient; cp -f Dockerfile.base Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
   echo "Created ECommerce-SurveyClient/Dockerfile"
