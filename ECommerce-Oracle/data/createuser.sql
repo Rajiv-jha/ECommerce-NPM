@@ -1,0 +1,3 @@
+create user world identified by world;
+GRANT CREATE SESSION, RESOURCE, CREATE VIEW, CREATE MATERIALIZED VIEW, CREATE SYNONYM TO world;
+
