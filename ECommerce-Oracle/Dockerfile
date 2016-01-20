@@ -22,6 +22,7 @@ RUN alien --scripts -v -d /oracle-xe-11.2.0-1.0.x86_64.rpm
 ADD chkconfig /sbin/chkconfig
 ADD init.ora /
 ADD initXETemp.ora /
+ADD data /root
 
 RUN apt-get install -y libaio1 net-tools bc
 RUN ln -s /usr/bin/awk /bin/awk

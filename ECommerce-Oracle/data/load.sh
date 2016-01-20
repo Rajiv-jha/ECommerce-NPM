@@ -1,6 +1,6 @@
 export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe
 export ORACLE_SID=XE
-/u01/app/oracle/product/11.2.0/xe/bin/sqlplus -s system/oracle << EOF
+/u01/app/oracle/product/11.2.0/xe/bin/sqlplus -s sys/oracle as sysdba << EOF
 whenever sqlerror exit sql.sqlcode;
 set echo off
 set heading off
@@ -13,6 +13,7 @@ set heading off
 @/root/orderdetails.sql
 @/root/orders.sql
 @/root/zips.sql
+@/root/sproc.sql
 
 exit;
 EOF
