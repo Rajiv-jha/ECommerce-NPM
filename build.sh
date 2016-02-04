@@ -130,34 +130,34 @@ cloneProjects() {
 # Build Docker containers
 buildContainers() {
   echo; echo "Building ECommerce-Tomcat..." 
-  (cd ECommerce-Tomcat && docker build -t appdynamics/ecommerce-tomcat .) || exit $?
+  (cd ECommerce-Tomcat && docker build --no-cache -t appdynamics/ecommerce-tomcat .) || exit $?
 
   echo; echo "Building ECommerce-FulfillmentClient..."
-  (cd ECommerce-FulfillmentClient && docker build -t appdynamics/ecommerce-fulfillment-client .) || exit $?
+  (cd ECommerce-FulfillmentClient && docker build --no-cache -t appdynamics/ecommerce-fulfillment-client .) || exit $?
 
   echo; echo "Building ECommerce-Synapse..."
-  (cd ECommerce-Synapse && docker build -t appdynamics/ecommerce-synapse .) || exit $?
+  (cd ECommerce-Synapse && docker build --no-cache -t appdynamics/ecommerce-synapse .) || exit $?
 
   echo; echo "Building ECommerce-DBAgent..."
-  (cd ECommerce-DBAgent && docker build -t appdynamics/ecommerce-dbagent .) || exit $?
+  (cd ECommerce-DBAgent && docker build --no-cache -t appdynamics/ecommerce-dbagent .) || exit $?
 
   echo; echo "Building ECommerce-LBR..."
-  (cd ECommerce-LBR && docker build -t appdynamics/ecommerce-lbr .) || exit $?
+  (cd ECommerce-LBR && docker build --no-cache -t appdynamics/ecommerce-lbr .) || exit $?
 
   echo; echo "Building ECommerce-Angular..."
-  (cd ECommerce-Angular && docker build -t appdynamics/ecommerce-angular .) || exit $?
+  (cd ECommerce-Angular && docker build --no-cache -t appdynamics/ecommerce-angular .) || exit $?
 
   echo; echo "Building ECommerce-Load..."
-  (cd ECommerce-Load && docker build -t appdynamics/ecommerce-load .) || exit $?
+  (cd ECommerce-Load && docker build --no-cache -t appdynamics/ecommerce-load .) || exit $?
 
   echo; echo "Building ECommerce-Customer Survey Client..."
-  (cd ECommerce-SurveyClient && docker build -t appdynamics/ecommerce-survey-client .) || exit $?
+  (cd ECommerce-SurveyClient && docker build --no-cache -t appdynamics/ecommerce-survey-client .) || exit $?
 
   echo; echo "Building ECommerce-FaultInjection..."
-  (cd ECommerce-FaultInjection && docker build -t appdynamics/ecommerce-faultinjection .) || exit $?
+  (cd ECommerce-FaultInjection && docker build --no-cache -t appdynamics/ecommerce-faultinjection .) || exit $?
 
   echo rds-dbwrapper; echo "Build ECommerce-AddressService..."
-  (cd ECommerce-AddressService && docker build -t appdynamics/ecommerce-dbwrapper .) || exit $?
+  (cd ECommerce-AddressService && docker build --no-cache -t appdynamics/ecommerce-dbwrapper .) || exit $?
 }
 
 # Usage information
@@ -267,7 +267,7 @@ else
         echo "Building ECommerce-Java base image..."
         echo "Using JDK: ${ORACLE_JDK7}"
         cp -f ${ORACLE_JDK7} ECommerce-Java/jdk-linux-x64.rpm
-        (cd ECommerce-Java; docker build -t appdynamics/ecommerce-java:oracle-java7 .) || exit $?
+        (cd ECommerce-Java; docker build --no-cache -t appdynamics/ecommerce-java:oracle-java7 .) || exit $?
         echo
     else
         echo "Error: Oracle JDK7 (jdk-7uXX-linux-x64.rpm) is required"; exit 1
