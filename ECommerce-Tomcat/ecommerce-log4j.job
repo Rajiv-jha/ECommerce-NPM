@@ -1,15 +1,18 @@
-enabled: true
-startAtEnd: false
+version: 2
 
-file:
-    path: /tomcat/logs
-    nameGlob: cart.log
+enabled: true
+
+source:
+  type: file
+  path: /tomcat/logs
+  nameGlob: cart.log
+  startAtEnd: false
 
 multiline:
-   startsWith: "["
+  startsWith: "["
 
 fields:
-   sourceType: ECommerce41-log4j
+   sourceType: ECommerce-log4j
    nodeName: _NODE_NAME
    tierName: _TIER_NAME
    appName: _APP_NAME
