@@ -6,7 +6,7 @@ file:
     nameGlob: cart.log
 
 multiline:
-   startsWith: "INFO"
+   startsWith: "["
 
 fields:
    sourceType: ECommerce41-log4j
@@ -16,7 +16,10 @@ fields:
 
 grok:
   patterns:
-    - "(?s)%{LOG4J_TIMESTAMP:eventTimestamp} %{JAVACLASS:class} %{JAVAFILE:method}%{SPACE}%{LOGLEVEL:logLevel}: %{GREEDYDATA:logMessage}"
+    - "\\[%{LOGLEVEL:logLevel}%{SPACE}\\]  \\[%{DATA:threadName}\\]  \\[%{JAVACLASS:class}\\]  \\[%{REQUEST_GUID:guid}\\]  %{GREEDYDATA:logMessage}"
+
+requestGuid:
+  source: guid
 
 eventTimestamp:
    pattern: "MMM d, yyyy h:mm:ss aa"
