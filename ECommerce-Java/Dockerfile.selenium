@@ -5,8 +5,8 @@ RUN yum -y install tar
 RUN yum -y install ntp
 
 #RUN yum -y install openssh-server openssh-clients
-#RUN yum -y install firefox
-#RUN yum -y install Xvfb
+RUN yum -y install firefox
+RUN yum -y install Xvfb
 
 # Install Oracle JDK
 ADD jdk-linux-x64.rpm /

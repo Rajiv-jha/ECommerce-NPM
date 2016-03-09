@@ -4,9 +4,8 @@ RUN yum -y install unzip
 RUN yum -y install tar
 RUN yum -y install ntp
 
-#RUN yum -y install openssh-server openssh-clients
-#RUN yum -y install firefox
-#RUN yum -y install Xvfb
+RUN cd /etc/yum.repos.d/; curl -O -k  https://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo
+RUN yum -y install httpd24.x86_64
 
 # Install Oracle JDK
 ADD jdk-linux-x64.rpm /

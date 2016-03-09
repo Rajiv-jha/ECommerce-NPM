@@ -1,0 +1,43 @@
+FROM appdynamics/ecommerce-java:oracle-java7
+
+# set timezone to UTC
+RUN mv /etc/localtime /etc/localtime.bak
+RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
+
+ENV CLIENT_HOME /opt/fulfillment-client
+
+# Gradle build
+RUN mkdir ${CLIENT_HOME} 
+ADD ECommerce-FulfillmentClient.jar ${CLIENT_HOME}
+
+# App Server Agent Install
+ADD AppServerAgent.zip /
+
+RUN unzip -q /AppServerAgent.zip -d ${CLIENT_HOME}/appagent;rm AppServerAgent.zip
+ADD custom-interceptors.xml ${CLIENT_HOME}/appagent/conf/
+
+# (Placeholder - build script will update with zip/rpm directives)
+# Machine Agent Install
+
+# Analytics Agent config
+ADD configAnalytics.sh /
+
+# Startup scripts
+ADD startup.sh /
+ADD env.sh /
+
+ADD start-machine-agent.sh /
+ADD start-appserver-agent.sh /
+
+RUN chmod +x /startup.sh
+RUN chmod +x /env.sh
+RUN chmod +x /start-machine-agent.sh
+RUN chmod +x /start-appserver-agent.sh
+RUN chmod +x /configAnalytics.sh
+
+WORKDIR /
+CMD ["/bin/bash","/startup.sh"]
+
+EXPOSE 80
+EXPOSE 8080
+EXPOSE 8009

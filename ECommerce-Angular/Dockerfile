@@ -4,31 +4,17 @@ FROM appdynamics/ecommerce-java:oracle-java7
 RUN mv /etc/localtime /etc/localtime.bak
 RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
-RUN yum -y install tar
-RUN yum -y install ntp
-RUN yum -y install git
-
-# Install Maven
-RUN (cd /usr/local; curl -O -k http://apache.mirrors.ionfish.org//maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz; tar -xzf apache-maven-3.3.3-bin.tar.gz)
-RUN ln -s /usr/local/apache-maven-3.3.3/bin/mvn /usr/bin/mvn
-
 # Environment vars: Tomcat
-ENV TOMCAT_MAJOR_VERSION 8
-ENV TOMCAT_MINOR_VERSION 8.0.14
 ENV CATALINA_HOME /tomcat
 
 # Install Tomcat
-RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz \
-    && curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
-    && md5sum apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
-    && tar zxf apache-tomcat-*.tar.gz \
-    && rm apache-tomcat-*.tar.gz* \
-    && mv apache-tomcat-${TOMCAT_MINOR_VERSION} tomcat
+COPY /apache-tomcat.tar.gz /apache-tomcat.tar.gz
+RUN tar zxf /apache-tomcat.tar.gz \
+    && rm apache-tomcat.tar.gz \
+    && mv apache-tomcat* tomcat 
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 
-# Build ECommerce-Angular
-ADD ECommerce-Angular /ECommerce-Angular
-RUN (cd ECommerce-Angular; mvn clean install; cp target/AngularUI-1.0-SNAPSHOT.war ${CATALINA_HOME}/webapps/angular.war)
+ADD /AngularUI-1.0-SNAPSHOT.war ${CATALINA_HOME}/webapps/angular.war)
 
 ADD update-rum-key.sh /update-rum-key.sh
 ADD adrum.js /adrum.js

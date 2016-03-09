@@ -16,6 +16,7 @@ ECommerce-Synapse/Dockerfile
 ECommerce-FulfillmentClient/Dockerfile
 ECommerce-Dbwrapper/Dockerfile
 ECommerce-SurveyClient/Dockerfile
+ECommerce-AddressService/Dockerfile
 
 # ECommerce-Load build files
 ECommerce-Load/.gradle/
