@@ -45,6 +45,15 @@ ADD appdynamicspilot.war /ECommerce-Java/ECommerce-Web/build/libs/
 ADD appdynamicspilotjms.war /ECommerce-Java/ECommerce-JMS/build/libs/
 ADD cart.war /ECommerce-Java/ECommerce-WS/build/libs/
 
+RUN mkdir -p /ECommerce-Java/libs
+ADD ojdbc6.jar /ECommerce-Java/libs/
+
+ADD build.gradle /ECommerce-Java/
+ADD database.properties /ECommerce-Java/
+ADD schema.sql /ECommerce-Java/
+ADD oracle.sql /ECommerce-Java/
+ADD zips.sql /ECommerce-Java/
+
 # Startup scripts
 ADD startup.sh /
 RUN version=`find ${CATALINA_HOME}/appagent -maxdepth 1 -type d -name "ver*" | sed "s:^${CATALINA_HOME}/appagent/::"`; \
@@ -57,6 +66,8 @@ RUN chmod +x /startup.sh
 RUN chmod +x /start-machine-agent.sh
 RUN chmod +x /start-appserver-agent.sh
 RUN chmod +x /configAnalytics.sh
+
+RUN export TERM=xterm
 
 WORKDIR /
 
