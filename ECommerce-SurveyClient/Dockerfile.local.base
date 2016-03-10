@@ -7,7 +7,7 @@ RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
 ENV CLIENT_HOME /opt/survey-client
 
 RUN mkdir -p ${CLIENT_HOME} 
-ADD ECommerce-SurveyClient-1.0.jar $(CLIENT_HOME}/
+ADD ECommerce-SurveyClient-1.0.jar ${CLIENT_HOME}/
 
 # App Server Agent Install
 ADD AppServerAgent.zip /
