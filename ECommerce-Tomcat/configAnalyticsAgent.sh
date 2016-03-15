@@ -10,7 +10,7 @@ aaprop=${ANALYTICS_AGENT_HOME}/conf/analytics-agent.properties
 
 if [ "$(grep '^http.event.endpoint=' $aaprop)" ]; then
         echo "${aaprop}: setting event.endpoint: ${EVENT_ENDPOINT}"
-	sed -i "/^http.event.endpoint=/c\http.event.endpoint=http:\/\/${EVENT_ENDPOINT}\/v1" ${aaprop}
+	sed -i "/^http.event.endpoint=/c\http.event.endpoint=${EVENT_ENDPOINT}\/v1" ${aaprop}
 else
         echo "${aaprop}: http.event.endpoint property not found"
 fi
