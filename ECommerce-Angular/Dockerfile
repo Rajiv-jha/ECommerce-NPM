@@ -14,7 +14,7 @@ RUN tar zxf /apache-tomcat.tar.gz \
     && mv apache-tomcat* tomcat 
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 
-ADD /AngularUI-1.0-SNAPSHOT.war ${CATALINA_HOME}/webapps/angular.war)
+ADD /AngularUI-1.0-SNAPSHOT.war ${CATALINA_HOME}/webapps/angular.war
 
 ADD update-rum-key.sh /update-rum-key.sh
 ADD adrum.js /adrum.js
