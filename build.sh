@@ -31,6 +31,7 @@ cleanUp() {
   if [ -z ${PREPARE_ONLY} ]; then 
     # Delete agent and build artifacts from docker build dirs
     (cd ECommerce-Tomcat && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${ANALYTICS_AGENT} apache-tomcat.tar.gz ${ECOMMERCE_WARS})
+    (cd ECommerce-Tomcat && rm -f build.gradle database.properties ojdbc6.jar oracle.sql schema.sql settings.gradle zips.sql)
     (cd ECommerce-FulfillmentClient && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ECommerce-FulfillmentClient.jar)
     (cd ECommerce-Synapse && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT})
     (cd ECommerce-LBR && rm -f ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${WEB_SERVER_AGENT} ${JS_AGENT})
