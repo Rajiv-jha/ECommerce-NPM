@@ -4,18 +4,46 @@ Dockerfiles and configuration scripts for the ECommerce demo.
 
 Building the Container Images
 -----------------------------
-To build the containers, you need to supply paths to the AppDynamics agent installers used by the demo containers.  
-Download the latest versions directly from the [AppDynamics download site](https://download.appdynamics.com)
+To build the containers, you need to supply paths to the AppDynamics agent installers used by the demo containers.  Download the latest versions directly from the [AppDynamics download site](https://download.appdynamics.com)
 
-1. Run `build.sh` without commandline args to be prompted (with autocomplete) for the agent installer paths __or__
-2. Run `build.sh -a <App Server Agent> -m <Machine Agent> -d <Database Agent> -w <Web Server Agent> -r <Javascript Agent> [-y <Analytics Agent>] [-j <Oracle JDK7>]` to supply agent installer paths 
+Two build scripts are available:
 
-Note: Run build.sh with the `-p` flag to prepare the build environment but skip the actual docker container builds.  This will build the Dockerfiles and add the AppDynamics agents to the build dirs: the containers can then be built manually with `docker build -t <container-name> .`.  Use this option to save time when making updates to only one container.
+1. Full Build (`full-build.sh`): this will download all source code, build tools and OS package dependencies directly into the containers, and will run the gradle/maven builds as part of the container Dockerfile.  This is the easiest way to build the containers, but will involve substantial network download volumes.
+2. Local Build (`build.sh`): this uses locally-built jar/war files, plus pre-downloaded Apache Tomcat and Oracle JDK distributions, to save network download times. This will result in much faster build times, but requires you to do some additional setup on your local build machine (see below)
 
 The database containers (`ecommerce-oracle` and `ecommerce-mysql`) do not include AppDynamics agents and only need to be rebuilt if you want to refresh the database or OS version. You will need to download the Linux x64 RPM package installer for Oracle Database XE 11g R2 from the [Oracle Download Site](http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads). To build the database containers, cd to the relevant build directories and run:
 
 - ECommerce-Oracle `docker build -t appdynamics/ecommerce-oracle .`
 - ECommerce-MySQL `docker build -t appdynamics/ecommerce-mysql .`
+
+### Running a Full Build
+
+1. Run `full-build.sh` without commandline args to be prompted (with autocomplete) for the agent installer paths __or__
+2. Run `full-build.sh` with commandline args to supply agent installer paths
+
+*Note: Run `full-build.sh --help` for a list of commandline arguments*
+
+Run full-build.sh with the `-p` flag to prepare the build environment but skip the actual docker container builds.  This will build the Dockerfiles and add the AppDynamics agents to the build dirs: the containers can then be built manually with `docker build -t <container-name> .`.  Use this option to save time when making updates to only one container.
+
+### Running a Local Build
+
+1. Download the desired Apache Tomcat (.tar.gz) distribution from the [Apache Tomcat download site]()
+2. Download the Oracle JDK (Linux x64 .rpm) distribution
+3. Download and build the ECommerce source code projects (see below) 
+4. Run `build.sh` without commandline args to be prompted (with autocomplete) for the agent installer paths __or__
+5. Run `build.sh` with commandline args to supply agent installer paths, source code project locations and Tomcat/JDK distributions
+
+*Note: Run `build.sh --help` for a list of commandline arguments*
+
+### Building the ECommerce Source Projects
+
+Clone the GitHub source code projects and build as follows:
+
+1. [ECommerce-Java](https://github.com/Appdynamics/ECommerce-Java): `gradle war uberjar`
+2. [ECommerce-Load](https://github.com/Appdynamics/ECommerce-Load): `gradle distZip`
+3. [ECommerce-Angular](https://github.com/Appdynamics/ECommerce-Angular): `mvn clean install`
+4. [docker-dbwrapper](https://github.com/Appdynamics/docker-dbwrapper): `gradle clean build`
+
 
 Running the ECommerce Demo
 --------------------------
