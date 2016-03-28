@@ -8,7 +8,7 @@ aaprop=${MACHINE_AGENT_HOME}/monitors/analytics-agent/conf/analytics-agent.prope
 
 if [ "$(grep '^http.event.endpoint=http://localhost:9080/v1' $aaprop)" ]; then
         echo "${aaprop}: setting event.endpoint: ${EVENT_ENDPOINT}"
-	sed -i "/^http.event.endpoint=/c\http.event.endpoint=http:\/\/${EVENT_ENDPOINT}\/v1" ${aaprop}
+	sed -i "/^http.event.endpoint=/c\http.event.endpoint=${EVENT_ENDPOINT}\/v1" ${aaprop}
 else
         echo "${aaprop}: endpoint already set or doesn't exist"
 fi
