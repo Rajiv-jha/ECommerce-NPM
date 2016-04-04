@@ -8,7 +8,7 @@ ENV CLIENT_HOME /opt/fulfillment-client
 
 # Gradle build
 RUN mkdir ${CLIENT_HOME} 
-ADD ECommerce-FulfillmentClient.jar ${CLIENT_HOME}
+ADD ECommerce-FulfillmentClient.jar ${CLIENT_HOME}/
 
 # App Server Agent Install
 ADD AppServerAgent.zip /
