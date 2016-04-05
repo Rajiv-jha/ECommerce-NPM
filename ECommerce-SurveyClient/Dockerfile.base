@@ -5,10 +5,10 @@ RUN mv /etc/localtime /etc/localtime.bak
 RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
 # Install Gradle
-RUN curl -O http://downloads.gradle.org/distributions/gradle-2.1-bin.zip
-RUN unzip -q gradle-2.1-bin.zip -d /opt/
-RUN rm gradle-2.1-bin.zip
-ENV GRADLE_HOME /opt/gradle-2.1
+RUN curl -O http://downloads.gradle.org/distributions/gradle-2.12-bin.zip
+RUN unzip -q gradle-2.12-bin.zip -d /opt/
+RUN rm gradle-2.12-bin.zip
+ENV GRADLE_HOME /opt/gradle-2.12
 ENV PATH $PATH:$GRADLE_HOME/bin
 ENV CLIENT_HOME /opt/survey-client
 
