@@ -305,17 +305,17 @@ else
     cp -f ${ANALYTICS_AGENT_INPUT} ECommerce-Tomcat/${ANALYTICS_AGENT}
     
     # Add analytics agent when creating Dockerfile for machine agent
-    DOCKERFILE_OPTIONS="analytics"
+    DOCKERFILE_OPTIONS="-al"
 fi
 
 if [ ${MACHINE_AGENT_INPUT: -4} == ".zip" ]
 then
-    source ./makeDockerfiles.sh zip ${DOCKERFILE_OPTIONS}
+    ./makeDockerfiles.sh -t zip ${DOCKERFILE_OPTIONS}
     cp -f ${MACHINE_AGENT_INPUT} MachineAgent.zip
     MACHINE_AGENT="MachineAgent.zip"        
 elif [ ${MACHINE_AGENT_INPUT: -4} == ".rpm" ]
 then
-    source ./makeDockerfiles.sh rpm ${DOCKERFILE_OPTIONS}
+    ./makeDockerfiles.sh -t rpm ${DOCKERFILE_OPTIONS}
     cp -f ${MACHINE_AGENT_INPUT} machineagent.rpm
     MACHINE_AGENT="machineagent.rpm"
 else

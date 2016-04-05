@@ -145,10 +145,10 @@ buildContainers() {
   (cd ECommerce-LBR && docker build --no-cache -t appdynamics/ecommerce-lbr .) || exit $?
 
   echo; echo "Building ECommerce-Angular..."
-  (cd ECommerce-Angular && docker build --no-cache -t appdynamics/ecommerce-angular .) || exit $?
+  (cd ECommerce-Angular && docker build --no-cache -f Dockerfile.full -t appdynamics/ecommerce-angular .) || exit $?
 
   echo; echo "Building ECommerce-Load..."
-  (cd ECommerce-Load && docker build --no-cache -t appdynamics/ecommerce-load .) || exit $?
+  (cd ECommerce-Load && docker build --no-cache -f Dockerfile.full -t appdynamics/ecommerce-load .) || exit $?
 
   echo; echo "Building ECommerce-Customer Survey Client..."
   (cd ECommerce-SurveyClient && docker build --no-cache -t appdynamics/ecommerce-survey-client .) || exit $?
@@ -284,17 +284,17 @@ else
     cp -f ${ANALYTICS_AGENT_INPUT} ECommerce-Tomcat/${ANALYTICS_AGENT}
     
     # Add analytics agent when creating Dockerfile for machine agent
-    DOCKERFILE_OPTIONS="analytics"
+    DOCKERFILE_OPTIONS="-a"
 fi
 
 if [ ${MACHINE_AGENT_INPUT: -4} == ".zip" ]
 then
-    source ./makeDockerfiles.sh zip ${DOCKERFILE_OPTIONS}
+    ./makeDockerfiles.sh -t zip ${DOCKERFILE_OPTIONS}
     cp -f ${MACHINE_AGENT_INPUT} MachineAgent.zip
     MACHINE_AGENT="MachineAgent.zip"        
 elif [ ${MACHINE_AGENT_INPUT: -4} == ".rpm" ]
 then
-    source ./makeDockerfiles.sh rpm ${DOCKERFILE_OPTIONS}
+    ./makeDockerfiles.sh -t rpm ${DOCKERFILE_OPTIONS}
     cp -f ${MACHINE_AGENT_INPUT} machineagent.rpm
     MACHINE_AGENT="machineagent.rpm"
 else
