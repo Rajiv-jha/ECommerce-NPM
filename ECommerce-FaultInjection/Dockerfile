@@ -10,8 +10,11 @@ RUN yum -y install git
 RUN yum -y install wget
 
 # Install Maven
-RUN (cd /usr/local; wget --quiet http://apache.arvixe.com/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz; tar -xzf apache-maven-3.3.3-bin.tar.gz)
-RUN ln -s /usr/local/apache-maven-3.3.3/bin/mvn /usr/bin/mvn
+RUN yum -y install wget
+RUN wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+RUN sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+RUN yum install -y apache-maven
+RUN mvn --version
 
 # Environment vars: Tomcat
 ENV TOMCAT_MAJOR_VERSION 8
@@ -27,10 +30,9 @@ RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERS
     && mv apache-tomcat-${TOMCAT_MINOR_VERSION} tomcat
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 
-# Build ECommerce-Angular
+# Build ECommerce-FaultInejction
 ADD ECommerce-FaultInjectionUI /ECommerce-FaultInjectionUI
 RUN (cd ECommerce-FaultInjectionUI; mvn clean install; cp target/FaultInjectionUI-0.0.1-SNAPSHOT.war ${CATALINA_HOME}/webapps/faultinjection-ui.war)
-
 
 ADD startup.sh /startup.sh
 RUN chmod +x /startup.sh

@@ -1,16 +1,29 @@
 FROM appdynamics/ecommerce-java:oracle-java7
 
+# Install Gradle
+RUN curl -O http://downloads.gradle.org/distributions/gradle-2.12-bin.zip
+RUN unzip gradle-2.12-bin.zip -d /opt/
+RUN rm gradle-2.12-bin.zip
+ENV GRADLE_HOME /opt/gradle-2.12
+ENV PATH $PATH:$GRADLE_HOME/bin
+
 # Environment vars: Tomcat
 ENV CATALINA_HOME /tomcat
+ENV TOMCAT_MAJOR_VERSION 8
+ENV TOMCAT_MINOR_VERSION 8.0.14
 
 # Install Tomcat
-COPY /apache-tomcat.tar.gz /apache-tomcat.tar.gz
-RUN tar zxf /apache-tomcat.tar.gz \
-    && rm apache-tomcat.tar.gz \
-    && mv apache-tomcat* tomcat 
+#INSTALL TOMCAT
+RUN curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz \
+    && curl -O -k https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
+    && md5sum apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 \
+    && tar zxf apache-tomcat-*.tar.gz \
+    && rm apache-tomcat-*.tar.gz \
+    && mv apache-tomcat-${TOMCAT_MINOR_VERSION} tomcat
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 
-ADD rds-dbwrapper.war ${CATALINA_HOME}/webapps/
+ADD docker-dbwrapper /docker-dbwrapper
+RUN cd /docker-dbwrapper; gradle clean build; mv build/libs/rds-dbwrapper.war ${CATALINA_HOME}/webapps/
 
 # App Server Agent Install
 ADD AppServerAgent.zip /

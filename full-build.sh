@@ -156,7 +156,7 @@ buildContainers() {
   echo; echo "Building ECommerce-FaultInjection..."
   (cd ECommerce-FaultInjection && docker build --no-cache -t appdynamics/ecommerce-faultinjection .) || exit $?
 
-  echo rds-dbwrapper; echo "Build ECommerce-AddressService..."
+  echo; echo "Build ECommerce-AddressService..."
   (cd ECommerce-AddressService && docker build --no-cache -t appdynamics/ecommerce-dbwrapper .) || exit $?
 }
 
