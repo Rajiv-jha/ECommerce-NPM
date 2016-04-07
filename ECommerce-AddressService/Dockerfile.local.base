@@ -9,14 +9,13 @@ ENV TOMCAT_MINOR_VERSION 8.0.14
 ENV CATALINA_HOME /tomcat
 
 #INSTALL TOMCAT
-COPY /apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz /apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz
-RUN tar zxf /apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz \
-    && rm apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz \
-    && mv apache-tomcat-${TOMCAT_MINOR_VERSION} tomcat
+COPY /apache-tomcat.tar.gz /apache-tomcat.tar.gz
+RUN tar zxf /apache-tomcat.tar.gz \
+    && rm apache-tomcat.tar.gz \
+    && mv apache-tomcat* tomcat 
 RUN cd ${CATALINA_HOME}/bin;chmod +x *.sh
 
-ADD docker-dbwrapper /docker-dbwrapper
-RUN cd /docker-dbwrapper; gradle clean build; mv build/libs/rds-dbwrapper.war ${CATALINA_HOME}/webapps/
+ADD rds-dbwrapper.war ${CATALINA_HOME}/webapps/
 
 # App Server Agent Install
 ADD AppServerAgent.zip /

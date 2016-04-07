@@ -59,7 +59,7 @@ then
   echo "Created ECommerce-FulfillmentClient/Dockerfile"
   (cd ECommerce-SurveyClient; cp -f ${DOCKERFILE_BASE} Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
   echo "Created ECommerce-SurveyClient/Dockerfile"
-  (cd ECommerce-AddressService; cp -f Dockerfile.base Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
+  (cd ECommerce-AddressService; cp -f ${DOCKERFILE_BASE} Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
   echo "Created ECommerce-Dbwrapper/Dockerfile"
   (cd ECommerce-LBR; cp -f Dockerfile.base Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.zip' Dockerfile; rm -f Dockerfile.bak)
   echo "Created ECommerce-LBR/Dockerfile"
@@ -73,7 +73,7 @@ then
   echo "Created ECommerce-FulfillmentClient/Dockerfile"
   (cd ECommerce-SurveyClient; cp -f ${DOCKERFILE_BASE} Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
   echo "Created ECommerce-SurveyClient/Dockerfile"
-  (cd ECommerce-AddressService; cp -f Dockerfile.base Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
+  (cd ECommerce-AddressService; cp -f ${DOCKERFILE_BASE} Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
   echo "Created ECommerce-Dbwrapper/Dockerfile"
   (cd ECommerce-LBR; cp -f Dockerfile.base Dockerfile; sed -i ${SED_OPTS} '/# Machine Agent Install/ r Dockerfile.include.rpm' Dockerfile; rm -f Dockerfile.bak)
   echo "Created ECommerce-LBR/Dockerfile"
