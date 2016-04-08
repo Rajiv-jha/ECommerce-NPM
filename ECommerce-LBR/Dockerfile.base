@@ -4,9 +4,6 @@ FROM appdynamics/ecommerce-java:apache24
 RUN mv /etc/localtime /etc/localtime.bak
 RUN ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
-# Centos 6 installs Apache 2.2 by default: we want 2.4
-ENV HTTPD_24 /opt/rh/httpd24/root/etc/httpd
-ENV HTTPD_DOC_ROOT ${HTTPD_24}/../../var/www/html
 ENV APPDYNAMICS_SIM_ENABLED true
 
 # Use Apache Worker MPM
@@ -16,7 +13,7 @@ ADD 00-mpm.conf ${HTTPD_24}/conf.modules.d/00-mpm.conf
 ADD 02-appd.conf ${HTTPD_24}/
 ADD update-rum-key.sh /
 RUN chmod +x /update-rum-key.sh
-
+RUN cp /update-rum-key.sh /usr/local/bin/update-rum-key
 
 # Add Javascript agent to httpd doc root
 ADD adrum.js ${HTTPD_DOC_ROOT}/adrum.js

@@ -24,7 +24,6 @@ APP_SERVER_AGENT=AppServerAgent.zip
 ANALYTICS_AGENT=AnalyticsAgent.zip
 DB_AGENT=dbagent.zip
 JS_AGENT=adrum.js
-ADRUM_ZIP=adrum.zip
 ECOMMERCE_WARS="appdynamicspilot.war appdynamicspilotjms.war cart.war"
 
 cleanUp() {
@@ -90,16 +89,14 @@ copyAgents() {
   echo "Copied Agents for ECommerce-Synapse"
 
   cp -f ${WEB_AGENT_INPUT} ECommerce-LBR/${WEB_SERVER_AGENT}
-  cp -f ${ADRUM_AGENT_INPUT} ECommerce-LBR/${ADRUM_ZIP}
-  (cd ECommerce-LBR; rm -f adrum*.js; unzip -o ${ADRUM_ZIP}; mv adrum*.js ${JS_AGENT}; rm ${ADRUM_ZIP})
+  cp -f ${ADRUM_AGENT_INPUT} ECommerce-LBR/${JS_AGENT}
   cp -f ${MACHINE_AGENT_INPUT} ECommerce-LBR/${MACHINE_AGENT}
   echo "Copied Agents for ECommerce-LBR"
 
   cp -f ${DB_AGENT_INPUT} ECommerce-DBAgent/${DB_AGENT}
   echo "Copied Agents for ECommerce-DBAgent"
 
-  cp -f ${ADRUM_AGENT_INPUT} ECommerce-Angular/${ADRUM_ZIP}
-  (cd ECommerce-Angular; rm -f adrum*.js; unzip -o ${ADRUM_ZIP}; mv adrum*.js ${JS_AGENT}; rm ${ADRUM_ZIP})
+  cp -f ${ADRUM_AGENT_INPUT} ECommerce-Angular/${JS_AGENT}
   echo "Copied Agents for ECommerce-Angular"
 
   cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-SurveyClient/AppServerAgent.zip
@@ -184,7 +181,7 @@ then
 
 else
   # Allow user to specify locations of App Server, Machine and Database Agents
-  while getopts "a:m:d:w:r:y:j:t:b:prepare" opt; do
+  while getopts "a:m:d:w:r:y:j:t:b:p" opt; do
     case $opt in
       a)
         APP_SERVER_AGENT_INPUT=$OPTARG

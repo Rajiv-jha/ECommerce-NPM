@@ -23,4 +23,8 @@ ECommerce-Load/.gradle/
 ECommerce-Load/.idea/
 
 # Ignore jdk rpms
-dk-*.rpm
+jdk-*.rpm
+ECommerce-Java/jdk-*.rpm
+
+#Tomcat
+apache-tomcat*.tar.gz

@@ -47,24 +47,36 @@ Clone the GitHub source code projects and build as follows:
 
 Running the ECommerce Demo
 --------------------------
+### Using the run script
+
 To run the demo:
 `./run.sh <tag> <app_name>` where 
 
 - `<tag>` is the docker tag for the container version to run 
 - `<app_name>` is the name to register for the application
 
-Note: The run.sh script will get AWS credentails (optional), controller host/port and analytics/events-service configuration from the following environment variables, which will be injected into the running containers:
+Note: The run.sh script will get AWS credentials (optional), controller host/port and analytics/events-service configuration from the following environment variables, which will be injected into the running containers:
 
 - `AWS_ACCESS_KEY (optional - used for FulfillmentClient container)`
 - `AWS_SECRET_KEY (optional - used for FulfillmentClient container)`
-- `CONTR_HOST`
+- `CONTR_HOST (do not include "http(s)://")`
 - `CONTR_PORT`
-- `ACCOUNT_NAME`
-- `ACCESS_KEY`
-- `EVENT_ENDPOINT`  
+- `ACCOUNT_NAME (Global ACcount Name from Controller License screen)`
+- `ACCESS_KEY (Access Key from Controller License screen)`
+- `EVENT_ENDPOINT (include "http(s)://" and port)`  
 
-Starting the Machine Agent and Analytics Agent
-----------------------------------------------
+### Manual Injection of the EUM App Key
+
+Once the containers have been started, use the `update-rum-key` command to configure manual injection of the EUM App Key by the LBR container:
+
+`docker exec -it lbr update-rum-key -k <EUM APP Key>`
+
+Other commandline options are available to override the default values for `beaconUrlHttp` and `adrumExtUrl` in the Browser RUM Javascript Agent. In most cases, you will want to download the Javascript directly from the Controller's EUM Configuration page, in which case these values will be pre-configured.  For more details, run:
+
+`docker exec -it lbr update-rum-key`
+
+### Starting the Machine Agents or Analytics Agents
+
 By default, on startup the containers will run the App Server / Database / Web Server Agents only.
 The Machine Agent or standalone Analytics Agent can be started using `docker exec` once the container is running:
 

@@ -4,14 +4,16 @@ RUN yum -y install unzip
 RUN yum -y install tar
 RUN yum -y install ntp
 
+# Install Apache 2.4 (Centos 6 uses 2.2 by default)
+RUN useradd -U apache
 RUN cd /etc/yum.repos.d/; curl -O -k  https://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo
 RUN yum -y install httpd24.x86_64
+ENV HTTPD_24 /opt/rh/httpd24/root/etc/httpd
+ENV HTTPD_DOC_ROOT ${HTTPD_24}/../../var/www/html
 
 # Install Oracle JDK
 ADD jdk-linux-x64.rpm /
 RUN rpm -Uvh /jdk-linux-x64.rpm
-
 RUN rm jdk-linux-x64.rpm
 ENV JAVA_HOME /usr/java/default
-ENV APPDYNAMICS_SIM_ENABLED true
 ENV PATH $PATH:$JAVA_HOME/bin
