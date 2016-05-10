@@ -19,16 +19,16 @@ multiline:
 
 fields:
    sourceType: ECommerce-log4j
-   nodeName: mark-ecomm-550_WEB1
-   tierName: ECommerce-Services
-   appName: mark-ecomm-550
+   nodeName: _NODE_NAME
+   tierName: _TIER_NAME
+   appName: _APP_NAME
 
 # Example single-line log4j output
 # INFO ajp-nio-8009-exec-6 2016-05-10/16:37:24.233/UTC com.appdynamicspilot.action.CartAction - The items associated with the user are: 1
 
 grok:
   patterns:
-    - "(?s)%{LOG4J_TIMESTAMP:eventTimestamp} %{JAVACLASS:class} %{JAVAFILE:method}%{SPACE}%{LOGLEVEL:logLevel}: %{GREEDYDATA}"
+    - "%{LOGLEVEL:logLevel} %{DATA:threadName} %{LOG4J_TIMESTAMP:eventTimestamp} %{JAVACLASS:class} %{JAVAFILE:method} %{REQUEST_GUID:guid} %{GREEDYDATA}"
 
 requestGuid:
   source: guid
