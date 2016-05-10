@@ -8,21 +8,30 @@ source:
   nameGlob: cart.log
   startAtEnd: false
 
+# Example multiline log4j output
+# ERROR ajp-nio-8009-exec-2 2016-05-10/16:25:10.053/UTC com.appdynamicspilot.oracle.jdbc.OracleStatementExecutor - org.apache.tomcat.dbcp.dbcp2.BasicDataSource.createPoolableConnectionFactory(BasicDataSource.java:2152)
+# org.apache.tomcat.dbcp.dbcp2.BasicDataSource.createDataSource(BasicDataSource.java:1902)
+# org.apache.tomcat.dbcp.dbcp2.BasicDataSource.getConnection(BasicDataSource.java:1412)
+# ...
+
 multiline:
-  startsWith: "["
+   regex: "[A-Z].*"
 
 fields:
    sourceType: ECommerce-log4j
-   nodeName: _NODE_NAME
-   tierName: _TIER_NAME
-   appName: _APP_NAME
+   nodeName: mark-ecomm-550_WEB1
+   tierName: ECommerce-Services
+   appName: mark-ecomm-550
+
+# Example single-line log4j output
+# INFO ajp-nio-8009-exec-6 2016-05-10/16:37:24.233/UTC com.appdynamicspilot.action.CartAction - The items associated with the user are: 1
 
 grok:
   patterns:
-    - "\\[%{LOGLEVEL:logLevel}%{SPACE}\\]  \\[%{DATA:threadName}\\]  \\[%{JAVACLASS:class}\\]  \\[%{REQUEST_GUID:guid}\\]  %{GREEDYDATA:logMessage}"
+    - "(?s)%{LOG4J_TIMESTAMP:eventTimestamp} %{JAVACLASS:class} %{JAVAFILE:method}%{SPACE}%{LOGLEVEL:logLevel}: %{GREEDYDATA}"
 
 requestGuid:
   source: guid
 
 eventTimestamp:
-   pattern: "MMM d, yyyy h:mm:ss aa"
+   pattern: "yyyy-MM-dd HH:mm:ss,SSS"
