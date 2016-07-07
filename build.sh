@@ -24,6 +24,9 @@ APP_SERVER_AGENT=AppServerAgent.zip
 ANALYTICS_AGENT=AnalyticsAgent.zip
 DB_AGENT=dbagent.zip
 JS_AGENT=adrum.js
+NPM_DS=npm-ds.zip
+NETWORK_AGENT=NetworkAgent.zip
+
 ECOMMERCE_WARS="appdynamicspilot.war appdynamicspilotjms.war cart.war"
 
 cleanUp() {
@@ -62,6 +65,8 @@ promptForAgents() {
   read -e -p "Enter path to Web Server Agent: " WEB_AGENT_INPUT
   read -e -p "Enter path to Javascript Agent: " ADRUM_AGENT_INPUT
   read -e -p "Enter path to Analytics Agent: " ANALYTICS_AGENT_INPUT
+  read -e -p "Enter Path to npm-ds distribution: " NPM_DS_INPUT
+  read -e -p "Enter path to Network Agent" NETWORK_AGENT_INPUT
   read -e -p "Enter path to Oracle JDK7: " ORACLE_JDK7
   read -e -p "Enter path to ECommerce source code projects: " LOCAL_BUILD_PATH
   read -e -p "Enter path to Tomcat tar.gz distribution: " LOCAL_TOMCAT
@@ -74,18 +79,22 @@ copyAgents() {
     ${WEB_AGENT_INPUT} 
     ${DB_AGENT_INPUT}
     ${MACHINE_AGENT_INPUT}
-    ${ADRUM_AGENT_INPUT}" 
+    ${ADRUM_AGENT_INPUT}
+    ${NPM_DS_INPUT}" 
 
   cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-Tomcat/${APP_SERVER_AGENT}
   cp -f ${MACHINE_AGENT_INPUT} ECommerce-Tomcat/${MACHINE_AGENT}
+  cp -f ${NPM_DS_INPUT} ECommerce-Tomcat/${NPM_DS}
   echo "Copied Agents for ECommerce-Tomcat"
 
   cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-FulfillmentClient/${APP_SERVER_AGENT}
   cp -f ${MACHINE_AGENT_INPUT} ECommerce-FulfillmentClient/${MACHINE_AGENT}
+  cp -f ${NPM_DS_INPUT} ECommerce-FulfillmentClient/${NPM_DS}
   echo "Copied Agents for ECommerce-FulfillmentClient"
 
   cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-Synapse/${APP_SERVER_AGENT}
   cp -f ${MACHINE_AGENT_INPUT} ECommerce-Synapse/${MACHINE_AGENT}
+  cp -f ${NPM_DS_INPUT} ECommerce-Synapse/${NPM_DS}
   echo "Copied Agents for ECommerce-Synapse"
 
   cp -f ${WEB_AGENT_INPUT} ECommerce-LBR/${WEB_SERVER_AGENT}
@@ -101,10 +110,12 @@ copyAgents() {
 
   cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-SurveyClient/AppServerAgent.zip
   cp -f ${MACHINE_AGENT_INPUT} ECommerce-SurveyClient/${MACHINE_AGENT}
+  cp -f ${NPM_DS_INPUT} ECommerce-SurveyClient/${NPM_DS}
   echo "Copied Agents for ECommerce-SurveyClient"
 
   cp -f ${MACHINE_AGENT_INPUT} ECommerce-AddressService/${MACHINE_AGENT}
   cp -f ${APP_SERVER_AGENT_INPUT} ECommerce-AddressService/AppServerAgent.zip
+  cp -f ${NPM_DS_INPUT} ECommerce-AddressService/${NPM_DS}
   echo "Copied Agents for ECommerce-AddressService"
 }
 
@@ -167,6 +178,8 @@ then
           -w <Path to Web Server Agent>
           -r <Path to JavaScript Agent>
           -y <Path to Analytics Agent>
+          -n <path to network Dynamic Service>
+          -m <path to network Agents>
           -j <Path to Oracle JDK7>
           -b <Path to ECommerce source projects>
           -t <Path to Tomcat distro>"
