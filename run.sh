@@ -177,3 +177,6 @@ echo -n "dbagent: "; docker run --name dbagent -h ${APP_NAME}-dbagent \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e ACCESS_KEY=${ACCESS_KEY} \
         --link db:db --link oracle-db:oracle-db \
         -d ${DOCKER_REGISTRY}/ecommerce-dbagent:$VERSION
+        
+        sleep 60 
+sudo sh ./Network-Agent/bin/start.sh
