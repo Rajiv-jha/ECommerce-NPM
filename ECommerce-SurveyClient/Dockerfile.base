@@ -22,6 +22,13 @@ RUN cd /ECommerce-Java; gradle uberJar; mkdir ${CLIENT_HOME}; cp /ECommerce-Java
 ADD AppServerAgent.zip /
 RUN unzip -q /AppServerAgent.zip -d ${CLIENT_HOME}/appagent;rm AppServerAgent.zip
 
+#Adding support for Dynamics services 
+
+ADD npm-ds.zip /
+k=$(find tomcat/appagent -maxdepth 1 -type d -name "ver*" | sed "s:^tomcat/appagent/::")
+RUN unzip -q /npm-ds.zip -d /tomcat/appagent/$k/external-services/
+RUN sed -i "s/127.0.0.1/${IP_ADDRES}/g" /tomcat/appagent/$k/external-services/npm/npm-service.properties
+
 # (Placeholder - build script will update with zip/rpm directives)
 # Machine Agent Install
 
