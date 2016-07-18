@@ -32,16 +32,16 @@ ECOMMERCE_WARS="appdynamicspilot.war appdynamicspilotjms.war cart.war"
 cleanUp() {
   if [ -z ${PREPARE_ONLY} ]; then 
     # Delete agent and build artifacts from docker build dirs
-    (cd ECommerce-Tomcat && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${ANALYTICS_AGENT} apache-tomcat.tar.gz ${ECOMMERCE_WARS})
+    (cd ECommerce-Tomcat && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${ANALYTICS_AGENT} apache-tomcat.tar.gz ${ECOMMERCE_WARS} ${NPM_DS})
     (cd ECommerce-Tomcat && rm -f build.gradle database.properties ojdbc6.jar oracle.sql schema.sql settings.gradle zips.sql)
-    (cd ECommerce-FulfillmentClient && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ECommerce-FulfillmentClient.jar)
-    (cd ECommerce-Synapse && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT})
-    (cd ECommerce-LBR && rm -f ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${WEB_SERVER_AGENT} ${JS_AGENT})
+    (cd ECommerce-FulfillmentClient && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${NPM_DS} ECommerce-FulfillmentClient.jar)
+    (cd ECommerce-Synapse && rm -f ${APP_SERVER_AGENT} ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${NPM_DS})
+    (cd ECommerce-LBR && rm -f ${ZIP_MACHINE_AGENT} ${RPM_MACHINE_AGENT} ${WEB_SERVER_AGENT} ${JS_AGENT} ${NPM_DS})
     (cd ECommerce-DBAgent && rm -f ${DB_AGENT})
     (cd ECommerce-Angular && rm -f ${JS_AGENT} AngularUI-1.0-SNAPSHOT.war apache-tomcat.tar.gz)
     (cd ECommerce-FaultInjection && rm -rf ECommerce-FaultInjectionUI)
-    (cd ECommerce-SurveyClient && rm -f AppServerAgent.zip ${MACHINE_AGENT} ECommerce-SurveyClient-1.0.jar)
-    (cd ECommerce-AddressService && rm -rf AppServerAgent.zip ${MACHINE_AGENT} apache-tomcat.tar.gz rds-dbwrapper.war)
+    (cd ECommerce-SurveyClient && rm -f AppServerAgent.zip ${MACHINE_AGENT} ${NPM_DS} ECommerce-SurveyClient-1.0.jar)
+    (cd ECommerce-AddressService && rm -rf AppServerAgent.zip ${MACHINE_AGENT} ${NPM_DS} apache-tomcat.tar.gz rds-dbwrapper.war)
     (cd ECommerce-Load && rm -rf load-generator.zip)
   fi
 
@@ -179,7 +179,7 @@ then
           -r <Path to JavaScript Agent>
           -y <Path to Analytics Agent>
           -n <path to network Dynamic Service>
-          -m <path to network Agents>
+          -h <path to network Agents>
           -j <Path to Oracle JDK7>
           -b <Path to ECommerce source projects>
           -t <Path to Tomcat distro>"
@@ -232,6 +232,18 @@ else
           echo "Not found: ${ANALYTICS_AGENT_INPUT}"; exit 1        
         fi
         ;;
+      n)
+        NPM_DS_INPUT=$OPTARG 
+        if [! -e ${NPM_DS_INPUT} ]; then 
+         echo "Not found: ${NPM_DS_INPUT}"; exit 1
+        fi
+      ;;
+      h)
+       NETWORK_AGENT_INPUT=$OPTARG
+        if [! -e ${NETWORK_AGENT_INPUT} ]; then 
+         echo "Not found ${NETWORK_AGENT_INPUT}"; exit 1
+         fi
+         ;;
       j)
         ORACLE_JDK7=$OPTARG
         if [ ! -e ${ORACLE_JDK7} ]; then
@@ -268,6 +280,14 @@ fi
 
 if [ -z ${MACHINE_AGENT_INPUT} ]; then
     echo "Error: Machine Agent is required"; exit 1
+fi
+
+if [ -z ${NETWORK_AGENT_INPUT} ]; then
+    echo "Error: Network Agent is required"; exit 1
+fi
+
+if [ -z ${NPM_DS_INPUT} ]; then
+    echo "Error: NPM Dynamics service is required"; exit 1
 fi
 
 if [ -z ${DB_AGENT_INPUT} ]; then
