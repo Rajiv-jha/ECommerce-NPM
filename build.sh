@@ -70,6 +70,7 @@ promptForAgents() {
   read -e -p "Enter path to Oracle JDK7: " ORACLE_JDK7
   read -e -p "Enter path to ECommerce source code projects: " LOCAL_BUILD_PATH
   read -e -p "Enter path to Tomcat tar.gz distribution: " LOCAL_TOMCAT
+  read -e -p "Enter Hardware IP Addess " IP_ADDRES
 }
 
 # Copy Agent zips to build dirs
