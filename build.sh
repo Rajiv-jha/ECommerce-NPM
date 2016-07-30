@@ -365,5 +365,3 @@ if [ "${PREPARE_ONLY}" = true ] ; then
 else
     buildContainers
 fi
-unzip ${NETWORK_AGENT_PATH} -d Network-Agent/
-sudo sh ./Network-Agent/install.sh
