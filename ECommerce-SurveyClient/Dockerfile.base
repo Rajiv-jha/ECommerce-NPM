@@ -25,7 +25,7 @@ RUN unzip -q /AppServerAgent.zip -d ${CLIENT_HOME}/appagent;rm AppServerAgent.zi
 #Adding support for Dynamics services 
 
 ADD npm-ds.zip /
-RUN k='find tomcat/appagent -maxdepth 1 -type d -name "ver*" | sed "s:^tomcat/appagent/::"'
+RUN k='find tomcat/appagent -maxdepth 1 -type d -name "ver*" | sed "s:^opt/survey-client/appagent/::"'
 RUN unzip -q /npm-ds.zip -d /opt/survey-client/appagent/$k/external-services/
 RUN sed -i "s/127.0.0.1/${IP_ADDRES}/g" /opt/survey-client/appagent/$k/external-services/npm/npm-service.properties
 
