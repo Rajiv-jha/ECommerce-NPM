@@ -178,5 +178,7 @@ echo -n "dbagent: "; docker run --name dbagent -h ${APP_NAME}-dbagent \
         --link db:db --link oracle-db:oracle-db \
         -d ${DOCKER_REGISTRY}/ecommerce-dbagent:$VERSION
         
-        sleep 60 
+sleep 60 
+unzip ${3} -d Network-Agent/
+sudo sh ./Network-Agent/install.sh
 sudo sh ./Network-Agent/bin/start.sh
