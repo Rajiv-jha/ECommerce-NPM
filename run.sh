@@ -179,6 +179,12 @@ echo -n "dbagent: "; docker run --name dbagent -h ${APP_NAME}-dbagent \
         -d ${DOCKER_REGISTRY}/ecommerce-dbagent:$VERSION
         
 sleep 60 
+
+if [ -d Network-Agent ]; then
+sudo sh ./Network-Agent/bin/stop.sh
+rm -rf /Network-Agent
+else 
 unzip ${3} -d Network-Agent/
 sudo sh ./Network-Agent/install.sh
 sudo sh ./Network-Agent/bin/start.sh
+fi
