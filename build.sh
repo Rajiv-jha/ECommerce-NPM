@@ -47,8 +47,6 @@ cleanUp() {
 
   # Delete temp copy of machine agent distro
   rm -f ${MACHINE_AGENT}
-  sudo sh ./Network-Agent/bin/stop.sh
-  rm -rf /Network-Agent
 
   # Remove dangling images left-over from build
   if [[ `docker images -q --filter "dangling=true"` ]]
