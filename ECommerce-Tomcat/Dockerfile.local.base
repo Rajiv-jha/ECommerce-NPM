@@ -67,7 +67,6 @@ RUN version=`find ${CATALINA_HOME}/appagent -maxdepth 1 -type d -name "ver*" | s
 ADD start-machine-agent.sh /
 ADD start-appserver-agent.sh /
 ADD app-agent-config-dbcam.xml /
-ADD start-npm-agent.sh /
 
 RUN chmod +x /startup.sh
 RUN chmod +x /start-machine-agent.sh

@@ -177,7 +177,6 @@ then
           -r <Path to JavaScript Agent>
           -y <Path to Analytics Agent>
           -n <path to network Dynamic Service>
-          -h <path to network Agents>
           -j <Path to Oracle JDK7>
           -b <Path to ECommerce source projects>
           -t <Path to Tomcat distro>"
@@ -236,12 +235,6 @@ else
          echo "Not found: ${NPM_DS_INPUT}"; exit 1
         fi
       ;;
-      h)
-       NETWORK_AGENT_INPUT=$OPTARG
-        if [! -e ${NETWORK_AGENT_INPUT} ]; then 
-         echo "Not found ${NETWORK_AGENT_INPUT}"; exit 1
-         fi
-         ;;
       j)
         ORACLE_JDK7=$OPTARG
         if [ ! -e ${ORACLE_JDK7} ]; then
@@ -278,10 +271,6 @@ fi
 
 if [ -z ${MACHINE_AGENT_INPUT} ]; then
     echo "Error: Machine Agent is required"; exit 1
-fi
-
-if [ -z ${NETWORK_AGENT_INPUT} ]; then
-    echo "Error: Network Agent is required"; exit 1
 fi
 
 if [ -z ${NPM_DS_INPUT} ]; then
