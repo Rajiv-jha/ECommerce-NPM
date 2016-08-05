@@ -21,12 +21,11 @@ ADD rds-dbwrapper.war ${CATALINA_HOME}/webapps/
 ADD AppServerAgent.zip /
 RUN unzip -q /AppServerAgent.zip -d ${CATALINA_HOME}/appagent;rm /AppServerAgent.zip
 
-#Add Dynamic Service 
+#NPM DS support has been added
 ADD npm-ds.zip /
-RUN k='find tomcat/appagent -maxdepth 1 -type d -name "ver*" | sed "s:^tomcat/appagent/::"'
-RUN unzip -q /npm-ds.zip -d /tomcat/appagent/$k/external-services/
-RUN sed -i "s/127.0.0.1/${IP_ADDRES}/g" /tomcat/appagent/$k/external-services/npm/npm-service.properties
-RUN sed -i "s/localhost/${IP_ADDRES}/g" /tomcat/appagent/$k/external-services/npm/npm-service.properties
+ADD confignpmds.sh /
+RUN chmod +x /confignpmds.sh
+RUN sh /confignpmds.sh
 
 # (Placeholder - build script will update with zip/rpm directives)
 # Machine Agent Install

@@ -25,7 +25,6 @@ ANALYTICS_AGENT=AnalyticsAgent.zip
 DB_AGENT=dbagent.zip
 JS_AGENT=adrum.js
 NPM_DS=npm-ds.zip
-NETWORK_AGENT=NetworkAgent.zip
 
 ECOMMERCE_WARS="appdynamicspilot.war appdynamicspilotjms.war cart.war"
 
@@ -66,11 +65,9 @@ promptForAgents() {
   read -e -p "Enter path to Javascript Agent: " ADRUM_AGENT_INPUT
   read -e -p "Enter path to Analytics Agent: " ANALYTICS_AGENT_INPUT
   read -e -p "Enter Path to npm-ds distribution: " NPM_DS_INPUT
-  read -e -p "Enter path to Network Agent" NETWORK_AGENT_INPUT
   read -e -p "Enter path to Oracle JDK7: " ORACLE_JDK7
   read -e -p "Enter path to ECommerce source code projects: " LOCAL_BUILD_PATH
   read -e -p "Enter path to Tomcat tar.gz distribution: " LOCAL_TOMCAT
-  read -e -p "Enter Hardware IP Addess " IP_ADDRES
 }
 
 # Copy Agent zips to build dirs

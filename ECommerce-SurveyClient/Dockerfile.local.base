@@ -13,12 +13,11 @@ ADD ECommerce-SurveyClient-1.0.jar ${CLIENT_HOME}/
 ADD AppServerAgent.zip /
 RUN unzip -q /AppServerAgent.zip -d ${CLIENT_HOME}/appagent;rm AppServerAgent.zip
 
-#Adding Support for NPM Dynamic Service 
+#Adding support for NPM Dynamics services
 ADD npm-ds.zip /
-RUN k='find tomcat/appagent -maxdepth 1 -type d -name "ver*" | sed "s:^opt/survey-client/appagent/::"'
-RUN unzip -q /npm-ds.zip -d /opt/survey-client/appagent/$k/external-services/
-RUN sed -i "s/127.0.0.1/${IP_ADDRES}/g" /opt/survey-client/appagent/$k/external-services/npm/npm-service.properties
-RUN sed -i "s/localhost/${IP_ADDRES}/g" /opt/survey-client/appagent/$k/external-services/npm/npm-service.properties
+ADD confignpmds.sh /
+RUN chmod +x /confignpmds.sh
+RUN sh /confignpmds.sh
 
 # (Placeholder - build script will update with zip/rpm directives)
 # Machine Agent Install
