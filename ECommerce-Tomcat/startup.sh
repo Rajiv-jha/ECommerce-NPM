@@ -2,6 +2,7 @@
 
 source /env.sh
 
+:Wq!
 k=$(find /tomcat/appagent/ -maxdepth 1 -type d -name "ver*" | sed "s:^/tomcat/appagent/::")
 sed -i "s/127.0.0.1/${IP_ADDRESS}/g" /tomcat/appagent/$k/external-services/npm/npm-service.properties
 sed -i "s/localhost/${IP_ADDRESS}/g" /tomcat/appagent/$k/external-services/npm/npm-service.properties
