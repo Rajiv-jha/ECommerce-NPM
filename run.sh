@@ -1,4 +1,4 @@
-# This script is provided for illustration purposes only.
+8u9# This script is provided for illustration purposes only.
 #
 # To build the ECommerce demo application, you will need to download the following components:
 # 1. An appropriate version of the Oracle Java 7 JDK
@@ -80,14 +80,14 @@ echo -n "db: "; docker run --name db -p 3306:3306 -p 2223:22 -e MYSQL_ROOT_PASSW
 echo -n "jms: "; docker run --name jms -d ${DOCKER_REGISTRY}/ecommerce-activemq
 sleep 60
 
-echo -n "dbwrapper: "; docker run --name rds-dbwrapper -h ${APP_NAME}-address \
+echo -n "dbwrapper: "; docker run --name rds-dbwrapper --privileged -h ${APP_NAME}-address \
 	-e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e IP_ADDRESS=${IP_ADDRESS} \
         -e NODE_NAME=${APP_NAME}_ADDRESS -e APP_NAME=${APP_NAME} -e TIER_NAME=Address-Services \
         -e MACHINE_PATH_1="${APP_NAME}" -e MACHINE_PATH_2="Address-Services" \
         --link oracle-db:oracle-db -d ${DOCKER_REGISTRY}/ecommerce-dbwrapper:$VERSION
 
-echo -n "ws: "; docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e ws=true \
+echo -n "ws: "; docker run --name ws --privileged -h ${APP_NAME}-ws -e create_schema=true -e ws=true \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e IP_ADDRESS=${IP_ADDRESS} \
         -e NODE_NAME=${APP_NAME}_INVENTORY -e APP_NAME=$APP_NAME -e TIER_NAME=Inventory-Services \
@@ -95,7 +95,7 @@ echo -n "ws: "; docker run --name ws -h ${APP_NAME}-ws -e create_schema=true -e 
         --link jms:jms --link oracle-db:oracle-db --link rds-dbwrapper:rds-dbwrapper --link db:db \
         -d ${DOCKER_REGISTRY}/ecommerce-tomcat:$VERSION
 
-echo -n "web: "; docker run --name web -h ${APP_NAME}-web -e JVM_ROUTE=route1 -e web=true \
+echo -n "web: "; docker run --name web --privileged -h ${APP_NAME}-web -e JVM_ROUTE=route1 -e web=true \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e IP_ADDRESS=${IP_ADDRESS} \
         -e NODE_NAME=${APP_NAME}_WEB1 -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
@@ -104,7 +104,7 @@ echo -n "web: "; docker run --name web -h ${APP_NAME}-web -e JVM_ROUTE=route1 -e
         -d ${DOCKER_REGISTRY}/ecommerce-tomcat:$VERSION
 sleep 60
 
-echo -n "fulfillment: "; docker run --name fulfillment -h ${APP_NAME}-fulfillment -e web=true \
+echo -n "fulfillment: "; docker run --name fulfillment --privileged -h ${APP_NAME}-fulfillment -e web=true \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e IP_ADDRESS=${IP_ADDRESS} \
         -e NODE_NAME=Fulfillment -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Services \
@@ -114,7 +114,7 @@ echo -n "fulfillment: "; docker run --name fulfillment -h ${APP_NAME}-fulfillmen
         -d ${DOCKER_REGISTRY}/ecommerce-tomcat:$VERSION
 sleep 60
 
-echo -n "fulfillment-client: "; docker run --name fulfillment-client -h ${APP_NAME}-fulfillment-client \
+echo -n "fulfillment-client: "; docker run --name fulfillment-client --privileged -h ${APP_NAME}-fulfillment-client \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e IP_ADDRESS=${IP_ADDRESS} \
         -e NODE_NAME=FulfillmentClient -e APP_NAME=${APP_NAME}-Fulfillment -e TIER_NAME=Fulfillment-Client-Services \
@@ -124,7 +124,7 @@ echo -n "fulfillment-client: "; docker run --name fulfillment-client -h ${APP_NA
 
 sleep 60
 
-echo -n "web1: "; docker run --name web1 -h ${APP_NAME}-web1 -e JVM_ROUTE=route2 -e web=true \
+echo -n "web1: "; docker run --name web1 --privileged -h ${APP_NAME}-web1 -e JVM_ROUTE=route2 -e web=true \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e IP_ADDRESS=${IP_ADDRESS} \
         -e NODE_NAME=${APP_NAME}_WEB2 -e APP_NAME=$APP_NAME -e TIER_NAME=ECommerce-Services \
@@ -133,7 +133,7 @@ echo -n "web1: "; docker run --name web1 -h ${APP_NAME}-web1 -e JVM_ROUTE=route2
         -d ${DOCKER_REGISTRY}/ecommerce-tomcat:$VERSION
 sleep 60
 
-echo -n "customer-survey: "; docker run --name customer-survey -h ${APP_NAME}-customer-survey \
+echo -n "customer-survey: "; docker run --name customer-survey --privileged -h ${APP_NAME}-customer-survey \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e IP_ADDRESS=${IP_ADDRESS} \
         -e NODE_NAME=${APP_NAME}_SURVEY -e APP_NAME=${APP_NAME} -e TIER_NAME=Customer-Survey-Services \
@@ -151,7 +151,7 @@ echo -n "lbr: "; docker run --name=lbr -h ${APP_NAME}-lbr \
         --link web:web --link web1:web1 -p 80:80 \
         -d ${DOCKER_REGISTRY}/ecommerce-lbr:$VERSION
 
-echo -n "msg: "; docker run --name msg -h ${APP_NAME}-msg -e jms=true \
+echo -n "msg: "; docker run --name msg --privileged -h ${APP_NAME}-msg -e jms=true \
         -e ACCOUNT_NAME=${ACCOUNT_NAME} -e ACCESS_KEY=${ACCESS_KEY} -e EVENT_ENDPOINT=${EVENT_ENDPOINT} \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e IP_ADDRESS=${IP_ADDRESS} \
         -e NODE_NAME=${APP_NAME}_ORDER -e APP_NAME=$APP_NAME -e TIER_NAME=Order-Processing-Services \
@@ -180,14 +180,3 @@ echo -n "dbagent: "; docker run --name dbagent -h ${APP_NAME}-dbagent \
         -e CONTROLLER=${CONTR_HOST} -e APPD_PORT=${CONTR_PORT} -e ACCESS_KEY=${ACCESS_KEY} \
         --link db:db --link oracle-db:oracle-db \
         -d ${DOCKER_REGISTRY}/ecommerce-dbagent:$VERSION
-        
-sleep 60 
-
-if [ -d Network-Agent ]; then
-sudo sh ./Network-Agent/bin/stop.sh
-rm -rf /Network-Agent
-else 
-unzip ${3} -d Network-Agent/
-sudo sh ./Network-Agent/install.sh
-sudo sh ./Network-Agent/bin/start.sh
-fi
