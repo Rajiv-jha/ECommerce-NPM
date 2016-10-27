@@ -36,7 +36,7 @@ export JAVA_OPTS="-Xmx512m -XX:MaxPermSize=256m"
 # Uncomment these lines to use system proeprties to override controller-info.xml settings
 export APPD_CONTROLLER_OPTS="-Dappdynamics.controller.hostName=${CONTROLLER} -Dappdynamics.controller.port=${APPD_PORT}"
 export APPD_APPLICATION_OPTS="-Dappdynamics.agent.applicationName=${APP_NAME} -Dappdynamics.agent.tierName=${TIER_NAME} -Dappdynamics.agent.nodeName=${NODE_NAME}"
-export APPD_ACCOUNT_OPTS="-Dappdynamics.agent.accountName=${ACCOUNT_NAME%%_*} -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY}"
+export APPD_ACCOUNT_OPTS="-Dappdynamics.agent.accountName=${ACCOUNT_NAME%%_*} -Dappdynamics.agent.accountAccessKey=${ACCESS_KEY} -Dappdynamics.socket.collection.bci.enable=true"
 export APPD_HOSTID_OPTS="-DuniqueHostId=${HOSTNAME}"
 export APPD_SIM_OPTS="-Dappdynamics.sim.enabled=true"
 

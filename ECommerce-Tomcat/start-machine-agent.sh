@@ -11,7 +11,7 @@ then
   AGENT_CONFIG=/etc/appdynamics/machine-agent/controller-info.xml
 else
   # Using zip installer
-  AGENT_CONFIG=${MACHINE_AGENT_HOME}/conf/controller-info.xml
+  AGENT_CONFIG=${MACHINE_AGENT_HOME}/conf/ls-info.xml
 fi
 
 # Uncomment to configure Agent using controller-info.xml
